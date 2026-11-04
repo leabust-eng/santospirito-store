@@ -83,11 +83,37 @@ export default function CartDrawer({
   };
 
   // Handle flow transition
-  const handleProceedFromCheckout = (e) => {
+  const handleProceedFromCheckout = async (e) => {
     e.preventDefault();
     if (customerData.paymentMethod === 'mercadopago') {
-      // Advance to the real-like card input screen
-      setCheckoutStep('payment');
+      setCheckoutStep('processing');
+
+      try {
+        // Attempt official Mercado Pago preference creation
+        const res = await fetch('/api/create-preference', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: cartItems,
+            payer: customerData,
+            shippingCost: estimatedShipping
+          })
+        });
+
+        const data = await res.json();
+
+        // If credentials are live and return an init_point from Mercado Pago
+        if (data && data.init_point && !data.isDemo) {
+          window.location.href = data.init_point;
+          return;
+        }
+
+        // If in development/demo mode (no token set yet), proceed to interactive card demo
+        setCheckoutStep('payment');
+      } catch (err) {
+        console.warn('Operando en modo interactivo local:', err);
+        setCheckoutStep('payment');
+      }
     } else {
       // Transferencia -> send to WhatsApp directly
       const itemsText = cartItems.map(it => 
