@@ -163,61 +163,12 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
           <div className={`absolute inset-0 bg-gradient-to-r ${slide.themeBg} opacity-85 transition-colors duration-1000`} />
         </div>
 
-        {/* Content Layout: 2 Columns on Desktop */}
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-center min-h-[460px] md:min-h-[520px] p-6 sm:p-8 md:p-12 gap-8">
+        {/* Content Layout: Responsive Grid (Mobile-friendly order) */}
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-center min-h-[460px] md:min-h-[520px] p-5 sm:p-8 md:p-12 gap-6 md:gap-8">
           
-          {/* Left Column: Text & CTAs (7 cols on md) */}
-          <div className="md:col-span-7 flex flex-col justify-center space-y-4 md:space-y-5 text-white">
-            
-            {/* Badges */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="bg-teal-700/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase border border-teal-500/30 shadow-sm">
-                {slide.tag}
-              </span>
-              <span className={`backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase border shadow-sm ${slide.badgeBg}`}>
-                {slide.badge}
-              </span>
-            </div>
-
-            {/* Title */}
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.15] drop-shadow-md">
-              {slide.title}
-            </h1>
-
-            {/* Description */}
-            <p className="text-sm sm:text-base text-neutral-200 font-light leading-relaxed max-w-xl drop-shadow">
-              {slide.subtitle}
-            </p>
-
-            {/* Highlight with Icon */}
-            <div className={`flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-wide ${slide.accentColor}`}>
-              <Sparkles size={16} className="shrink-0" />
-              <span>{slide.highlight}</span>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => onSelectCategory({ category: slide.categoryTarget, subCategory: null })}
-                className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-teal-700 hover:text-white px-6 py-3 rounded-full text-xs sm:text-sm font-bold tracking-wider uppercase shadow-lg transition-all active:scale-95 duration-200"
-              >
-                <span>{slide.cta}</span>
-                <ArrowRight size={16} />
-              </button>
-
-              <button
-                onClick={onOpenSizeGuide}
-                className="bg-black/40 hover:bg-black/60 backdrop-blur-md text-white border border-white/30 px-5 py-3 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition active:scale-95 duration-200"
-              >
-                Guía de Talles
-              </button>
-            </div>
-
-          </div>
-
-          {/* Right Column: Full Authentic Photoshoot Frame (5 cols on md) */}
-          <div className="md:col-span-5 flex justify-center items-center">
-            <div className="relative group w-full max-w-[280px] sm:max-w-[320px] md:max-w-[340px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-neutral-900">
+          {/* Photoshoot Frame: Order 1 on mobile, Order 2 on desktop */}
+          <div className="order-1 md:order-2 md:col-span-5 flex justify-center items-center">
+            <div className="relative group w-full max-w-[240px] sm:max-w-[280px] md:max-w-[340px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-neutral-900">
               
               {/* Actual SantoSpirito Photoshoot Image */}
               <img
@@ -229,12 +180,12 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
               />
 
               {/* Subtle glass tag on bottom of photo */}
-              <div className="absolute bottom-3 left-3 right-3 bg-neutral-950/75 backdrop-blur-md rounded-xl p-2.5 text-white flex items-center justify-between border border-white/10 shadow-lg">
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-neutral-950/80 backdrop-blur-md rounded-xl p-2 text-white flex items-center justify-between border border-white/10 shadow-lg">
                 <div>
-                  <div className="text-[10px] tracking-wider uppercase text-neutral-400 font-medium">Fotoshoot Oficial</div>
+                  <div className="text-[9px] tracking-wider uppercase text-neutral-400 font-medium">Fotoshoot Oficial</div>
                   <div className="text-xs font-bold text-white tracking-wide">{slide.colorName}</div>
                 </div>
-                <span className="text-[11px] font-semibold text-teal-300 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/30">
+                <span className="text-[10px] font-semibold text-teal-300 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/30">
                   {current + 1} / {slides.length}
                 </span>
               </div>
@@ -242,32 +193,81 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
             </div>
           </div>
 
+          {/* Left Column: Text & CTAs (Order 2 on mobile, Order 1 on desktop) */}
+          <div className="order-2 md:order-1 md:col-span-7 flex flex-col justify-center space-y-3.5 md:space-y-5 text-white">
+            
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="bg-teal-700/90 backdrop-blur-md text-white px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-wider uppercase border border-teal-500/30 shadow-sm">
+                {slide.tag}
+              </span>
+              <span className={`backdrop-blur-md px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-wider uppercase border shadow-sm ${slide.badgeBg}`}>
+                {slide.badge}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white leading-[1.15] drop-shadow-md">
+              {slide.title}
+            </h1>
+
+            {/* Description */}
+            <p className="text-xs sm:text-sm md:text-base text-neutral-200 font-light leading-relaxed max-w-xl drop-shadow">
+              {slide.subtitle}
+            </p>
+
+            {/* Highlight with Icon */}
+            <div className={`flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-wide ${slide.accentColor}`}>
+              <Sparkles size={16} className="shrink-0" />
+              <span>{slide.highlight}</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <button
+                onClick={() => onSelectCategory({ category: slide.categoryTarget, subCategory: null })}
+                className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-teal-700 hover:text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold tracking-wider uppercase shadow-lg transition-all active:scale-95 duration-200"
+              >
+                <span>{slide.cta}</span>
+                <ArrowRight size={15} />
+              </button>
+
+              <button
+                onClick={onOpenSizeGuide}
+                className="bg-black/40 hover:bg-black/60 backdrop-blur-md text-white border border-white/30 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition active:scale-95 duration-200"
+              >
+                Guía de Talles
+              </button>
+            </div>
+
+          </div>
+
         </div>
 
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition active:scale-95 z-20 border border-white/20"
+          className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center transition active:scale-95 z-20 border border-white/20"
           aria-label="Slide anterior"
         >
-          <ChevronLeft size={22} />
+          <ChevronLeft size={20} />
         </button>
 
         <button
           onClick={nextSlide}
-          className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition active:scale-95 z-20 border border-white/20"
+          className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center transition active:scale-95 z-20 border border-white/20"
           aria-label="Slide siguiente"
         >
-          <ChevronRight size={22} />
+          <ChevronRight size={20} />
         </button>
 
         {/* Mini Thumbnails / Indicator Pills on Bottom */}
-        <div className="relative z-20 bg-black/40 backdrop-blur-md border-t border-white/10 px-4 py-2.5 flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto">
+        <div className="relative z-20 bg-black/50 backdrop-blur-md border-t border-white/10 px-3 py-2 flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto">
           {slides.map((s, idx) => (
             <button
               key={s.id}
               onClick={() => setCurrent(idx)}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200 shrink-0 ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-medium transition-all duration-200 shrink-0 ${
                 current === idx
                   ? "bg-teal-600 text-white shadow-md font-bold scale-105"
                   : "bg-white/10 text-neutral-300 hover:bg-white/20 hover:text-white"
