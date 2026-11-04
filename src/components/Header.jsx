@@ -8,7 +8,8 @@ export default function Header({
   searchQuery, 
   setSearchQuery,
   onSelectProduct,
-  products
+  products,
+  onGoHome
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -37,9 +38,13 @@ export default function Header({
             </button>
           </div>
 
-          {/* Logo (SantoSpirito) */}
+          {/* Logo (SantoSpirito) - Resets to Home */}
           <div className="flex-shrink-0 flex items-center">
-            <a href="#" className="flex flex-col items-center group">
+            <button 
+              onClick={onGoHome} 
+              className="flex flex-col items-center group cursor-pointer text-left focus:outline-none"
+              aria-label="Volver a la página de inicio"
+            >
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-teal-800 text-white font-serif font-bold text-lg flex items-center justify-center shadow-sm">
                   S
@@ -51,7 +56,7 @@ export default function Header({
               <span className="text-[9px] tracking-[0.28em] uppercase font-semibold text-neutral-500 -mt-0.5">
                 Ambos de Diseño • Colección 2026
               </span>
-            </a>
+            </button>
           </div>
 
           {/* Search bar (Central, matching Plavusa) */}

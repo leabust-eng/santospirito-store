@@ -113,6 +113,12 @@ export default function App() {
 
   const totalCartUnits = cartItems.reduce((acc, it) => acc + it.quantity, 0);
 
+  const handleGoHome = () => {
+    setActiveCategory({ category: "TODOS", subCategory: null });
+    setSearchQuery('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#faf9f8] text-[#222]">
       
@@ -128,6 +134,7 @@ export default function App() {
         setSearchQuery={setSearchQuery}
         onSelectProduct={(p) => setSelectedProduct(p)}
         products={products}
+        onGoHome={handleGoHome}
       />
 
       {/* 3. Multi-level Navigation (Matching Plavusa) */}
@@ -135,6 +142,7 @@ export default function App() {
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+        onGoHome={handleGoHome}
       />
 
       {/* 4. Hero Carousel (Shows on home view) */}
@@ -300,6 +308,7 @@ export default function App() {
       <Footer 
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
         onSelectCategory={setActiveCategory}
+        onGoHome={handleGoHome}
       />
 
       {/* 8. Floating WhatsApp */}

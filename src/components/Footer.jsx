@@ -1,7 +1,7 @@
 import React from 'react';
 import { Instagram, MessageCircle, Mail, Phone, MapPin, ShieldCheck, Heart } from 'lucide-react';
 
-export default function Footer({ onOpenSizeGuide, onSelectCategory }) {
+export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) {
   return (
     <footer className="bg-[#18181b] text-neutral-300 text-xs border-t border-neutral-800">
       
@@ -11,14 +11,18 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory }) {
           
           {/* Col 1: Brand */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
+            <button 
+              onClick={onGoHome} 
+              className="flex items-center gap-2 group text-left cursor-pointer focus:outline-none"
+              aria-label="Ir al inicio"
+            >
               <div className="w-7 h-7 rounded-md bg-teal-700 text-white font-serif font-bold flex items-center justify-center">
                 S
               </div>
-              <span className="font-serif text-xl font-bold tracking-tight text-white">
+              <span className="font-serif text-xl font-bold tracking-tight text-white group-hover:text-teal-400 transition">
                 SantoSpirito
               </span>
-            </div>
+            </button>
             <p className="text-neutral-400 text-xs leading-relaxed">
               Expresá tu estilo profesional. Diseñamos y confeccionamos ambos médicos, chaquetas y uniformes de primera calidad con telas Spandex y Arciel pensadas para la comodidad en tu jornada laboral.
             </p>

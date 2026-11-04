@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Sparkles, Ruler } from 'lucide-react';
 import { categories } from '../data/products';
 
-export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGuide }) {
+export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGuide, onGoHome }) {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const handleCategoryClick = (catName, subCat = null) => {
@@ -19,7 +19,7 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
             
             {/* Inicio / Todos */}
             <button
-              onClick={() => handleCategoryClick("TODOS")}
+              onClick={onGoHome || (() => handleCategoryClick("TODOS"))}
               className={`px-3 py-2.5 rounded-md transition whitespace-nowrap ${
                 activeCategory.category === "TODOS"
                   ? "text-teal-900 border-b-2 border-teal-800 font-bold bg-teal-50/50"
