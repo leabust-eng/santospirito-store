@@ -3,7 +3,7 @@ import { Instagram, MessageCircle, Mail, Phone, MapPin, ShieldCheck, Heart } fro
 
 export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) {
   return (
-    <footer className="bg-[#18181b] text-neutral-300 text-xs border-t border-neutral-800">
+    <footer className="bg-[#18181b] text-neutral-300 text-xs border-t border-neutral-800 w-full max-w-full overflow-hidden">
       
       {/* Top Banner */}
       <div className="border-b border-neutral-800 py-8">

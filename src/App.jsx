@@ -120,7 +120,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf9f8] text-[#222]">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#faf9f8] text-[#222]">
       
       {/* 1. Announcement Bar */}
       <AnnouncementBar onOpenSizeGuide={() => setIsSizeGuideOpen(true)} />

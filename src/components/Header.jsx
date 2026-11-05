@@ -23,37 +23,37 @@ export default function Header({
     : [];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm transition-all w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
           {/* Mobile hamburger */}
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-neutral-700 hover:text-black rounded-lg focus:outline-none"
+              className="p-1.5 sm:p-2 text-neutral-700 hover:text-black rounded-lg focus:outline-none"
               aria-label="Abrir menú"
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
           {/* Logo (SantoSpirito) - Resets to Home */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="flex-1 flex items-center justify-center lg:justify-start lg:flex-initial min-w-0">
             <button 
               onClick={onGoHome} 
-              className="flex flex-col items-center group cursor-pointer text-left focus:outline-none"
+              className="flex flex-col items-center sm:items-start group cursor-pointer text-left focus:outline-none max-w-full"
               aria-label="Volver a la página de inicio"
             >
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-teal-800 text-white font-serif font-bold text-lg flex items-center justify-center shadow-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-teal-800 text-white font-serif font-bold text-base sm:text-lg flex items-center justify-center shadow-sm shrink-0">
                   S
                 </div>
-                <span className="font-serif text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900 group-hover:text-teal-900 transition">
+                <span className="font-serif text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900 group-hover:text-teal-900 transition truncate">
                   SantoSpirito
                 </span>
               </div>
-              <span className="text-[9px] tracking-[0.28em] uppercase font-semibold text-neutral-500 -mt-0.5">
+              <span className="hidden sm:block text-[9px] tracking-[0.25em] uppercase font-semibold text-neutral-500 -mt-0.5 truncate">
                 Ambos de Diseño • Colección 2026
               </span>
             </button>
@@ -138,12 +138,12 @@ export default function Header({
             {/* Cart Button with Counter */}
             <button
               onClick={onOpenCart}
-              className="relative flex items-center gap-2 bg-neutral-900 hover:bg-teal-900 text-white px-4 py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-sm hover:shadow-md transition active:scale-95"
+              className="relative flex items-center gap-1.5 sm:gap-2 bg-neutral-900 hover:bg-teal-900 text-white px-3 py-2 sm:px-4 sm:py-2.5 rounded-full text-xs font-semibold tracking-wide shadow-sm hover:shadow-md transition active:scale-95 shrink-0"
               aria-label="Abrir carrito de compras"
             >
-              <ShoppingBag size={17} />
-              <span className="hidden sm:inline">MI CARRITO</span>
-              <span className="bg-emerald-500 text-white font-bold text-[11px] w-5 h-5 rounded-full flex items-center justify-center">
+              <ShoppingBag size={16} />
+              <span className="hidden md:inline">MI CARRITO</span>
+              <span className="bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] w-5 h-5 rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             </button>
@@ -152,7 +152,7 @@ export default function Header({
         </div>
 
         {/* Mobile Search Input */}
-        <div className="lg:hidden pb-3">
+        <div className="lg:hidden pb-2.5 px-0.5">
           <div className="relative">
             <input
               type="text"
@@ -164,6 +164,42 @@ export default function Header({
             <Search className="absolute left-3 top-2.5 text-neutral-400" size={15} />
           </div>
         </div>
+
+        {/* Mobile Slide-down Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden py-3 border-t border-neutral-200 space-y-2 animate-fade-in bg-white">
+            <div className="flex flex-col space-y-1">
+              <button
+                onClick={() => {
+                  onGoHome();
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left px-3 py-2 rounded-lg text-xs font-bold text-teal-900 bg-teal-50"
+              >
+                🏠 Inicio / Todos los Productos
+              </button>
+              <button
+                onClick={() => {
+                  onOpenSizeGuide();
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left px-3 py-2 rounded-lg text-xs font-semibold text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+              >
+                <Ruler size={14} className="text-teal-700" />
+                <span>Tabla de Medidas y Talles</span>
+              </button>
+              <a
+                href="https://wa.me/5493815307474"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left px-3 py-2 rounded-lg text-xs font-semibold text-emerald-700 hover:bg-emerald-50 flex items-center gap-2"
+              >
+                <Phone size={14} />
+                <span>Asesoría por WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

@@ -3,8 +3,8 @@ import { CreditCard, Truck, MessageCircle, Instagram } from 'lucide-react';
 
 export default function AnnouncementBar({ onOpenSizeGuide }) {
   return (
-    <div className="bg-[#1a1a1a] text-white text-xs py-2 px-4 border-b border-neutral-800">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-center md:text-left">
+    <div className="bg-[#1a1a1a] text-white text-xs py-2 px-3 sm:px-4 border-b border-neutral-800 w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-center md:text-left">
         {/* Left: Socials & Contact */}
         <div className="hidden md:flex items-center gap-4 text-neutral-300">
           <a 
@@ -28,22 +28,20 @@ export default function AnnouncementBar({ onOpenSizeGuide }) {
           </a>
         </div>
 
-        {/* Center: Main Promo Callout (Like Plavusa) */}
-        <div className="flex items-center justify-center gap-3 font-medium tracking-wide">
-          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold uppercase text-[11px] bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/40">
-            <CreditCard size={12} />
+        {/* Center: Main Promo Callout */}
+        <div className="w-full md:w-auto flex items-center justify-center gap-2 sm:gap-3 font-medium tracking-wide">
+          <span className="flex items-center gap-1 sm:gap-1.5 text-emerald-400 font-semibold uppercase text-[10px] sm:text-[11px] bg-emerald-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-800/40 shrink-0">
+            <CreditCard size={11} />
             3 CUOTAS SIN INTERÉS
           </span>
-          <span className="text-neutral-300 hidden sm:inline">en toda la tienda</span>
-          <span className="text-neutral-600 hidden sm:inline">•</span>
-          <span className="text-neutral-300 flex items-center gap-1">
-            <Truck size={13} className="text-sky-400" />
+          <span className="text-neutral-300 text-[11px] flex items-center gap-1 shrink-0">
+            <Truck size={12} className="text-sky-400" />
             Envíos a todo el país
           </span>
         </div>
 
         {/* Right: Quick Links */}
-        <div className="flex items-center gap-4 text-[11px] text-neutral-400">
+        <div className="hidden lg:flex items-center gap-4 text-[11px] text-neutral-400">
           <button 
             onClick={onOpenSizeGuide}
             className="hover:text-white underline decoration-dotted transition"

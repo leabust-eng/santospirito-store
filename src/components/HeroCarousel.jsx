@@ -143,7 +143,7 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
 
   return (
     <section 
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-6"
+      className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 pb-6 overflow-hidden"
       aria-label="Carrusel Destacado SantoSpirito"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
