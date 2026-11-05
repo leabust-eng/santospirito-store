@@ -52,7 +52,7 @@ export default function VirtualFittingModal({
     setIsScanning(true);
     const timer = setTimeout(() => setIsScanning(false), 600);
     return () => clearTimeout(timer);
-  }, [height, weight, gender, fitPreference]);
+  }, [height, weight, age, gender, fitPreference]);
 
   const results = useMemo(() => {
     return calculateMeasurements({ gender, height, weight, age, fitPreference });
@@ -69,6 +69,9 @@ export default function VirtualFittingModal({
     const baseH = gender === 'mujer' ? 165 : 175;
     const hDiff = height - baseH;
 
+    // Age factor (slight natural midsection redistribution past 35)
+    const ageFactor = age > 35 ? Math.min(3.5, (age - 35) * 0.12) : 0;
+
     // Vertical landmarks (scaling proportionally with height)
     const headCy = 38;
     const headRx = 14 + (weight > 80 ? (weight - 80) * 0.05 : 0);
@@ -82,14 +85,14 @@ export default function VirtualFittingModal({
     const kneeY = 328 + hDiff * 0.74;
     const ankleY = 412 + hDiff * 0.95;
 
-    // Horizontal half-widths (scaling dynamically with estimated bust, waist, hip & weight)
+    // Horizontal half-widths (scaling dynamically with estimated bust, waist, hip, weight & age)
     let hw_neck, hw_shoulder, hw_bust, hw_waist, hw_hip, hw_thigh, hw_knee, hw_calf, hw_ankle;
 
     if (gender === 'mujer') {
       hw_neck = 7.5 + (weight - 55) * 0.04;
       hw_shoulder = 35 + hDiff * 0.05 + (weight - 55) * 0.12;
       hw_bust = 30 + (results.bust - 80) * 0.44;
-      hw_waist = 20 + (results.waist - 58) * 0.40;
+      hw_waist = 20 + (results.waist - 58) * 0.40 + ageFactor;
       hw_hip = 34 + (results.hip - 85) * 0.48;
       hw_thigh = 15 + (weight - 55) * 0.14;
       hw_knee = 10.5 + (weight - 55) * 0.07;
@@ -99,7 +102,7 @@ export default function VirtualFittingModal({
       hw_neck = 10 + (weight - 70) * 0.05;
       hw_shoulder = 47 + hDiff * 0.08 + (weight - 70) * 0.14;
       hw_bust = 36 + (results.bust - 85) * 0.40;
-      hw_waist = 27 + (results.waist - 72) * 0.38;
+      hw_waist = 27 + (results.waist - 72) * 0.38 + ageFactor;
       hw_hip = 32 + (results.hip - 88) * 0.38;
       hw_thigh = 16.5 + (weight - 70) * 0.14;
       hw_knee = 12 + (weight - 70) * 0.08;
@@ -126,7 +129,7 @@ export default function VirtualFittingModal({
       hw_neck, hw_shoulder, hw_bust, hw_waist, hw_hip, hw_thigh, hw_knee, hw_calf, hw_ankle,
       morphology
     };
-  }, [gender, height, weight, results]);
+  }, [gender, height, weight, age, results]);
 
   const handleApplySize = () => {
     if (onSelectSizeFilter) {
@@ -138,7 +141,7 @@ export default function VirtualFittingModal({
   const handleWhatsAppConsult = () => {
     const text = `*¡Hola SantoSpirito!* Usé el *Vestuario Virtual* interactivo con mis medidas:%0A` +
       `• Género: ${gender === 'mujer' ? 'Femenino' : 'Masculino'}%0A` +
-      `• Altura: ${height} cm | Peso: ${weight} kg%0A` +
+      `• Altura: ${height} cm | Peso: ${weight} kg | Edad: ${age} años%0A` +
       `• Medidas corporales: Busto/Pecho ${results.bust}cm | Cintura ${results.waist}cm | Cadera ${results.hip}cm%0A` +
       `• Morfología detectada: ${dims.morphology}%0A` +
       `• Talle sugerido: *${currentSize}*%0A%0A` +
@@ -273,7 +276,33 @@ export default function VirtualFittingModal({
                 </div>
               </div>
 
-              {/* 4. FIT PREFERENCE */}
+              {/* 4. AGE SLIDER */}
+              <div className="p-3 bg-neutral-50/70 rounded-xl border border-neutral-200/80">
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-bold text-neutral-800 flex items-center gap-1.5">
+                    <User size={14} className="text-teal-800" />
+                    <span>Edad:</span>
+                  </label>
+                  <span className="text-sm font-black text-teal-950 bg-white px-2.5 py-0.5 rounded-lg border border-teal-200 font-mono shadow-2xs">
+                    {age} años
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="18"
+                  max="75"
+                  value={age}
+                  onChange={(e) => setAge(Number(e.target.value))}
+                  className="w-full accent-teal-800 cursor-pointer h-2 bg-neutral-200 rounded-lg"
+                />
+                <div className="flex justify-between text-[10px] text-neutral-400 mt-1 font-medium">
+                  <span>18 años</span>
+                  <span className="text-teal-800 font-bold">Ajusta densidad y postura</span>
+                  <span>75 años</span>
+                </div>
+              </div>
+
+              {/* 5. FIT PREFERENCE */}
               <div>
                 <label className="text-xs font-bold text-neutral-800 block mb-1.5 flex items-center justify-between">
                   <span>Preferencia de calce:</span>
@@ -302,7 +331,7 @@ export default function VirtualFittingModal({
                 </div>
               </div>
 
-              {/* 5. COLOR PREVIEW SELECTOR */}
+              {/* 6. COLOR PREVIEW SELECTOR */}
               <div className="pt-2 border-t border-neutral-100">
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold text-neutral-700 flex items-center gap-1.5">
