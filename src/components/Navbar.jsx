@@ -12,8 +12,8 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
 
   return (
     <nav className="bg-white border-b border-neutral-200 text-xs font-semibold uppercase tracking-wider text-neutral-700 w-full max-w-full overflow-hidden">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 w-full max-w-full">
-        <div className="flex items-center justify-start xl:justify-center overflow-x-auto no-scrollbar py-1 w-full max-w-full scroll-smooth">
+      <div className="w-full px-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-start nav-center-wide overflow-x-auto no-scrollbar py-1 w-full scroll-smooth">
           
           <div className="flex items-center space-x-1 sm:space-x-2 shrink-0">
             

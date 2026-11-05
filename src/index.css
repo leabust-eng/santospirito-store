@@ -58,3 +58,10 @@ html, body {
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Center navigation menu symmetrically on desktop/wide screens without clipping mobile scroll */
+@media (min-width: 1350px) {
+  .nav-center-wide {
+    justify-content: center !important;
+  }
+}
