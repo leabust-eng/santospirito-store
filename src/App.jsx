@@ -171,6 +171,7 @@ export default function App() {
         <HeroCarousel
           onSelectCategory={setActiveCategory}
           onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+          onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
         />
       )}
 

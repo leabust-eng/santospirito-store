@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, Ruler } from 'lucide-react';
 
 const slides = [
   {
@@ -124,7 +124,7 @@ const slides = [
   }
 ];
 
-export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
+export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide, onOpenVirtualFitting }) {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -223,20 +223,33 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
-              <button
-                onClick={() => onSelectCategory({ category: slide.categoryTarget, subCategory: null })}
-                className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-teal-700 hover:text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold tracking-wider uppercase shadow-lg transition-all active:scale-95 duration-200"
-              >
-                <span>{slide.cta}</span>
-                <ArrowRight size={15} />
-              </button>
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full">
+              {/* Row 1 on mobile: Ver Colección & Guía de Talles */}
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 w-full sm:w-auto">
+                <button
+                  onClick={() => onSelectCategory({ category: slide.categoryTarget, subCategory: null })}
+                  className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white text-neutral-900 hover:bg-teal-700 hover:text-white px-3 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs md:text-sm font-bold tracking-wider uppercase shadow-lg transition-all active:scale-95 duration-200"
+                >
+                  <span className="truncate">{slide.cta}</span>
+                  <ArrowRight size={14} className="shrink-0" />
+                </button>
 
+                <button
+                  onClick={onOpenSizeGuide}
+                  className="flex items-center justify-center gap-1.5 bg-black/40 hover:bg-black/60 backdrop-blur-md text-white border border-white/30 hover:border-white/50 px-3 sm:px-5 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs md:text-sm font-semibold tracking-wider uppercase transition active:scale-95 duration-200"
+                >
+                  <Ruler size={13} className="text-teal-300 shrink-0" />
+                  <span className="truncate">Guía de Talles</span>
+                </button>
+              </div>
+
+              {/* Row 2 on mobile: Vestuario Virtual (positioned alongside on desktop, below on mobile) */}
               <button
-                onClick={onOpenSizeGuide}
-                className="bg-black/40 hover:bg-black/60 backdrop-blur-md text-white border border-white/30 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition active:scale-95 duration-200"
+                onClick={onOpenVirtualFitting}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-neutral-950 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs md:text-sm font-black tracking-wider uppercase shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 border border-amber-300 transition-all active:scale-95 duration-200 group"
               >
-                Guía de Talles
+                <Sparkles size={14} className="text-amber-900 group-hover:rotate-12 transition-transform duration-300 shrink-0" />
+                <span>Vestuario Virtual</span>
               </button>
             </div>
 
