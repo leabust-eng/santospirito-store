@@ -159,12 +159,15 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
             <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 block">
               Envíos Seguros a Todo el País
             </span>
-            <div className="flex items-center justify-center md:justify-start gap-2 pt-1">
-              <span className="bg-neutral-800 text-yellow-400 font-bold text-[10px] px-3 py-1 rounded border border-neutral-700">
-                📫 Correo Argentino (Sucursal y Domicilio)
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 pt-1">
+              <span className="bg-neutral-800 text-yellow-400 font-bold text-[10px] px-2.5 py-1 rounded border border-neutral-700">
+                📫 Correo Argentino
               </span>
-              <span className="bg-neutral-800 text-white font-bold text-[10px] px-3 py-1 rounded border border-neutral-700">
-                📦 Andreani
+              <span className="bg-neutral-800 text-teal-300 font-bold text-[10px] px-2.5 py-1 rounded border border-neutral-700">
+                🛵 Cadetería Tucumán
+              </span>
+              <span className="bg-neutral-800 text-emerald-300 font-bold text-[10px] px-2.5 py-1 rounded border border-neutral-700">
+                🤝 Retiro Personal Gratis
               </span>
             </div>
           </div>

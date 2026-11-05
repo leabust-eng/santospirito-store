@@ -48,8 +48,8 @@ export default async function handler(req, res) {
     // Add shipping cost item if exists
     if (shippingCost && Number(shippingCost) > 0) {
       mpItems.push({
-        id: 'envio-correo-argentino',
-        title: 'Envío Correo Argentino',
+        id: 'costo-envio',
+        title: req.body?.shippingTitle || 'Costo de Envío / Entrega',
         quantity: 1,
         unit_price: Number(shippingCost),
         currency_id: 'ARS'

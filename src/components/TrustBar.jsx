@@ -11,8 +11,8 @@ const trustItems = [
   {
     icon: Truck,
     title: "Envíos a Todo el País",
-    desc: "A domicilio o sucursal por Correo Argentino con seguimiento online",
-    highlight: "Despacho rápido"
+    desc: "Cadetería en Tucumán y Correo Argentino a todo el país con seguimiento online",
+    highlight: "Cadetería express"
   },
   {
     icon: RefreshCw,

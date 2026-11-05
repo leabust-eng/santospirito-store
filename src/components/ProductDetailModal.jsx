@@ -30,15 +30,31 @@ export default function ProductDetailModal({
     setIsCalculatingShipping(true);
     setTimeout(() => {
       setIsCalculatingShipping(false);
-      // Realistic Correo Argentino rate calculation based on CP
-      const cpNum = parseInt(postalCode, 10) || 1000;
+      const cpClean = postalCode.trim();
+      const cpNum = parseInt(cpClean, 10) || 0;
+      const isTucuman = (cpNum >= 4000 && cpNum <= 4178) || cpClean.startsWith('40') || cpClean.startsWith('41');
       const isBsAs = cpNum >= 1000 && cpNum <= 1900;
-      setShippingQuote({
-        sucursal: isBsAs ? 4800 : 5900,
-        domicilio: isBsAs ? 6400 : 7800,
-        diasSucursal: isBsAs ? "2 a 3 días hábiles" : "3 a 5 días hábiles",
-        diasDomicilio: isBsAs ? "1 a 3 días hábiles" : "2 a 4 días hábiles"
-      });
+
+      if (isTucuman) {
+        setShippingQuote({
+          isTucuman: true,
+          moto: 3500,
+          sucursal: 4900,
+          domicilio: 6400,
+          diasMoto: "En el día o 24hs hábiles (Servimoto / PedidosYa)",
+          diasRetiro: "A coordinar con SantoSpirito (San Miguel)",
+          diasSucursal: "2 a 3 días hábiles (Interior)",
+          diasDomicilio: "1 a 2 días hábiles"
+        });
+      } else {
+        setShippingQuote({
+          isTucuman: false,
+          sucursal: isBsAs ? 4800 : 5900,
+          domicilio: isBsAs ? 6400 : 7800,
+          diasSucursal: isBsAs ? "2 a 3 días hábiles" : "3 a 5 días hábiles",
+          diasDomicilio: isBsAs ? "1 a 3 días hábiles" : "2 a 4 días hábiles"
+        });
+      }
     }, 400);
   };
 
@@ -281,11 +297,13 @@ export default function ProductDetailModal({
                   </button>
                 </div>
 
-                {/* Calculador de Envíos Correo Argentino (Exacto como Plavusa) */}
+                {/* Calculador de Envíos (Correo Argentino & Cadetería Local Tucumán) */}
                 <div className="pt-4 border-t border-neutral-200">
-                  <div className="flex items-center gap-2 text-xs font-bold text-neutral-900 mb-2">
-                    <Truck size={16} className="text-teal-800" />
-                    <span>Calcular costo de envío (Correo Argentino):</span>
+                  <div className="flex items-center justify-between text-xs font-bold text-neutral-900 mb-2">
+                    <div className="flex items-center gap-2">
+                      <Truck size={16} className="text-teal-800" />
+                      <span>Calcular costo de envío / entrega:</span>
+                    </div>
                   </div>
 
                   <form onSubmit={handleCalculateShipping} className="flex gap-2">
@@ -306,28 +324,89 @@ export default function ProductDetailModal({
                     </button>
                   </form>
 
-                  <a
-                    href="https://www.correoargentino.com.ar/formularios/cpa"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[10px] text-neutral-400 hover:text-neutral-700 underline block mt-1"
-                  >
-                    ¿No sabés tu código postal? Buscalo en Correo Argentino
-                  </a>
+                  <div className="flex items-center justify-between text-[10px] text-neutral-400 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPostalCode('4000');
+                        setShippingQuote({
+                          isTucuman: true,
+                          moto: 3500,
+                          sucursal: 4900,
+                          domicilio: 6400,
+                          diasMoto: "En el día o 24hs hábiles (Servimoto / PedidosYa)",
+                          diasRetiro: "A coordinar con SantoSpirito (San Miguel)",
+                          diasSucursal: "2 a 3 días hábiles (Interior)",
+                          diasDomicilio: "1 a 2 días hábiles"
+                        });
+                      }}
+                      className="text-teal-700 hover:text-teal-900 font-bold underline"
+                    >
+                      📍 ¿Estás en Tucumán? Probá CP 4000
+                    </button>
+                    <a
+                      href="https://www.correoargentino.com.ar/formularios/cpa"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-neutral-700 underline"
+                    >
+                      Buscar mi código postal
+                    </a>
+                  </div>
 
                   {shippingQuote && (
-                    <div className="mt-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-2 text-xs animate-fade-in">
-                      <div className="flex justify-between items-center">
-                        <span className="text-neutral-700">🏢 Retiro en Sucursal Correo Argentino:</span>
-                        <strong className="text-neutral-900 font-bold">${shippingQuote.sucursal.toLocaleString('es-AR')},00</strong>
-                      </div>
-                      <span className="text-[10px] text-neutral-400 block -mt-1">{shippingQuote.diasSucursal}</span>
+                    <div className="mt-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-2.5 text-xs animate-fade-in">
+                      {shippingQuote.isTucuman ? (
+                        <>
+                          <div className="flex items-center justify-between pb-1.5 border-b border-neutral-200 text-[11px] font-bold text-teal-900">
+                            <span>📍 Opciones en San Miguel de Tucumán y alrededores:</span>
+                          </div>
 
-                      <div className="flex justify-between items-center pt-1 border-t border-neutral-200">
-                        <span className="text-neutral-700">🏠 Envío a Domicilio Clásico:</span>
-                        <strong className="text-neutral-900 font-bold">${shippingQuote.domicilio.toLocaleString('es-AR')},00</strong>
-                      </div>
-                      <span className="text-[10px] text-neutral-400 block -mt-1">{shippingQuote.diasDomicilio}</span>
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <span className="text-neutral-800 font-semibold flex items-center gap-1">
+                                🛵 Cadetería Express (Servimoto / PedidosYa):
+                              </span>
+                              <span className="text-[10px] text-neutral-500 block">{shippingQuote.diasMoto}</span>
+                            </div>
+                            <strong className="text-neutral-900 font-bold">${shippingQuote.moto.toLocaleString('es-AR')},00</strong>
+                          </div>
+
+                          <div className="flex justify-between items-center pt-1.5 border-t border-neutral-200">
+                            <div>
+                              <span className="text-emerald-900 font-bold flex items-center gap-1">
+                                🤝 Entrega Personal / Retiro:
+                              </span>
+                              <span className="text-[10px] text-neutral-500 block">{shippingQuote.diasRetiro}</span>
+                            </div>
+                            <span className="bg-emerald-100 text-emerald-800 font-extrabold text-[10px] px-2 py-0.5 rounded">
+                              ¡GRATIS!
+                            </span>
+                          </div>
+
+                          <div className="flex justify-between items-center pt-1.5 border-t border-neutral-200">
+                            <div>
+                              <span className="text-neutral-700">🏢 Sucursal Correo Argentino (Interior):</span>
+                              <span className="text-[10px] text-neutral-400 block">{shippingQuote.diasSucursal}</span>
+                            </div>
+                            <strong className="text-neutral-900 font-bold">${shippingQuote.sucursal.toLocaleString('es-AR')},00</strong>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex justify-between items-center">
+                            <span className="text-neutral-700">🏢 Retiro en Sucursal Correo Argentino:</span>
+                            <strong className="text-neutral-900 font-bold">${shippingQuote.sucursal.toLocaleString('es-AR')},00</strong>
+                          </div>
+                          <span className="text-[10px] text-neutral-400 block -mt-1">{shippingQuote.diasSucursal}</span>
+
+                          <div className="flex justify-between items-center pt-1 border-t border-neutral-200">
+                            <span className="text-neutral-700">🏠 Envío a Domicilio Clásico:</span>
+                            <strong className="text-neutral-900 font-bold">${shippingQuote.domicilio.toLocaleString('es-AR')},00</strong>
+                          </div>
+                          <span className="text-[10px] text-neutral-400 block -mt-1">{shippingQuote.diasDomicilio}</span>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
