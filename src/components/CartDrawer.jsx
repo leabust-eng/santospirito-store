@@ -93,11 +93,11 @@ export default function CartDrawer({
   const [cardBrand, setCardBrand] = useState('visa'); // 'visa' | 'mastercard' | 'amex'
   const [orderReceipt, setOrderReceipt] = useState(null);
 
+  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const selectedShipping = shippingMethodsData[shippingMethod] || shippingMethodsData.tucuman_moto;
   const isFreeShipping = subtotal >= 150000;
   const estimatedShipping = selectedShipping.price === 0 ? 0 : (isFreeShipping ? 0 : selectedShipping.price);
 
-  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const discountAmount = couponApplied ? Math.round(subtotal * 0.10) : 0;
   const transferDiscount = customerData.paymentMethod === 'transferencia' ? Math.round((subtotal - discountAmount) * 0.10) : 0;
   const finalTotal = subtotal - discountAmount - transferDiscount + (cartItems.length > 0 ? estimatedShipping : 0);
