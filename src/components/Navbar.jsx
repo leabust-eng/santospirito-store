@@ -13,7 +13,7 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
   return (
     <nav className="bg-white border-b border-neutral-200 text-xs font-semibold uppercase tracking-wider text-neutral-700 w-full max-w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 w-full max-w-full">
-        <div className="flex items-center justify-between overflow-x-auto no-scrollbar py-1 w-full max-w-full scroll-smooth">
+        <div className="flex items-center overflow-x-auto no-scrollbar py-1 w-full max-w-full scroll-smooth">
           
           <div className="flex items-center space-x-1 sm:space-x-2">
             
@@ -87,12 +87,16 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
               <span>Tabla de Talles</span>
             </button>
 
-          </div>
+            {/* Colección Spandex 2026 - Integrada junto a Tabla de Talles */}
+            <button
+              onClick={() => handleCategoryClick("TODOS", "Spandex")}
+              className="flex items-center gap-1.5 text-[11px] text-amber-800 bg-amber-50 hover:bg-amber-100/90 px-3 py-1 rounded-full border border-amber-200/90 font-bold whitespace-nowrap transition active:scale-95 ml-1 sm:ml-2 shadow-2xs"
+              title="Filtrar por Colección Spandex"
+            >
+              <Sparkles size={12} className="text-amber-600" />
+              <span>Colección Spandex 2026</span>
+            </button>
 
-          {/* Right Highlight Tag */}
-          <div className="hidden xl:flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 font-medium whitespace-nowrap">
-            <Sparkles size={12} className="text-amber-600" />
-            <span>Colección Spandex 2026</span>
           </div>
 
         </div>
