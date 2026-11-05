@@ -1,12 +1,12 @@
 import React from 'react';
-import { CreditCard, Truck, MessageCircle, Instagram } from 'lucide-react';
+import { CreditCard, Truck, MessageCircle, Instagram, Facebook } from 'lucide-react';
 
 export default function AnnouncementBar({ onOpenSizeGuide, onOpenVirtualFitting }) {
   return (
     <div className="bg-[#1a1a1a] text-white text-xs py-2 px-3 sm:px-4 border-b border-neutral-800 w-full overflow-hidden">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-center md:text-left">
         {/* Left: Socials & Contact */}
-        <div className="hidden md:flex items-center gap-4 text-neutral-300">
+        <div className="hidden md:flex items-center gap-3 text-neutral-300">
           <a 
             href="https://instagram.com/santospirito.ok" 
             target="_blank" 
@@ -15,6 +15,16 @@ export default function AnnouncementBar({ onOpenSizeGuide, onOpenVirtualFitting 
           >
             <Instagram size={13} className="text-pink-400" />
             <span>@santospirito.ok</span>
+          </a>
+          <span className="text-neutral-600">|</span>
+          <a 
+            href="https://www.facebook.com/santospirito.ok" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-white transition"
+          >
+            <Facebook size={13} className="text-blue-400" />
+            <span>Facebook</span>
           </a>
           <span className="text-neutral-600">|</span>
           <a 

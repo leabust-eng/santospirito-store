@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ShoppingBag, Menu, X, HelpCircle, Ruler, Phone, Sparkles } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, HelpCircle, Ruler, Phone, Sparkles, Instagram, Facebook } from 'lucide-react';
 
 export default function Header({ 
   cartCount, 
@@ -214,6 +214,27 @@ export default function Header({
                 <Phone size={14} />
                 <span>Asesoría por WhatsApp</span>
               </a>
+              <div className="pt-2 border-t border-neutral-100 flex items-center justify-around text-xs">
+                <a
+                  href="https://instagram.com/santospirito.ok"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-neutral-600 hover:text-pink-600 py-1"
+                >
+                  <Instagram size={14} className="text-pink-500" />
+                  <span>Instagram</span>
+                </a>
+                <span className="text-neutral-300">|</span>
+                <a
+                  href="https://www.facebook.com/santospirito.ok"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-neutral-600 hover:text-blue-600 py-1"
+                >
+                  <Facebook size={14} className="text-blue-600" />
+                  <span>Facebook</span>
+                </a>
+              </div>
             </div>
           </div>
         )}

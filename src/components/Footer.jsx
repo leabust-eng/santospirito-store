@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, MessageCircle, Mail, Phone, MapPin, ShieldCheck, Heart } from 'lucide-react';
+import { Instagram, Facebook, MessageCircle, Mail, Phone, MapPin, ShieldCheck, Heart } from 'lucide-react';
 
 export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) {
   return (
@@ -34,14 +34,25 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-pink-600 text-white flex items-center justify-center transition"
+                aria-label="Instagram de SantoSpirito"
               >
                 <Instagram size={15} />
+              </a>
+              <a 
+                href="https://www.facebook.com/santospirito.ok" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-blue-600 text-white flex items-center justify-center transition"
+                aria-label="Facebook de SantoSpirito"
+              >
+                <Facebook size={15} />
               </a>
               <a 
                 href="https://wa.me/5493815307474" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-emerald-600 text-white flex items-center justify-center transition"
+                aria-label="WhatsApp de SantoSpirito"
               >
                 <MessageCircle size={15} />
               </a>
