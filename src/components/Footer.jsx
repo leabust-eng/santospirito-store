@@ -13,18 +13,20 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
           <div className="space-y-3">
             <button 
               onClick={onGoHome} 
-              className="flex items-center gap-2 group text-left cursor-pointer focus:outline-none"
+              className="flex flex-col items-start group text-left cursor-pointer focus:outline-none"
               aria-label="Ir al inicio"
             >
-              <div className="w-7 h-7 rounded-md bg-teal-700 text-white font-serif font-bold flex items-center justify-center">
-                S
-              </div>
-              <span className="font-serif text-xl font-bold tracking-tight text-white group-hover:text-teal-400 transition">
-                SantoSpirito
+              <img 
+                src="/brand/santospirito-logo-horizontal-white.svg" 
+                alt="SantoSpirito" 
+                className="h-8 w-auto object-contain transition duration-200 group-hover:opacity-90"
+              />
+              <span className="text-[10px] tracking-widest uppercase font-semibold text-neutral-400 mt-1">
+                Expresa tu Stilo
               </span>
             </button>
             <p className="text-neutral-400 text-xs leading-relaxed">
-              Expresá tu estilo profesional. Diseñamos y confeccionamos ambos médicos, chaquetas y uniformes de primera calidad con telas Spandex y Arciel pensadas para la comodidad en tu jornada laboral.
+              Expresa tu Stilo profesional. Diseñamos y confeccionamos ambos médicos, chaquetas y uniformes de primera calidad con telas Spandex y Arciel pensadas para la máxima comodidad en tu jornada laboral.
             </p>
             <div className="flex items-center gap-3 pt-1">
               <a 

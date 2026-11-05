@@ -8,6 +8,8 @@ export default {
     extend: {
       colors: {
         brand: {
+          charcoal: '#4D4D4D', // SantoSpirito Corporate Dark Gray
+          gray: '#666666',     // SantoSpirito Corporate Medium Gray
           dark: '#1e293b',
           primary: '#2563eb',
           secondary: '#38bdf8',
@@ -17,7 +19,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"Raleway"', 'system-ui', '-apple-system', 'sans-serif'],
+        brand: ['"Raleway"', 'sans-serif'],
+        serif: ['"Raleway"', 'serif'],
       }
     },
   },

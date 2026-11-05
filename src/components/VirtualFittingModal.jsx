@@ -157,8 +157,8 @@ export default function VirtualFittingModal({
         <div className="p-4 sm:p-5 border-b border-neutral-200 bg-gradient-to-r from-neutral-950 via-neutral-900 to-teal-950 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-teal-400 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg">
-              <div className="w-full h-full bg-neutral-950 rounded-[10px] flex items-center justify-center text-amber-300">
-                <Sparkles size={20} />
+              <div className="w-full h-full bg-neutral-950 rounded-[10px] flex items-center justify-center p-1.5">
+                <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-full h-full object-contain" />
               </div>
             </div>
             <div>

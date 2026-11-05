@@ -989,6 +989,13 @@ export default function CartDrawer({
 
               {/* Receipt Card */}
               <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 text-left text-xs space-y-2">
+                <div className="flex justify-center pb-2 border-b border-neutral-200">
+                  <img 
+                    src="/brand/santospirito-logo-horizontal.svg" 
+                    alt="SantoSpirito" 
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
                 <div className="flex justify-between border-b border-neutral-200 pb-2">
                   <span className="text-neutral-500">ID de Operación:</span>
                   <strong className="font-mono text-neutral-900">{orderReceipt.id}</strong>

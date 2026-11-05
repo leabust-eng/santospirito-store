@@ -46,16 +46,13 @@ export default function Header({
               className="flex flex-col items-center sm:items-start group cursor-pointer text-left focus:outline-none max-w-full"
               aria-label="Volver a la página de inicio"
             >
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-teal-800 text-white font-serif font-bold text-base sm:text-lg flex items-center justify-center shadow-sm shrink-0">
-                  S
-                </div>
-                <span className="font-serif text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900 group-hover:text-teal-900 transition truncate">
-                  SantoSpirito
-                </span>
-              </div>
-              <span className="hidden sm:block text-[9px] tracking-[0.25em] uppercase font-semibold text-neutral-500 -mt-0.5 truncate">
-                Ambos de Diseño • Colección 2026
+              <img 
+                src="/brand/santospirito-logo-horizontal.svg" 
+                alt="SantoSpirito" 
+                className="h-8 sm:h-10 w-auto object-contain transition duration-200 group-hover:opacity-90"
+              />
+              <span className="hidden sm:block text-[9px] tracking-[0.22em] uppercase font-bold text-neutral-500 mt-0.5 truncate">
+                Expresa tu Stilo • Colección 2026
               </span>
             </button>
           </div>
