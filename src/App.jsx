@@ -7,6 +7,7 @@ import TrustBar from './components/TrustBar';
 import ProductCard from './components/ProductCard';
 import ProductDetailModal from './components/ProductDetailModal';
 import SizeGuideModal from './components/SizeGuideModal';
+import VirtualFittingModal from './components/VirtualFittingModal';
 import CartDrawer from './components/CartDrawer';
 import PaymentMethodsModal from './components/PaymentMethodsModal';
 import Footer from './components/Footer';
@@ -42,7 +43,22 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [isVirtualFittingOpen, setIsVirtualFittingOpen] = useState(false);
+  const [virtualFittingGender, setVirtualFittingGender] = useState('mujer');
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
+  const handleOpenVirtualFitting = (g = 'mujer') => {
+    setVirtualFittingGender(g);
+    setIsVirtualFittingOpen(true);
+  };
+
+  const handleSelectSizeFromFitter = (size, g) => {
+    setActiveCategory({ 
+      category: g === 'mujer' ? "AMBOS MUJER" : "AMBOS HOMBRE", 
+      subCategory: null 
+    });
+    window.scrollTo({ top: 550, behavior: 'smooth' });
+  };
 
   // Cart operations
   const handleAddToCart = (itemToAdd) => {
@@ -123,13 +139,17 @@ export default function App() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#faf9f8] text-[#222]">
       
       {/* 1. Announcement Bar */}
-      <AnnouncementBar onOpenSizeGuide={() => setIsSizeGuideOpen(true)} />
+      <AnnouncementBar 
+        onOpenSizeGuide={() => setIsSizeGuideOpen(true)} 
+        onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
+      />
 
       {/* 2. Header */}
       <Header
         cartCount={totalCartUnits}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+        onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         onSelectProduct={(p) => setSelectedProduct(p)}
@@ -142,6 +162,7 @@ export default function App() {
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+        onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
         onGoHome={handleGoHome}
       />
 
@@ -321,6 +342,7 @@ export default function App() {
           onClose={() => setSelectedProduct(null)}
           onAddToCart={handleAddToCart}
           onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+          onOpenVirtualFitting={(g) => handleOpenVirtualFitting(g || 'mujer')}
           onOpenPaymentMethods={() => setIsPaymentModalOpen(true)}
         />
       )}
@@ -329,9 +351,19 @@ export default function App() {
       <SizeGuideModal
         isOpen={isSizeGuideOpen}
         onClose={() => setIsSizeGuideOpen(false)}
+        onOpenVirtualFitting={(g) => handleOpenVirtualFitting(g || 'mujer')}
       />
 
-      {/* 11. Cart Drawer */}
+      {/* 11. Virtual Fitting Modal (Simulador y Vestuario Virtual) */}
+      <VirtualFittingModal
+        isOpen={isVirtualFittingOpen}
+        onClose={() => setIsVirtualFittingOpen(false)}
+        onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+        onSelectSizeFilter={handleSelectSizeFromFitter}
+        initialGender={virtualFittingGender}
+      />
+
+      {/* 12. Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}

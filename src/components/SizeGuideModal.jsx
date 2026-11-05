@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { X, Ruler, CheckCircle2, AlertCircle, HelpCircle } from 'lucide-react';
+import { X, Ruler, CheckCircle2, AlertCircle, HelpCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { sizeGuideData } from '../data/sizeChart';
 
-export default function SizeGuideModal({ isOpen, onClose }) {
+export default function SizeGuideModal({ isOpen, onClose, onOpenVirtualFitting }) {
   if (!isOpen) return null;
 
   const [activeTab, setActiveTab] = useState('mujer');
@@ -39,6 +39,36 @@ export default function SizeGuideModal({ isOpen, onClose }) {
 
         {/* Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-6">
+
+          {/* Virtual Fitting Callout Banner */}
+          <div className="p-4 bg-gradient-to-r from-teal-950 via-teal-900 to-neutral-900 rounded-2xl text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                  <span>¿Preferís que calculemos tu talle automáticamente?</span>
+                  <span className="bg-amber-400/20 text-amber-300 text-[10px] px-2 py-0.5 rounded-full border border-amber-400/30 uppercase font-extrabold hidden md:inline">
+                    Nuevo
+                  </span>
+                </h4>
+                <p className="text-[11px] text-teal-200 mt-0.5">
+                  Ingresá tu altura y peso en el <strong>Vestuario Virtual</strong> y mirá cómo te queda sobre una silueta interactiva.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                onClose();
+                if (onOpenVirtualFitting) onOpenVirtualFitting(activeTab);
+              }}
+              className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-neutral-950 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wide uppercase whitespace-nowrap transition shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
+            >
+              <span>Abrir Vestuario Virtual</span>
+              <ChevronRight size={14} />
+            </button>
+          </div>
           
           {/* Gender Tabs */}
           <div className="flex justify-center">

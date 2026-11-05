@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Search, ShoppingBag, Menu, X, HelpCircle, Ruler, Phone } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, HelpCircle, Ruler, Phone, Sparkles } from 'lucide-react';
 
 export default function Header({ 
   cartCount, 
   onOpenCart, 
   onOpenSizeGuide,
+  onOpenVirtualFitting,
   searchQuery, 
   setSearchQuery,
   onSelectProduct,
@@ -115,6 +116,15 @@ export default function Header({
 
           {/* Right Actions */}
           <div className="flex items-center gap-3 sm:gap-4">
+            {/* Virtual Fitting trigger */}
+            <button
+              onClick={onOpenVirtualFitting}
+              className="hidden md:flex items-center gap-1.5 text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 hover:from-teal-100 hover:to-emerald-100 px-3 py-1.5 rounded-full border border-teal-200/80 transition shadow-2xs active:scale-95"
+            >
+              <Sparkles size={14} className="text-amber-500" />
+              <span>Vestuario Virtual</span>
+            </button>
+
             {/* Size chart trigger */}
             <button
               onClick={onOpenSizeGuide}
@@ -177,6 +187,16 @@ export default function Header({
                 className="text-left px-3 py-2 rounded-lg text-xs font-bold text-teal-900 bg-teal-50"
               >
                 🏠 Inicio / Todos los Productos
+              </button>
+              <button
+                onClick={() => {
+                  onOpenVirtualFitting();
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left px-3 py-2 rounded-lg text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/70 hover:bg-teal-100 flex items-center gap-2"
+              >
+                <Sparkles size={14} className="text-amber-500" />
+                <span>✨ Vestuario Virtual (Simulador 3D)</span>
               </button>
               <button
                 onClick={() => {

@@ -9,6 +9,7 @@ export default function ProductDetailModal({
   onClose, 
   onAddToCart, 
   onOpenSizeGuide,
+  onOpenVirtualFitting,
   onOpenPaymentMethods 
 }) {
   if (!product) return null;
@@ -211,14 +212,29 @@ export default function ProductDetailModal({
                       <span className="text-teal-800 font-extrabold">({selectedSize})</span>
                     </label>
 
-                    {/* Guía de Talles Button */}
-                    <button
-                      onClick={onOpenSizeGuide}
-                      className="text-xs font-bold text-teal-800 hover:text-teal-950 flex items-center gap-1.5 underline decoration-teal-700 hover:scale-105 transition"
-                    >
-                      <Ruler size={14} />
-                      <span>Ver Tabla de Medidas en cm</span>
-                    </button>
+                    {/* Guía de Talles & Vestuario Virtual Buttons */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          if (onOpenVirtualFitting) {
+                            const isMen = product.gender?.toLowerCase()?.includes('hombre') || product.name?.toLowerCase()?.includes('hombre');
+                            onOpenVirtualFitting(isMen ? 'hombre' : 'mujer');
+                          }
+                        }}
+                        className="text-xs font-bold text-teal-900 hover:text-teal-950 flex items-center gap-1 bg-gradient-to-r from-teal-50 to-emerald-50 hover:from-teal-100 hover:to-emerald-100 px-2 py-0.5 rounded-full border border-teal-200/80 transition"
+                      >
+                        <Sparkles size={12} className="text-amber-500" />
+                        <span>Vestuario Virtual</span>
+                      </button>
+
+                      <button
+                        onClick={onOpenSizeGuide}
+                        className="text-xs font-semibold text-neutral-600 hover:text-neutral-900 flex items-center gap-1 underline decoration-dotted transition"
+                      >
+                        <Ruler size={13} />
+                        <span>Tabla</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Size Pills */}

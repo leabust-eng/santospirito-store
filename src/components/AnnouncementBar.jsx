@@ -1,7 +1,7 @@
 import React from 'react';
 import { CreditCard, Truck, MessageCircle, Instagram } from 'lucide-react';
 
-export default function AnnouncementBar({ onOpenSizeGuide }) {
+export default function AnnouncementBar({ onOpenSizeGuide, onOpenVirtualFitting }) {
   return (
     <div className="bg-[#1a1a1a] text-white text-xs py-2 px-3 sm:px-4 border-b border-neutral-800 w-full overflow-hidden">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-center md:text-left">
@@ -41,7 +41,14 @@ export default function AnnouncementBar({ onOpenSizeGuide }) {
         </div>
 
         {/* Right: Quick Links */}
-        <div className="hidden lg:flex items-center gap-4 text-[11px] text-neutral-400">
+        <div className="hidden lg:flex items-center gap-3 text-[11px] text-neutral-400">
+          <button 
+            onClick={onOpenVirtualFitting}
+            className="text-amber-300 hover:text-amber-200 font-bold transition flex items-center gap-1"
+          >
+            <span>✨ Vestuario Virtual</span>
+          </button>
+          <span className="text-neutral-600">|</span>
           <button 
             onClick={onOpenSizeGuide}
             className="hover:text-white underline decoration-dotted transition"
@@ -49,7 +56,7 @@ export default function AnnouncementBar({ onOpenSizeGuide }) {
             📏 Tabla de Talles
           </button>
           <span className="text-neutral-600">|</span>
-          <span className="text-amber-300 font-medium">10% OFF con Transferencia</span>
+          <span className="text-emerald-400 font-medium">10% OFF Transferencia</span>
         </div>
       </div>
     </div>

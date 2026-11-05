@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Sparkles, Ruler } from 'lucide-react';
 import { categories } from '../data/products';
 
-export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGuide, onGoHome }) {
+export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGuide, onOpenVirtualFitting, onGoHome }) {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const handleCategoryClick = (catName, subCat = null) => {
@@ -78,10 +78,19 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
               );
             })}
 
+            {/* Vestuario Virtual Button */}
+            <button
+              onClick={onOpenVirtualFitting}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 hover:from-teal-100 hover:to-emerald-100 border border-teal-200/80 rounded-lg shadow-2xs transition whitespace-nowrap active:scale-95"
+            >
+              <Sparkles size={13} className="text-amber-500 animate-pulse" />
+              <span>Vestuario Virtual</span>
+            </button>
+
             {/* Guía de Talles Button */}
             <button
               onClick={onOpenSizeGuide}
-              className="flex items-center gap-1.5 px-3 py-2.5 text-teal-800 hover:text-teal-950 font-bold hover:bg-teal-50 rounded-md transition whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2.5 text-neutral-600 hover:text-neutral-900 font-semibold hover:bg-neutral-50 rounded-md transition whitespace-nowrap"
             >
               <Ruler size={14} />
               <span>Tabla de Talles</span>
