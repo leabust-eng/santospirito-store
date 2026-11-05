@@ -46,9 +46,10 @@ export default function CartDrawer({
       id: 'tucuman_moto',
       zone: 'tucuman',
       title: 'Cadetería Express (Servimoto / PedidosYa)',
-      subtitle: 'San Miguel y Gran Tucumán • Entrega en 24hs o coordinada',
-      shortName: 'Cadetería Tucumán',
-      price: 3500,
+      subtitle: 'San Miguel de Tucumán y hasta 10 km • Se abona al recibir',
+      shortName: 'Cadetería en destino',
+      price: 0,
+      isPayOnDelivery: true,
       requiresAddress: true
     },
     tucuman_retiro: {
@@ -58,24 +59,27 @@ export default function CartDrawer({
       subtitle: 'Coordinamos por WhatsApp horario y punto de entrega',
       shortName: 'Entrega Personal / Retiro',
       price: 0,
+      isPayOnDelivery: false,
       requiresAddress: false
     },
     correo_domicilio: {
       id: 'correo_domicilio',
-      zone: 'nacional',
+      zone: 'ambas',
       title: 'Correo Argentino a Domicilio',
-      subtitle: 'Llega directo a tu casa en todo el país (3 a 5 días hábiles)',
+      subtitle: 'Para interior de Tucumán (>10 km) o resto del país (3 a 5 días)',
       shortName: 'Correo Arg. a Domicilio',
       price: 6900,
+      isPayOnDelivery: false,
       requiresAddress: true
     },
     correo_sucursal: {
       id: 'correo_sucursal',
-      zone: 'nacional',
+      zone: 'ambas',
       title: 'Sucursal Correo Argentino',
-      subtitle: 'Retiro en la sucursal más cercana de tu localidad',
+      subtitle: 'Para interior de Tucumán (>10 km) o resto del país',
       shortName: 'Sucursal Correo Arg.',
       price: 4900,
+      isPayOnDelivery: false,
       requiresAddress: true
     }
   };
@@ -194,6 +198,12 @@ export default function CartDrawer({
         ? `*ENTREGA:* Retiro / Entrega Personal en Tucumán (A coordinar con SantoSpirito)` + (customerData.notes ? `%0A*NOTA / SUGERENCIA:* ${customerData.notes}` : '')
         : `*DIRECCION:* ${customerData.address}, ${customerData.city} (${customerData.province || 'Tucumán'})${customerData.postalCode ? ` [CP: ${customerData.postalCode}]` : ''}`;
 
+      const shippingCostText = selectedShipping.isPayOnDelivery
+        ? 'A abonar al recibir (al cadete en destino)'
+        : estimatedShipping === 0
+        ? '¡GRATIS!'
+        : `$${estimatedShipping.toLocaleString('es-AR')}`;
+
       const message = `*¡HOLA SANTO SPIRITO! Quiero confirmar mi pedido por Transferencia:*%0A%0A` +
         `*CLIENTE:* ${customerData.name}%0A` +
         `*TELEFONO:* ${customerData.phone}%0A` +
@@ -203,8 +213,9 @@ export default function CartDrawer({
         `*SUBTOTAL:* $${subtotal.toLocaleString('es-AR')}%0A` +
         (discountAmount > 0 ? `*DESCUENTO CUPON:* -$${discountAmount.toLocaleString('es-AR')}%0A` : '') +
         `*DESCUENTO TRANSFERENCIA (10%):* -$${transferDiscount.toLocaleString('es-AR')}%0A` +
-        `*COSTO DE ENVIO:* ${estimatedShipping === 0 ? '¡GRATIS!' : `$${estimatedShipping.toLocaleString('es-AR')}`}%0A` +
+        `*COSTO DE ENVIO:* ${shippingCostText}%0A` +
         `*TOTAL FINAL A TRANSFERIR:* $${finalTotal.toLocaleString('es-AR')}%0A%0A` +
+        (selectedShipping.isPayOnDelivery ? `_🛵 Nota: El servicio de cadetería se abona directo al cadete al recibir la prenda._%0A%0A` : '') +
         `_Aguardando CBU / Alias para enviar el comprobante._`;
 
       window.open(`https://wa.me/5493815307474?text=${message}`, '_blank');
@@ -213,6 +224,7 @@ export default function CartDrawer({
         method: 'Transferencia Bancaria (10% OFF)',
         shippingTitle: selectedShipping.title,
         shippingMethod: selectedShipping.id,
+        isPayOnDelivery: selectedShipping.isPayOnDelivery,
         shippingCost: estimatedShipping,
         total: finalTotal
       });
@@ -236,6 +248,7 @@ export default function CartDrawer({
         total: finalTotal,
         shippingTitle: selectedShipping.title,
         shippingMethod: selectedShipping.id,
+        isPayOnDelivery: selectedShipping.isPayOnDelivery,
         shippingCost: estimatedShipping,
         authCode: `AUTH-${Math.floor(100000 + Math.random() * 900000)}`
       });
@@ -509,12 +522,12 @@ export default function CartDrawer({
                             <span className="font-bold text-neutral-900 text-xs">
                               🛵 Cadetería Express (Servimoto / PedidosYa)
                             </span>
-                            <span className="font-extrabold text-xs text-neutral-900">
-                              {isFreeShipping ? <span className="text-emerald-700">¡GRATIS!</span> : "$3.500,00"}
+                            <span className="text-[10px] font-bold text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded border border-teal-300">
+                              A abonar en destino
                             </span>
                           </div>
                           <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
-                            San Miguel de Tucumán y Gran Tucumán (Yerba Buena, etc.). Entrega en 24hs.
+                            Válido para San Miguel de Tucumán y radio hasta 10 km. <strong>El costo del cadete lo abonás al recibir la prenda.</strong>
                           </p>
                         </div>
                       </label>
@@ -542,7 +555,36 @@ export default function CartDrawer({
                             <span className="font-extrabold text-xs text-emerald-700">$0,00</span>
                           </div>
                           <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
-                            Coordinamos día, horario y punto de entrega personal o retiro por WhatsApp.
+                            Coordinamos día, horario y punto de entrega personal o retiro por WhatsApp en San Miguel.
+                          </p>
+                        </div>
+                      </label>
+
+                      {/* Correo Argentino Domicilio Interior Tucuman */}
+                      <label className={`flex items-start gap-2.5 p-2.5 rounded-xl border cursor-pointer transition ${
+                        shippingMethod === 'correo_domicilio'
+                          ? "border-teal-800 bg-teal-50/70 ring-2 ring-teal-700/20"
+                          : "border-neutral-200 hover:border-neutral-300 bg-white"
+                      }`}>
+                        <input
+                          type="radio"
+                          name="shippingMethod"
+                          value="correo_domicilio"
+                          checked={shippingMethod === 'correo_domicilio'}
+                          onChange={() => setShippingMethod('correo_domicilio')}
+                          className="mt-0.5"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-neutral-900 text-xs">
+                              🏠 Correo Argentino a Domicilio (&gt; 10 km / Interior)
+                            </span>
+                            <span className="font-extrabold text-xs text-neutral-900">
+                              {isFreeShipping ? <span className="text-emerald-700">¡GRATIS!</span> : "$6.900,00"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
+                            Recomendado para distancias mayores a 10 km o interior provincial.
                           </p>
                         </div>
                       </label>
@@ -564,7 +606,7 @@ export default function CartDrawer({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-neutral-900 text-xs">
-                              🏢 Sucursal Correo Argentino (Interior Tucumán)
+                              🏢 Sucursal Correo Argentino (&gt; 10 km / Interior)
                             </span>
                             <span className="font-extrabold text-xs text-neutral-900">
                               {isFreeShipping ? <span className="text-emerald-700">¡GRATIS!</span> : "$4.900,00"}
@@ -667,13 +709,13 @@ export default function CartDrawer({
                   <div>
                     <label className="font-bold text-neutral-700 block mb-1">
                       {shippingMethod === 'tucuman_moto'
-                        ? "Dirección para el Cadete (Calle, número, piso/depto o consultorio) *"
+                        ? "Dirección para el Cadete (San Miguel y hasta 10 km) *"
                         : "Dirección de Entrega (Calle y Número) *"}
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder={shippingMethod === 'tucuman_moto' ? "Ej: San Martín 540, Consultorio 2A" : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"}
+                      placeholder={shippingMethod === 'tucuman_moto' ? "Ej: San Martín 540, Consultorio 2A (Abonás al cadete)" : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"}
                       value={customerData.address}
                       onChange={e => setCustomerData({...customerData, address: e.target.value})}
                       className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
@@ -997,8 +1039,11 @@ export default function CartDrawer({
                   🤝 <strong>Próximo paso:</strong> Nos comunicaremos por WhatsApp al <strong>{customerData.phone}</strong> para coordinar día, horario y punto de entrega en San Miguel de Tucumán.
                 </div>
               ) : orderReceipt.shippingMethod === 'tucuman_moto' ? (
-                <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-[11px] text-teal-950 text-left">
-                  🛵 <strong>Próximo paso:</strong> Prepararemos tu pedido y coordinaremos el despacho con el cadete (Servimoto / PedidosYa) a <strong>{customerData.address}</strong>. Te avisaremos antes de salir al <strong>{customerData.phone}</strong>.
+                <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-[11px] text-teal-950 text-left space-y-1">
+                  <p>🛵 <strong>Próximo paso:</strong> Prepararemos tu pedido y coordinaremos el despacho con el cadete (Servimoto / PedidosYa) a <strong>{customerData.address}</strong>.</p>
+                  <p className="text-teal-900 font-bold bg-white/80 p-1.5 rounded border border-teal-200">
+                    💡 Recordá que el costo del viaje del cadete lo abonás directo al recibir la prenda en mano.
+                  </p>
                 </div>
               ) : (
                 <div className="p-3 bg-sky-50 rounded-xl border border-sky-200 text-[11px] text-sky-950 text-left">
@@ -1046,10 +1091,25 @@ export default function CartDrawer({
                 </div>
               )}
 
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span>Envío ({selectedShipping.shortName}):</span>
-                <span>{estimatedShipping === 0 ? <strong className="text-emerald-700 font-bold">¡GRATIS!</strong> : `$${estimatedShipping.toLocaleString('es-AR')},00`}</span>
+                <span>
+                  {selectedShipping.isPayOnDelivery ? (
+                    <span className="text-teal-900 font-bold bg-teal-100/70 px-2 py-0.5 rounded border border-teal-300 text-[11px]">
+                      A abonar en destino
+                    </span>
+                  ) : estimatedShipping === 0 ? (
+                    <strong className="text-emerald-700 font-bold">¡GRATIS!</strong>
+                  ) : (
+                    `$${estimatedShipping.toLocaleString('es-AR')},00`
+                  )}
+                </span>
               </div>
+              {selectedShipping.isPayOnDelivery && (
+                <p className="text-[10px] text-teal-800 text-right -mt-1 font-medium">
+                  🛵 Abonás el servicio directo al cadete al recibir la prenda
+                </p>
+              )}
 
               <div className="flex justify-between text-base font-extrabold text-neutral-900 pt-2 border-t border-neutral-200">
                 <span>Total Final:</span>

@@ -38,13 +38,13 @@ export default function ProductDetailModal({
       if (isTucuman) {
         setShippingQuote({
           isTucuman: true,
-          moto: 3500,
+          motoPayOnDelivery: true,
           sucursal: 4900,
           domicilio: 6400,
-          diasMoto: "En el día o 24hs hábiles (Servimoto / PedidosYa)",
+          diasMoto: "San Miguel de Tucumán y radio hasta 10 km • Se abona al recibir",
           diasRetiro: "A coordinar con SantoSpirito (San Miguel)",
-          diasSucursal: "2 a 3 días hábiles (Interior)",
-          diasDomicilio: "1 a 2 días hábiles"
+          diasSucursal: "Para distancias > 10 km o interior (2 a 3 días)",
+          diasDomicilio: "Para distancias > 10 km o interior (1 a 2 días)"
         });
       } else {
         setShippingQuote({
@@ -331,13 +331,13 @@ export default function ProductDetailModal({
                         setPostalCode('4000');
                         setShippingQuote({
                           isTucuman: true,
-                          moto: 3500,
+                          motoPayOnDelivery: true,
                           sucursal: 4900,
                           domicilio: 6400,
-                          diasMoto: "En el día o 24hs hábiles (Servimoto / PedidosYa)",
+                          diasMoto: "San Miguel de Tucumán y radio hasta 10 km • Se abona al recibir",
                           diasRetiro: "A coordinar con SantoSpirito (San Miguel)",
-                          diasSucursal: "2 a 3 días hábiles (Interior)",
-                          diasDomicilio: "1 a 2 días hábiles"
+                          diasSucursal: "Para distancias > 10 km o interior (2 a 3 días)",
+                          diasDomicilio: "Para distancias > 10 km o interior (1 a 2 días)"
                         });
                       }}
                       className="text-teal-700 hover:text-teal-900 font-bold underline"
@@ -359,7 +359,8 @@ export default function ProductDetailModal({
                       {shippingQuote.isTucuman ? (
                         <>
                           <div className="flex items-center justify-between pb-1.5 border-b border-neutral-200 text-[11px] font-bold text-teal-900">
-                            <span>📍 Opciones en San Miguel de Tucumán y alrededores:</span>
+                            <span>📍 Opciones en Tucumán:</span>
+                            <span className="text-[10px] text-teal-700 font-normal">Moto hasta 10 km / Correo mayor distancia</span>
                           </div>
 
                           <div className="flex justify-between items-center">
@@ -369,7 +370,9 @@ export default function ProductDetailModal({
                               </span>
                               <span className="text-[10px] text-neutral-500 block">{shippingQuote.diasMoto}</span>
                             </div>
-                            <strong className="text-neutral-900 font-bold">${shippingQuote.moto.toLocaleString('es-AR')},00</strong>
+                            <span className="text-[10px] font-bold text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded border border-teal-300">
+                              A abonar en destino
+                            </span>
                           </div>
 
                           <div className="flex justify-between items-center pt-1.5 border-t border-neutral-200">
@@ -386,10 +389,18 @@ export default function ProductDetailModal({
 
                           <div className="flex justify-between items-center pt-1.5 border-t border-neutral-200">
                             <div>
-                              <span className="text-neutral-700">🏢 Sucursal Correo Argentino (Interior):</span>
+                              <span className="text-neutral-700">🏢 Sucursal Correo Argentino (&gt; 10 km / Interior):</span>
                               <span className="text-[10px] text-neutral-400 block">{shippingQuote.diasSucursal}</span>
                             </div>
                             <strong className="text-neutral-900 font-bold">${shippingQuote.sucursal.toLocaleString('es-AR')},00</strong>
+                          </div>
+
+                          <div className="flex justify-between items-center pt-1.5 border-t border-neutral-200">
+                            <div>
+                              <span className="text-neutral-700">🏠 Domicilio Correo Argentino (&gt; 10 km / Interior):</span>
+                              <span className="text-[10px] text-neutral-400 block">{shippingQuote.diasDomicilio}</span>
+                            </div>
+                            <strong className="text-neutral-900 font-bold">${shippingQuote.domicilio.toLocaleString('es-AR')},00</strong>
                           </div>
                         </>
                       ) : (
