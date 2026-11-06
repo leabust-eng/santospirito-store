@@ -1,0 +1,6 @@
+# Robots.txt para SantoSpirito Store
+User-agent: *
+Allow: /
+
+# Sitemap oficial
+Sitemap: https://santospirito-store.vercel.app/sitemap.xml
