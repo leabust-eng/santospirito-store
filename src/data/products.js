@@ -22,7 +22,7 @@ export const products = [
       "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg",
-      "https://images.unsplash.com/photo-1594824813589-9a706bfa43e0?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg"
     ],
     colors: [
       { name: "Tricolor Menta + Blanco + Marino", hex: "#7bc4b2", inStock: true },
@@ -69,7 +69,7 @@ export const products = [
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/179b70366be62483d6cb18922249ffa8d6bc8ac69ea53ce461ad61101bab8f2d466763.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
     ],
     colors: [
       { name: "Celeste Sanitario + Azul Marino", hex: "#7ba7bc", inStock: true },
@@ -114,7 +114,7 @@ export const products = [
     badge: "MÁXIMA DISTINCIÓN",
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg"
     ],
     colors: [
       { name: "Beige Camel + Negro", hex: "#c8b29b", inStock: true },
@@ -361,7 +361,7 @@ export const products = [
     badge: "TENDENCIA FACEBOOK",
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/8e88e15d99e302000e6362428e137b9f64fd5b6d004a668ddf4d02fadb4bcb56466763.jpg",
-      "https://images.unsplash.com/photo-1594824813589-9a706bfa43e0?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg"
     ],
     colors: [
       { name: "Rosa Pastel + Bordeaux", hex: "#e2a9b3", inStock: true },
@@ -401,8 +401,8 @@ export const products = [
     reviewsCount: 19,
     badge: "GÉNEROS PREMIUM",
     images: [
-      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
     ],
     colors: [
       { name: "Azul Topacio Intenso", hex: "#007791", inStock: true },
@@ -443,7 +443,7 @@ export const products = [
     badge: "REFLEJA TU ESTILO",
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg"
     ],
     colors: [
       { name: "Azul Francia Vibrante", hex: "#0055a5", inStock: true }
@@ -482,7 +482,7 @@ export const products = [
     reviewsCount: 18,
     badge: "NUEVA COLECCIÓN FLEX",
     images: [
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80",
+      "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg"
     ],
     colors: [
@@ -524,8 +524,8 @@ export const products = [
     badge: "MÁS VENDIDO",
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/8e88e15d99e302000e6362428e137b9f64fd5b6d004a668ddf4d02fadb4bcb56466763.jpg",
-      "https://images.unsplash.com/photo-1594824813589-9a706bfa43e0?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
     ],
     colors: [
       { name: "Rosa Plumetí", hex: "#e2a9b3", inStock: true },
@@ -567,8 +567,8 @@ export const products = [
     badge: "DESTACADO HOMBRE",
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/44d79c226eaa92c228654fe429d81f229d77214f7ba34674dc704c0b1bf22663466763.jpg",
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
     ],
     colors: [
       { name: "Gris Grafito + Negro", hex: "#3b3d40", inStock: true },
@@ -608,8 +608,8 @@ export const products = [
     reviewsCount: 19,
     badge: "BÁSICO CLÍNICO",
     images: [
-      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
     ],
     colors: [
       { name: "Blanco Puro + Azul", hex: "#ffffff", inStock: true }
@@ -647,8 +647,8 @@ export const products = [
     reviewsCount: 15,
     badge: "ALTA DEMANDA",
     images: [
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1594824813589-9a706bfa43e0?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg"
     ],
     colors: [
       { name: "Blanco con vivos negros", hex: "#f8f9fa", inStock: true }
@@ -686,8 +686,8 @@ export const products = [
     reviewsCount: 12,
     badge: "DISEÑO EXCLUSIVO",
     images: [
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
+      "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg"
     ],
     colors: [
       { name: "Blanco / Negro", hex: "#222222", inStock: true }
@@ -724,7 +724,7 @@ export const products = [
     reviewsCount: 20,
     badge: "COLOR TENDENCIA",
     images: [
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80",
+      "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/a9b6ce1bd1c7323c23de5fab33c4a086f1ac731b411b63fa59537736a122db01466763.jpg"
     ],
     colors: [
