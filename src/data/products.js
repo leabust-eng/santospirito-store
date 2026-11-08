@@ -624,84 +624,7 @@ export const products = [
     }
   },
 
-  // 16. CHAQUETA MAO
-  {
-    id: "chaqueta-mao-blanca-y-negra",
-    slug: "chaqueta-mao-blanca-y-negra",
-    name: "CHAQUETA CUELLO MAO CON BROCHES",
-    tagline: "Estilo oriental moderno con broches de presión metálicos inoxidables",
-    gender: "Mujer",
-    category: "Chaquetas",
-    subCategory: "Broches",
-    fabric: "Spandex Peinado",
-    price: 85000,
-    originalPrice: 95000,
-    discount: "11% OFF",
-    featured: true,
-    rating: 4.9,
-    reviewsCount: 15,
-    badge: "ALTA DEMANDA",
-    images: [
-      "/products/chaqueta-mao-blanca-negra.jpg",
-      "/products/chaqueta-dior-bicolor.jpg"
-    ],
-    colors: [
-      { name: "Blanco con vivos negros", hex: "#f8f9fa", inStock: true }
-    ],
-    sizes: [
-      { size: "S", stock: 4 },
-      { size: "M", stock: 7 },
-      { size: "L", stock: 5 },
-      { size: "XL", stock: 2 }
-    ],
-    description: {
-      intro: "Chaqueta elegante de cuello mao recomendada para odontología, medicina estética y dermatología.",
-      casaca: "Cierre asimétrico con broches a presión metálicos que no se oxidan.",
-      pantalon: "Prenda individual (chaqueta sola).",
-      composicion: "97% Algodón Spandex, 3% Elastano.",
-      cuidados: ["Planchar del revés"]
-    }
-  },
-
-  // 17. CHAQUETA DIOR BICOLOR
-  {
-    id: "chaqueta-dior-blanca-y-negra",
-    slug: "chaqueta-dior-blanca-y-negra",
-    name: "CHAQUETA ESTILO DIOR BICOLOR",
-    tagline: "Inspirada en el corte sastre parisino con vivo contrastante en solapa",
-    gender: "Mujer",
-    category: "Chaquetas",
-    subCategory: "Alta Costura",
-    fabric: "Spandex Alta Densidad",
-    price: 89000,
-    originalPrice: 102000,
-    discount: "13% OFF",
-    featured: false,
-    rating: 4.8,
-    reviewsCount: 12,
-    badge: "DISEÑO EXCLUSIVO",
-    images: [
-      "/products/chaqueta-dior-bicolor.jpg",
-      "/products/chaqueta-mao-blanca-negra.jpg"
-    ],
-    colors: [
-      { name: "Blanco / Negro", hex: "#222222", inStock: true }
-    ],
-    sizes: [
-      { size: "S", stock: 3 },
-      { size: "M", stock: 6 },
-      { size: "L", stock: 4 }
-    ],
-    description: {
-      intro: "Una prenda de distinción pensada para consultorios privados, clínicas estéticas y profesionales independientes.",
-      casaca: "Solapa smoking estilizada bicolor con costura invisible.",
-      pantalon: "Chaqueta individual.",
-      composicion: "Spandex peinado con forrería interna suave.",
-      cuidados: ["Limpieza en seco o lavado a mano con jabón neutro"]
-    }
-  },
-
-  // 18. AMBO VERDE SECO CUELLO EN V
+  // 16. AMBO VERDE SECO CUELLO EN V
   {
     id: "ambo-verde-seco",
     slug: "ambo-verde-seco",
@@ -756,21 +679,11 @@ export const categories = [
   {
     id: "ambos-unisex",
     name: "AMBOS UNISEX",
-    subCategories: ["Spandex", "Azul Francia", "Guardia 24hs"]
+    subCategories: ["Línea Quirúrgica", "Azul Francia", "Enfermería"]
   },
   {
-    id: "chaquetas",
-    name: "CHAQUETAS",
-    subCategories: ["Cuello Mao", "Estilo Dior", "Con Cierre"]
-  },
-  {
-    id: "pantalones",
-    name: "PANTALONES",
-    subCategories: ["Jogger Spandex", "Rectos Confort", "Cargo"]
-  },
-  {
-    id: "accesorios",
-    name: "ACCESORIOS",
-    subCategories: ["Cofias Quirúrgicas", "Portacredenciales", "Bolsos"]
+    id: "edicion-tricolor",
+    name: "EDICIÓN TRICOLOR",
+    subCategories: ["Menta y Blanco", "Detalle Bolsillos"]
   }
 ];

@@ -312,7 +312,7 @@ export default function CartDrawer({
                   <div>
                     <h3 className="text-base font-bold text-neutral-900">Tu carrito está vacío</h3>
                     <p className="text-xs text-neutral-500 mt-1">
-                      Explorá nuestra colección de ambos y chaquetas de diseño.
+                      Explorá nuestra colección oficial de ambos médicos Spandex.
                     </p>
                   </div>
                   <button

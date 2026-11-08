@@ -26,7 +26,7 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
               </span>
             </button>
             <p className="text-neutral-400 text-xs leading-relaxed">
-              Expresa tu Stilo profesional. Diseñamos y confeccionamos ambos médicos, chaquetas y uniformes de primera calidad con telas Spandex y Arciel pensadas para la máxima comodidad en tu jornada laboral.
+              Expresa tu Stilo profesional. Diseñamos y confeccionamos ambos médicos de diseño y uniformes de primera calidad con telas Spandex elastizadas pensadas para la máxima comodidad en tu jornada laboral.
             </p>
             <div className="flex items-center gap-3 pt-1">
               <a 
@@ -81,13 +81,13 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectCategory({ category: "Chaquetas", subCategory: null })} className="hover:text-white transition">
-                  • Chaquetas Mao y Broches
+                <button onClick={() => onSelectCategory({ category: "EDICIÓN TRICOLOR", subCategory: null })} className="hover:text-white transition">
+                  • Edición Especial Tricolor
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectCategory({ category: "Pantalones", subCategory: null })} className="hover:text-white transition">
-                  • Pantalones Jogger y Cargo
+                <button onClick={() => onSelectCategory({ category: "TODOS", subCategory: "Spandex" })} className="hover:text-white transition">
+                  • Colección Spandex 2026
                 </button>
               </li>
             </ul>

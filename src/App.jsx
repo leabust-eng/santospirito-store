@@ -101,7 +101,11 @@ export default function App() {
       const activeCat = activeCategory.category.toLowerCase();
       const pCat = (p.category || '').toLowerCase();
       const pGender = (p.gender || '').toLowerCase();
-      const matchCat = pCat.includes(activeCat) || pGender.includes(activeCat) || activeCat.includes(pCat) || activeCat.includes(pGender);
+      const matchCat = pCat.includes(activeCat) || 
+                       pGender.includes(activeCat) || 
+                       activeCat.includes(pCat) || 
+                       activeCat.includes(pGender) ||
+                       (activeCat.includes('tricolor') && (p.name.toLowerCase().includes('tricolor') || (p.badge || '').toLowerCase().includes('tricolor')));
       if (!matchCat) return false;
 
       if (activeCategory.subCategory) {
@@ -210,7 +214,7 @@ export default function App() {
             
             <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
               {activeCategory.category === "TODOS" 
-                ? (searchQuery ? `Resultados para "${searchQuery}"` : "Catálogo Oficial de Ambos & Chaquetas") 
+                ? (searchQuery ? `Resultados para "${searchQuery}"` : "Catálogo Oficial de Ambos Médicos Spandex") 
                 : `${activeCategory.category} ${activeCategory.subCategory ? `• ${activeCategory.subCategory}` : ''}`}
             </h1>
             
