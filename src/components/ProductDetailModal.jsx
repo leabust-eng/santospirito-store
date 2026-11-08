@@ -24,6 +24,7 @@ export default function ProductDetailModal({
 
   const installmentAmount = Math.round(product.price / 3);
   const transferPrice = Math.round(product.price * 0.90);
+  const secondaryImage = product.images.length > 1 ? (selectedImage === 0 ? 1 : 0) : 0;
 
   const handleCalculateShipping = (e) => {
     e.preventDefault();
@@ -88,47 +89,83 @@ export default function ProductDetailModal({
         <div className="overflow-y-auto p-4 sm:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            {/* LEFT COLUMN: Gallery with Thumbnails (Plavusa Style) */}
-            <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-3">
+            {/* LEFT COLUMN: Galería de 2 Imágenes Horizontales + Miniaturas (Sin deformación) */}
+            <div className="lg:col-span-7 flex flex-col gap-3.5">
               
-              {/* Thumbnails Sidebar */}
-              <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto max-h-[480px] no-scrollbar flex-shrink-0">
+              {/* Contenedor de 2 Imágenes Horizontales en paralelo */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                {/* Imagen Horizontal 1: Vista Frontal / Chaqueta */}
+                <div className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
+                  <img
+                    src={product.images[selectedImage]}
+                    alt={`${product.name} vista frontal`}
+                    className="w-full h-full object-cover object-center transition duration-300 group-hover:scale-105"
+                  />
+
+                  {/* Logo Oficial SantoSpirito en prenda */}
+                  <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 shadow-md pointer-events-none">
+                    <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
+                  </div>
+
+                  <span className="absolute top-2.5 left-2.5 bg-neutral-900/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase shadow-sm">
+                    {product.badge || "Vista Frontal"}
+                  </span>
+
+                  <div className="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full">
+                    Foto {selectedImage + 1} de {product.images.length}
+                  </div>
+                </div>
+
+                {/* Imagen Horizontal 2: Vista Detalle / Confección / Pantalón */}
+                <div 
+                  onClick={() => setSelectedImage(secondaryImage)}
+                  className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group cursor-pointer"
+                  title="Click para alternar vista"
+                >
+                  <img
+                    src={product.images[secondaryImage]}
+                    alt={`${product.name} vista detalle`}
+                    className="w-full h-full object-cover object-center transition duration-300 group-hover:scale-105"
+                  />
+
+                  {/* Logo Oficial SantoSpirito en prenda */}
+                  <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 shadow-md pointer-events-none">
+                    <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
+                  </div>
+
+                  <span className="absolute top-2.5 left-2.5 bg-teal-900/90 backdrop-blur-sm text-teal-200 text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase shadow-sm">
+                    Detalle & Confección
+                  </span>
+
+                  <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full">
+                    Foto {secondaryImage + 1} de {product.images.length}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Tira de Miniaturas Horizontales debajo de las 2 fotos */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative w-16 h-20 md:w-20 md:h-24 rounded-lg overflow-hidden border-2 transition flex-shrink-0 ${
+                    className={`relative h-14 w-20 rounded-lg overflow-hidden border-2 transition flex-shrink-0 ${
                       selectedImage === idx 
-                        ? "border-teal-800 shadow-md scale-95" 
-                        : "border-neutral-200 hover:border-neutral-400 opacity-75 hover:opacity-100"
+                        ? "border-teal-700 shadow-md ring-2 ring-teal-500/30 scale-95" 
+                        : "border-neutral-200 hover:border-neutral-400 opacity-70 hover:opacity-100"
                     }`}
                   >
                     <img 
                       src={img} 
                       alt={`${product.name} miniatura ${idx + 1}`} 
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-cover object-center"
                     />
                   </button>
                 ))}
-              </div>
-
-              {/* Main Image View */}
-              <div className="relative flex-1 aspect-[3/4] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200">
-                <img
-                  src={product.images[selectedImage]}
-                  alt={product.name}
-                  className="w-full h-full object-cover object-top transition duration-300"
-                />
-                
-                {product.badge && (
-                  <span className="absolute top-3 left-3 bg-neutral-900/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded tracking-wider uppercase shadow">
-                    {product.badge}
-                  </span>
-                )}
-                
-                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[11px] px-2.5 py-1 rounded-full">
-                  Foto {selectedImage + 1} de {product.images.length}
-                </div>
               </div>
 
             </div>

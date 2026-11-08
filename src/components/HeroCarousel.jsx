@@ -10,6 +10,7 @@ const slides = [
     subtitle: "Chaqueta celeste pastel con vivos azul marino y pantalón náutico. Confeccionado en Gabardina Spandex de máxima suavidad y calce anatómico.",
     highlight: "Hasta 3 Cuotas Sin Interés con todas las tarjetas",
     cta: "Explorar Colección",
+    productSlug: "ambo-celeste-marino",
     categoryTarget: "Ambos Mujer",
     colorName: "Celeste & Marino",
     themeBg: "from-sky-950 via-slate-900 to-neutral-950",
@@ -25,6 +26,7 @@ const slides = [
     subtitle: "Diseño fresco y moderno que combina blanco, vivos azul y base verde menta. Ideal para esteticistas, médicas y odontólogas.",
     highlight: "Talles reales desde S hasta 3XL",
     cta: "Ver Tricolor",
+    productSlug: "ambo-tricolor-menta-blanco",
     categoryTarget: "Ambos Mujer",
     colorName: "Tricolor Menta",
     themeBg: "from-teal-950 via-slate-900 to-neutral-950",
@@ -40,6 +42,7 @@ const slides = [
     subtitle: "La calidez del tono beige camel combinada con vivos y pantalón negro azabache. Bolsillos amplios y corte que estiliza la figura.",
     highlight: "Envíos a todo el país por Correo Argentino",
     cta: "Ver Ambo Beige",
+    productSlug: "ambo-beige-negro",
     categoryTarget: "Ambos Mujer",
     colorName: "Beige & Negro",
     themeBg: "from-stone-900 via-neutral-900 to-stone-950",
@@ -55,6 +58,7 @@ const slides = [
     subtitle: "Sofisticada combinación de verde oliva militar con delicados vivos en rosa pastel. Pantalón recto elastizado con cintura confort.",
     highlight: "Cambio de talle fácil y garantizado",
     cta: "Ver Modelo Oliva",
+    productSlug: "ambo-verde-oliva-rosa",
     categoryTarget: "Ambos Mujer",
     colorName: "Oliva & Rosa",
     themeBg: "from-emerald-950 via-stone-900 to-neutral-950",
@@ -69,7 +73,8 @@ const slides = [
     title: "AMBO AZUL QUIRÚRGICO",
     subtitle: "Azul eléctrico vibrante en tela Arciel de alta densidad. Resiste lavados intensivos, calor y desinfectantes clínicos sin decolorar.",
     highlight: "Óptimo para veterinaria, odontología y guardia",
-    cta: "Ver Línea Unisex",
+    cta: "Ver Azul Quirúrgico",
+    productSlug: "ambo-azul-quirurgico",
     categoryTarget: "Ambos Unisex",
     colorName: "Azul Quirúrgico",
     themeBg: "from-blue-950 via-slate-900 to-neutral-950",
@@ -84,7 +89,8 @@ const slides = [
     title: "AMBO MENTA & NEGRO",
     subtitle: "Diseño moderno con chaqueta verde menta y pantalón jogger con puños elastizados. Libertad total para moverte en tu lugar de trabajo.",
     highlight: "3 Cuotas Sin Interés con Visa y Mastercard",
-    cta: "Comprar Ahora",
+    cta: "Ver Menta & Negro",
+    productSlug: "ambo-menta-negro",
     categoryTarget: "Ambos Mujer",
     colorName: "Menta & Negro",
     themeBg: "from-teal-950 via-neutral-900 to-zinc-950",
@@ -99,7 +105,8 @@ const slides = [
     title: "AMBO MAGENTA & OLIVA",
     subtitle: "Impactante chaqueta magenta con bolsillos frontales verde oliva y pantalón anatómico haciendo juego. Calidad prémium garantizada.",
     highlight: "10% de ahorro directo por Transferencia Bancaria",
-    cta: "Ver Colección",
+    cta: "Ver Magenta & Oliva",
+    productSlug: "ambo-magenta-oliva",
     categoryTarget: "Ambos Mujer",
     colorName: "Magenta & Oliva",
     themeBg: "from-pink-950 via-neutral-900 to-stone-950",
@@ -114,7 +121,8 @@ const slides = [
     title: "BOLSILLOS ANATÓMICOS TRICOLOR",
     subtitle: "Doble costura de seguridad, bolsillo porta-lapicera y capacidad optimizada para celular, instrumental y pertenencias de guardia.",
     highlight: "Asesoramiento personalizado por WhatsApp",
-    cta: "Ver Todos los Modelos",
+    cta: "Ver Detalle Tricolor",
+    productSlug: "ambo-bolsillos-anatomicos-tricolor",
     categoryTarget: "Ambos Mujer",
     colorName: "Detalle Tricolor",
     themeBg: "from-slate-900 via-neutral-900 to-stone-950",
@@ -124,7 +132,7 @@ const slides = [
   }
 ];
 
-export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide, onOpenVirtualFitting }) {
+export default function HeroCarousel({ onSelectCategory, onSelectProduct, onOpenSizeGuide, onOpenVirtualFitting }) {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -168,7 +176,22 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide, onOpen
           
           {/* Photoshoot Frame: Order 1 on mobile, Order 2 on desktop */}
           <div className="order-1 md:order-2 md:col-span-5 flex justify-center items-center">
-            <div className="relative group w-full max-w-[240px] sm:max-w-[280px] md:max-w-[340px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-neutral-900">
+            <div 
+              onClick={() => {
+                if (onSelectProduct && slide.productSlug) {
+                  onSelectProduct(slide.productSlug);
+                } else {
+                  onSelectCategory({ category: slide.categoryTarget, subCategory: null });
+                }
+              }}
+              className="relative group w-full max-w-[240px] sm:max-w-[280px] md:max-w-[340px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-neutral-900 cursor-pointer"
+              title={`Click para ver detalles y talles de ${slide.title}`}
+            >
+              {/* Logo Oficial SantoSpirito en foto del fotoshoot */}
+              <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 shadow-md pointer-events-none">
+                <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
+              </div>
               
               {/* Actual SantoSpirito Photoshoot Image */}
               <img
@@ -224,10 +247,16 @@ export default function HeroCarousel({ onSelectCategory, onOpenSizeGuide, onOpen
 
             {/* Action Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full">
-              {/* Row 1 on mobile: Ver Colección & Guía de Talles */}
+              {/* Row 1 on mobile: Ver Modelo Directo & Guía de Talles */}
               <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 w-full sm:w-auto">
                 <button
-                  onClick={() => onSelectCategory({ category: slide.categoryTarget, subCategory: null })}
+                  onClick={() => {
+                    if (onSelectProduct && slide.productSlug) {
+                      onSelectProduct(slide.productSlug);
+                    } else {
+                      onSelectCategory({ category: slide.categoryTarget, subCategory: null });
+                    }
+                  }}
                   className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white text-neutral-900 hover:bg-teal-700 hover:text-white px-3 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs md:text-sm font-bold tracking-wider uppercase shadow-lg transition-all active:scale-95 duration-200"
                 >
                   <span className="truncate">{slide.cta}</span>

@@ -27,6 +27,12 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
         onClick={() => onSelectProduct(product)}
         className="relative aspect-[3/4] bg-neutral-100 overflow-hidden cursor-pointer"
       >
+        {/* Logo Oficial SantoSpirito en cada prenda */}
+        <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-sm pointer-events-none">
+          <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-3 h-3" />
+          <span className="text-[9px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
+        </div>
+
         <img
           src={product.images[0]}
           alt={product.name}

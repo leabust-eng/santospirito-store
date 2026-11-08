@@ -170,6 +170,16 @@ export default function App() {
       {activeCategory.category === "TODOS" && !searchQuery && (
         <HeroCarousel
           onSelectCategory={setActiveCategory}
+          onSelectProduct={(slugOrProduct) => {
+            if (typeof slugOrProduct === 'string') {
+              const found = products.find(p => p.slug === slugOrProduct || p.id === slugOrProduct);
+              if (found) {
+                setSelectedProduct(found);
+              }
+            } else {
+              setSelectedProduct(slugOrProduct);
+            }
+          }}
           onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
           onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
         />
