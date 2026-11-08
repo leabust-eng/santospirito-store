@@ -10,6 +10,8 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
     setOpenDropdown(null);
   };
 
+  const navCategories = (categories || []).filter(c => c && c.id !== 'TODOS');
+
   return (
     <nav className="bg-white border-b border-neutral-200 text-xs font-semibold uppercase tracking-wider text-neutral-700 w-full max-w-full overflow-hidden">
       <div className="w-full px-2 sm:px-6 lg:px-8">
@@ -30,8 +32,10 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
             </button>
 
             {/* Dynamic Categories matching Plavusa */}
-            {categories.map((cat) => {
-              const isActive = activeCategory.category === cat.name;
+            {navCategories.map((cat) => {
+              const isActive = (activeCategory.category || "").toUpperCase() === (cat.name || "").toUpperCase();
+              const hasSubcategories = Array.isArray(cat.subCategories) && cat.subCategories.length > 0;
+
               return (
                 <div 
                   key={cat.id} 
@@ -48,11 +52,13 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
                     }`}
                   >
                     <span>{cat.name}</span>
-                    <ChevronDown size={13} className="text-neutral-400 group-hover:text-neutral-700 transition" />
+                    {hasSubcategories && (
+                      <ChevronDown size={13} className="text-neutral-400 group-hover:text-neutral-700 transition" />
+                    )}
                   </button>
 
                   {/* Dropdown Menu */}
-                  {openDropdown === cat.id && (
+                  {openDropdown === cat.id && hasSubcategories && (
                     <div className="absolute top-full left-0 w-52 bg-white rounded-lg shadow-xl border border-neutral-200 py-2 z-50 animate-fade-in">
                       <div className="px-3 py-1.5 text-[10px] text-neutral-400 font-bold tracking-widest border-b border-neutral-100 mb-1">
                         LÍNEAS DISPONIBLES
@@ -63,7 +69,7 @@ export default function Navbar({ activeCategory, onSelectCategory, onOpenSizeGui
                       >
                         Ver todo en {cat.name} →
                       </button>
-                      {cat.subCategories.map((sub, idx) => (
+                      {(cat.subCategories || []).map((sub, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleCategoryClick(cat.name, sub)}

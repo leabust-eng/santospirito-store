@@ -748,10 +748,34 @@ export const products = [
 ];
 
 export const categories = [
-  { id: "TODOS", name: "Todos los Modelos" },
-  { id: "Ambos Mujer", name: "Ambos Mujer" },
-  { id: "Ambos Hombre", name: "Ambos Hombre" },
-  { id: "Ambos Unisex", name: "Ambos Unisex" },
-  { id: "Chaquetas", name: "Chaquetas" },
-  { id: "Pantalones", name: "Pantalones" }
+  {
+    id: "ambos-mujer",
+    name: "AMBOS MUJER",
+    subCategories: ["Spandex", "Tricolor", "Edición Especial", "Gabardina"]
+  },
+  {
+    id: "ambos-hombre",
+    name: "AMBOS HOMBRE",
+    subCategories: ["Spandex", "Gris y Negro", "Clásicos"]
+  },
+  {
+    id: "ambos-unisex",
+    name: "AMBOS UNISEX",
+    subCategories: ["Spandex", "Azul Francia", "Guardia 24hs"]
+  },
+  {
+    id: "chaquetas",
+    name: "CHAQUETAS",
+    subCategories: ["Cuello Mao", "Estilo Dior", "Con Cierre"]
+  },
+  {
+    id: "pantalones",
+    name: "PANTALONES",
+    subCategories: ["Jogger Spandex", "Rectos Confort", "Cargo"]
+  },
+  {
+    id: "accesorios",
+    name: "ACCESORIOS",
+    subCategories: ["Cofias Quirúrgicas", "Portacredenciales", "Bolsos"]
+  }
 ];
