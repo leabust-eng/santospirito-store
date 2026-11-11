@@ -132,7 +132,12 @@ export default async function handler(req, res) {
  */
 async function sendOrderEmails(order) {
   const resendApiKey = process.env.RESEND_API_KEY;
-  const dispatchEmail = process.env.DISPATCH_NOTIFICATION_EMAIL || 'santospirito.ok@gmail.com';
+  const dispatchEmailsRaw = process.env.DISPATCH_NOTIFICATION_EMAIL || 'santospirito.ok@gmail.com';
+  // Permite múltiples correos separados por coma (ej: dueño, encargado, empleado)
+  const dispatchEmails = dispatchEmailsRaw
+    .split(',')
+    .map(email => email.trim())
+    .filter(email => email.length > 0);
 
   const customerHtml = `
     <!DOCTYPE html>
@@ -211,7 +216,7 @@ async function sendOrderEmails(order) {
   if (!resendApiKey) {
     console.log('[Email Notifier] RESEND_API_KEY no configurado en Vercel. Mostrando vista previa en logs:');
     console.log(`- Enviar a Cliente (${order.customer.email}): Pedido Confirmado ${order.orderId}`);
-    console.log(`- Enviar a Encargado (${dispatchEmail}): Hoja de Despacho ${order.orderId}`);
+    console.log(`- Enviar a Encargados (${dispatchEmails.join(', ')}): Hoja de Despacho ${order.orderId}`);
     return;
   }
 
@@ -233,7 +238,7 @@ async function sendOrderEmails(order) {
       });
     }
 
-    // 2. Email al Encargado de Despacho
+    // 2. Email al Equipo de Despacho (Dueño, Encargado, Empleado)
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -242,7 +247,7 @@ async function sendOrderEmails(order) {
       },
       body: JSON.stringify({
         from: 'SantoSpirito Tienda <alertas@santospirito.com.ar>',
-        to: [dispatchEmail],
+        to: dispatchEmails,
         subject: `🚨 NUEVA ORDEN PARA DESPACHO: ${order.orderId} - ${order.customer.name}`,
         html: dispatchHtml
       })
