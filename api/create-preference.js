@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
-  const { items, payer, shippingCost } = req.body || {};
+  const { items, payer, shippingCost, shippingTitle, shippingMethod } = req.body || {};
 
   // If token is not set yet in Vercel Environment Variables, return demo mode flag
   if (!token) {
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     if (shippingCost && Number(shippingCost) > 0) {
       mpItems.push({
         id: 'costo-envio',
-        title: req.body?.shippingTitle || 'Costo de Envío / Entrega',
+        title: shippingTitle || 'Costo de Envío / Entrega',
         quantity: 1,
         unit_price: Number(shippingCost),
         currency_id: 'ARS'
@@ -59,6 +59,7 @@ export default async function handler(req, res) {
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'santospirito-store.vercel.app';
     const protocol = req.headers['x-forwarded-proto'] || 'https';
     const baseUrl = `${protocol}://${host}`;
+    const orderId = `SP-${Date.now().toString().slice(-6)}`;
 
     const preferenceData = {
       body: {
@@ -74,14 +75,31 @@ export default async function handler(req, res) {
           }
         },
         back_urls: {
-          success: `${baseUrl}/?status=approved`,
-          failure: `${baseUrl}/?status=rejected`,
-          pending: `${baseUrl}/?status=pending`
+          success: `${baseUrl}/?status=approved&order=${orderId}`,
+          failure: `${baseUrl}/?status=rejected&order=${orderId}`,
+          pending: `${baseUrl}/?status=pending&order=${orderId}`
         },
         auto_return: 'approved',
+        notification_url: `${baseUrl}/api/mercadopago-webhook`,
+        external_reference: orderId,
         statement_descriptor: 'SANTOSPIRITO',
         payment_methods: {
           installments: 3 // Up to 3 installments as advertised
+        },
+        metadata: {
+          order_id: orderId,
+          customer_name: payer?.name || 'Cliente',
+          customer_email: payer?.email || '',
+          customer_phone: payer?.phone || '',
+          customer_address: payer?.address || '',
+          customer_city: payer?.city || '',
+          customer_province: payer?.province || '',
+          customer_postal_code: payer?.postalCode || '',
+          customer_notes: payer?.notes || '',
+          shipping_title: shippingTitle || 'Envío',
+          shipping_method: shippingMethod || '',
+          shipping_cost: Number(shippingCost) || 0,
+          items_summary: (items || []).map(it => `${it.quantity}x ${it.name} (Talle: ${it.selectedSize})`).join(' | ')
         }
       }
     };
@@ -91,6 +109,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       isDemo: false,
       id: response.id,
+      orderId,
       init_point: response.init_point,
       sandbox_init_point: response.sandbox_init_point
     });

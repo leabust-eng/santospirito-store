@@ -13,7 +13,8 @@ import PaymentMethodsModal from './components/PaymentMethodsModal';
 import Footer from './components/Footer';
 import WhatsAppFloating from './components/WhatsAppFloating';
 import { products } from './data/products';
-import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown } from 'lucide-react';
+import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown, CheckCircle2, PackageCheck, X } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 export default function App() {
   // Cart persisted in localStorage
@@ -33,6 +34,37 @@ export default function App() {
       console.error(e);
     }
   }, [cartItems]);
+
+  // Capturar retorno de pago aprobado desde Mercado Pago
+  const [orderSuccessData, setOrderSuccessData] = useState(null);
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+      const order = params.get('order');
+
+      if (status === 'approved') {
+        setCartItems([]);
+        try {
+          localStorage.removeItem('santospirito_cart');
+        } catch (e) {}
+
+        const cleanOrderId = order || `SP-${Math.floor(100000 + Math.random() * 900000)}`;
+        setOrderSuccessData({ orderId: cleanOrderId });
+
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   // Filters and Navigation
   const [activeCategory, setActiveCategory] = useState({ category: "TODOS", subCategory: null });
@@ -426,6 +458,69 @@ export default function App() {
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
       />
+
+      {/* 14. Mercado Pago Approved Purchase Celebration Modal */}
+      {orderSuccessData && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-teal-100 p-6 sm:p-8 text-center space-y-4">
+            <button
+              onClick={() => setOrderSuccessData(null)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 p-1 rounded-full hover:bg-neutral-100 transition"
+              aria-label="Cerrar"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-bounce">
+              <CheckCircle2 size={36} />
+            </div>
+
+            <div>
+              <span className="text-[10px] font-extrabold tracking-widest text-teal-800 uppercase bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                Pago Aprobado con Éxito
+              </span>
+              <h2 className="text-xl font-black text-neutral-900 mt-2">
+                ¡Gracias por tu compra!
+              </h2>
+              <p className="text-xs text-neutral-500 mt-1">
+                Tu pago fue procesado correctamente a través de Mercado Pago.
+              </p>
+            </div>
+
+            <div className="bg-neutral-50 rounded-xl p-3.5 border border-neutral-200/80 text-left space-y-1.5 text-xs">
+              <div className="flex justify-between">
+                <span className="text-neutral-500">N° de Pedido:</span>
+                <strong className="text-teal-900 font-bold">{orderSuccessData.orderId}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-neutral-500">Estado de la Orden:</span>
+                <span className="text-emerald-700 font-bold">En Preparación / Despacho</span>
+              </div>
+              <div className="pt-2 border-t border-neutral-200 text-[11px] text-neutral-600">
+                📦 <strong>Tiempos estimados:</strong> 24 a 48 hs para San Miguel de Tucumán o 2 a 5 días hábiles por Correo Argentino. Te enviamos los detalles a tu correo.
+              </div>
+            </div>
+
+            <div className="space-y-2 pt-2">
+              <a
+                href={`https://wa.me/5493815307474?text=¡Hola%20SantoSpirito!%20Acabo%20de%20realizar%20mi%20compra%20con%20tarjeta%20por%20Mercado%20Pago%20(Pedido%20${orderSuccessData.orderId}).`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95"
+              >
+                <span>Avisar al Taller por WhatsApp</span>
+              </a>
+
+              <button
+                onClick={() => setOrderSuccessData(null)}
+                className="w-full py-2.5 text-xs font-bold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition"
+              >
+                Volver a la tienda
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
