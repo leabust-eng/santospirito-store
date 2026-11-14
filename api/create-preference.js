@@ -75,9 +75,9 @@ export default async function handler(req, res) {
           }
         },
         back_urls: {
-          success: `${baseUrl}/?status=approved&order=${orderId}`,
-          failure: `${baseUrl}/?status=rejected&order=${orderId}`,
-          pending: `${baseUrl}/?status=pending&order=${orderId}`
+          success: `${baseUrl}/?mp_back=success&order=${orderId}`,
+          failure: `${baseUrl}/?mp_back=failure&order=${orderId}`,
+          pending: `${baseUrl}/?mp_back=pending&order=${orderId}`
         },
         auto_return: 'approved',
         notification_url: `${baseUrl}/api/mercadopago-webhook`,

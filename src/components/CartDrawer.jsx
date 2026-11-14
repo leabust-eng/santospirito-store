@@ -976,14 +976,22 @@ export default function CartDrawer({
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 uppercase">
-                  PAGO APROBADO ✓
+                <span className={`text-[10px] font-bold px-3 py-1 rounded-full border uppercase ${
+                  orderReceipt.method?.includes('Transferencia')
+                    ? 'text-teal-800 bg-teal-50 border-teal-200'
+                    : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                }`}>
+                  {orderReceipt.method?.includes('Transferencia') ? 'PEDIDO REGISTRADO • 10% OFF' : 'PAGO APROBADO ✓'}
                 </span>
                 <h3 className="text-lg font-serif font-bold text-neutral-900 mt-2">
-                  ¡Felicitaciones {customerData.name || 'por tu compra'}!
+                  {orderReceipt.method?.includes('Transferencia')
+                    ? `¡Muchas gracias ${customerData.name || ''}!`
+                    : `¡Felicitaciones ${customerData.name || 'por tu compra'}!`}
                 </h3>
                 <p className="text-xs text-neutral-500">
-                  Tu pedido de SantoSpirito ya está confirmado y en preparación.
+                  {orderReceipt.method?.includes('Transferencia')
+                    ? 'Tu pedido está reservado. Envianos el comprobante al chat de WhatsApp que se acaba de abrir para preparar tu paquete.'
+                    : 'Tu pedido de SantoSpirito ya está confirmado y en preparación.'}
                 </p>
               </div>
 
@@ -1036,7 +1044,7 @@ export default function CartDrawer({
                 )}
 
                 <div className="flex justify-between pt-1 text-sm font-extrabold text-neutral-900">
-                  <span>Total Abonado:</span>
+                  <span>{orderReceipt.method?.includes('Transferencia') ? 'Total a Transferir:' : 'Total Abonado:'}</span>
                   <span>${orderReceipt.total?.toLocaleString('es-AR')},00</span>
                 </div>
               </div>

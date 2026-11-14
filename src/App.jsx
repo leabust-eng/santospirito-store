@@ -13,7 +13,7 @@ import PaymentMethodsModal from './components/PaymentMethodsModal';
 import Footer from './components/Footer';
 import WhatsAppFloating from './components/WhatsAppFloating';
 import { products } from './data/products';
-import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown, CheckCircle2, PackageCheck, X } from 'lucide-react';
+import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown, CheckCircle2, PackageCheck, X, Clock, XCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function App() {
@@ -35,30 +35,60 @@ export default function App() {
     }
   }, [cartItems]);
 
-  // Capturar retorno de pago aprobado desde Mercado Pago
-  const [orderSuccessData, setOrderSuccessData] = useState(null);
+  // Capturar retorno de pago desde Mercado Pago (Aprobado, Pendiente Efectivo/Rapipago, Rechazado)
+  const [orderFeedback, setOrderFeedback] = useState(null);
 
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const status = params.get('status');
-      const order = params.get('order');
+      const collectionStatus = (params.get('collection_status') || '').toLowerCase();
+      const statusParam = (params.get('status') || '').toLowerCase();
+      const paymentType = (params.get('payment_type') || '').toLowerCase();
+      const mpBack = (params.get('mp_back') || '').toLowerCase();
+      const order = params.get('order') || params.get('external_reference');
 
-      if (status === 'approved') {
+      // Si no hay ningún parámetro de retorno de Mercado Pago, no hacer nada
+      if (!collectionStatus && !statusParam && !mpBack && !paymentType) {
+        return;
+      }
+
+      const cleanOrderId = order || `SP-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      // Detección precisa del estado:
+      // Si el medio es ticket (Rapipago / Pago Fácil) o status es pending/in_process
+      const isTicket = paymentType === 'ticket';
+      const isPending = isTicket || collectionStatus === 'pending' || collectionStatus === 'in_process' || statusParam === 'pending' || mpBack === 'pending';
+      const isApproved = (collectionStatus === 'approved' || statusParam === 'approved' || mpBack === 'success') && !isPending;
+      const isRejected = collectionStatus === 'rejected' || statusParam === 'rejected' || mpBack === 'failure';
+
+      if (isApproved) {
         setCartItems([]);
-        try {
-          localStorage.removeItem('santospirito_cart');
-        } catch (e) {}
-
-        const cleanOrderId = order || `SP-${Math.floor(100000 + Math.random() * 900000)}`;
-        setOrderSuccessData({ orderId: cleanOrderId });
-
+        try { localStorage.removeItem('santospirito_cart'); } catch (e) {}
+        setOrderFeedback({
+          type: 'approved',
+          orderId: cleanOrderId
+        });
         confetti({
           particleCount: 120,
           spread: 80,
           origin: { y: 0.6 }
         });
-
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (isPending) {
+        setCartItems([]);
+        try { localStorage.removeItem('santospirito_cart'); } catch (e) {}
+        setOrderFeedback({
+          type: 'pending',
+          orderId: cleanOrderId,
+          isCash: isTicket
+        });
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (isRejected) {
+        // En pago rechazado no vaciamos el carrito para que el cliente pueda reintentar
+        setOrderFeedback({
+          type: 'rejected',
+          orderId: cleanOrderId
+        });
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     } catch (e) {
@@ -459,60 +489,151 @@ export default function App() {
         onClose={() => setIsPaymentModalOpen(false)}
       />
 
-      {/* 14. Mercado Pago Approved Purchase Celebration Modal */}
-      {orderSuccessData && (
+      {/* 14. Mercado Pago Status Modal (Approved, Pending Cash/Rapipago, Rejected) */}
+      {orderFeedback && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-teal-100 p-6 sm:p-8 text-center space-y-4">
+          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-neutral-100 p-6 sm:p-8 text-center space-y-4">
             <button
-              onClick={() => setOrderSuccessData(null)}
+              onClick={() => setOrderFeedback(null)}
               className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 p-1 rounded-full hover:bg-neutral-100 transition"
               aria-label="Cerrar"
             >
               <X size={20} />
             </button>
 
-            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-bounce">
-              <CheckCircle2 size={36} />
-            </div>
+            {/* Icon by State */}
+            {orderFeedback.type === 'approved' && (
+              <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-bounce">
+                <CheckCircle2 size={36} />
+              </div>
+            )}
+            {orderFeedback.type === 'pending' && (
+              <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                <Clock size={36} />
+              </div>
+            )}
+            {orderFeedback.type === 'rejected' && (
+              <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                <XCircle size={36} />
+              </div>
+            )}
 
+            {/* Headers by State */}
             <div>
-              <span className="text-[10px] font-extrabold tracking-widest text-teal-800 uppercase bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
-                Pago Aprobado con Éxito
-              </span>
-              <h2 className="text-xl font-black text-neutral-900 mt-2">
-                ¡Gracias por tu compra!
-              </h2>
-              <p className="text-xs text-neutral-500 mt-1">
-                Tu pago fue procesado correctamente a través de Mercado Pago.
-              </p>
+              {orderFeedback.type === 'approved' && (
+                <>
+                  <span className="text-[10px] font-extrabold tracking-widest text-emerald-800 uppercase bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                    Pago Aprobado con Éxito
+                  </span>
+                  <h2 className="text-xl font-black text-neutral-900 mt-2">
+                    ¡Gracias por tu compra!
+                  </h2>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Tu pago fue procesado correctamente a través de Mercado Pago.
+                  </p>
+                </>
+              )}
+
+              {orderFeedback.type === 'pending' && (
+                <>
+                  <span className="text-[10px] font-extrabold tracking-widest text-amber-900 uppercase bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300">
+                    Cupón Generado • Pendiente de Pago
+                  </span>
+                  <h2 className="text-xl font-black text-neutral-900 mt-2">
+                    ¡Pedido Registrado con Éxito!
+                  </h2>
+                  <p className="text-xs text-neutral-600 mt-1">
+                    Generaste tu cupón para abonar en efectivo por Rapipago o Pago Fácil. Recordá abonarlo antes de su fecha de vencimiento.
+                  </p>
+                </>
+              )}
+
+              {orderFeedback.type === 'rejected' && (
+                <>
+                  <span className="text-[10px] font-extrabold tracking-widest text-rose-900 uppercase bg-rose-100 px-2.5 py-1 rounded-full border border-rose-300">
+                    Pago No Completado
+                  </span>
+                  <h2 className="text-xl font-black text-neutral-900 mt-2">
+                    No pudimos procesar el pago
+                  </h2>
+                  <p className="text-xs text-neutral-600 mt-1">
+                    La tarjeta o entidad bancaria no autorizó la operación. Tus prendas continúan guardadas en el carrito.
+                  </p>
+                </>
+              )}
             </div>
 
+            {/* Info Summary Box */}
             <div className="bg-neutral-50 rounded-xl p-3.5 border border-neutral-200/80 text-left space-y-1.5 text-xs">
               <div className="flex justify-between">
                 <span className="text-neutral-500">N° de Pedido:</span>
-                <strong className="text-teal-900 font-bold">{orderSuccessData.orderId}</strong>
+                <strong className="text-teal-900 font-bold">{orderFeedback.orderId}</strong>
               </div>
+
               <div className="flex justify-between">
                 <span className="text-neutral-500">Estado de la Orden:</span>
-                <span className="text-emerald-700 font-bold">En Preparación / Despacho</span>
+                {orderFeedback.type === 'approved' && (
+                  <span className="text-emerald-700 font-bold">En Preparación / Despacho</span>
+                )}
+                {orderFeedback.type === 'pending' && (
+                  <span className="text-amber-700 font-bold">Aguardando Pago en Efectivo</span>
+                )}
+                {orderFeedback.type === 'rejected' && (
+                  <span className="text-rose-700 font-bold">Cancelado / Rechazado</span>
+                )}
               </div>
+
               <div className="pt-2 border-t border-neutral-200 text-[11px] text-neutral-600">
-                📦 <strong>Tiempos estimados:</strong> 24 a 48 hs para San Miguel de Tucumán o 2 a 5 días hábiles por Correo Argentino. Te enviamos los detalles a tu correo.
+                {orderFeedback.type === 'approved' && (
+                  <>📦 <strong>Tiempos estimados:</strong> 24 a 48 hs para San Miguel de Tucumán o 2 a 5 días hábiles por Correo Argentino. Te enviamos los detalles a tu correo.</>
+                )}
+                {orderFeedback.type === 'pending' && (
+                  <>⏳ <strong>Aclaración importante:</strong> Prepararemos y despacharemos tu prenda apenas Rapipago / Mercado Pago nos notifique que el pago fue realizado en sucursal.</>
+                )}
+                {orderFeedback.type === 'rejected' && (
+                  <>💡 <strong>Sugerencia:</strong> Podés intentar con otra tarjeta o elegir la opción de <strong>Transferencia Bancaria (10% OFF adicional)</strong>.</>
+                )}
               </div>
             </div>
 
+            {/* Actions by State */}
             <div className="space-y-2 pt-2">
-              <a
-                href={`https://wa.me/5493815307474?text=¡Hola%20SantoSpirito!%20Acabo%20de%20realizar%20mi%20compra%20con%20tarjeta%20por%20Mercado%20Pago%20(Pedido%20${orderSuccessData.orderId}).`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95"
-              >
-                <span>Avisar al Taller por WhatsApp</span>
-              </a>
+              {orderFeedback.type === 'approved' && (
+                <a
+                  href={`https://wa.me/5493815307474?text=¡Hola%20SantoSpirito!%20Acabo%20de%20realizar%20mi%20compra%20con%20tarjeta%20por%20Mercado%20Pago%20(Pedido%20${orderFeedback.orderId}).`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95"
+                >
+                  <span>Avisar al Taller por WhatsApp</span>
+                </a>
+              )}
+
+              {orderFeedback.type === 'pending' && (
+                <a
+                  href={`https://wa.me/5493815307474?text=¡Hola%20SantoSpirito!%20Generé%20un%20cupón%20de%20pago%20en%20efectivo%20(Rapipago/Pago%20Fácil)%20para%20el%20pedido%20${orderFeedback.orderId}.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95"
+                >
+                  <span>Consultar por WhatsApp</span>
+                </a>
+              )}
+
+              {orderFeedback.type === 'rejected' && (
+                <button
+                  onClick={() => {
+                    setOrderFeedback(null);
+                    setIsCartOpen(true);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-neutral-900 hover:bg-black text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95"
+                >
+                  <span>Reintentar con otro medio</span>
+                </button>
+              )}
 
               <button
-                onClick={() => setOrderSuccessData(null)}
+                onClick={() => setOrderFeedback(null)}
                 className="w-full py-2.5 text-xs font-bold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition"
               >
                 Volver a la tienda
