@@ -47,7 +47,6 @@ export default function ProductDetailModal({
           sucursal: 4900,
           domicilio: 6400,
           diasMoto: "San Miguel de Tucumán y radio hasta 10 km • Se abona al recibir",
-          diasRetiro: "A coordinar con SantoSpirito (San Miguel)",
           diasSucursal: "Para distancias > 10 km o interior (2 a 3 días)",
           diasDomicilio: "Para distancias > 10 km o interior (1 a 2 días)"
         });

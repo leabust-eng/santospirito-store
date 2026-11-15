@@ -38,7 +38,7 @@ export default function CartDrawer({
 
   // Shipping zone: 'tucuman' | 'nacional'
   const [shippingZone, setShippingZone] = useState('tucuman');
-  // Shipping method: 'tucuman_moto' | 'tucuman_retiro' | 'correo_domicilio' | 'correo_sucursal'
+  // Shipping method: 'tucuman_moto' | 'correo_domicilio' | 'correo_sucursal'
   const [shippingMethod, setShippingMethod] = useState('tucuman_moto');
 
   const shippingMethodsData = {
@@ -51,16 +51,6 @@ export default function CartDrawer({
       price: 0,
       isPayOnDelivery: true,
       requiresAddress: true
-    },
-    tucuman_retiro: {
-      id: 'tucuman_retiro',
-      zone: 'tucuman',
-      title: 'Punto de Retiro / Entrega Personal con SantoSpirito',
-      subtitle: 'Coordinamos por WhatsApp horario y punto de entrega',
-      shortName: 'Entrega Personal / Retiro',
-      price: 0,
-      isPayOnDelivery: false,
-      requiresAddress: false
     },
     correo_domicilio: {
       id: 'correo_domicilio',
@@ -119,7 +109,7 @@ export default function CartDrawer({
         }
       } else if (cpClean.length >= 4) {
         setShippingZone('nacional');
-        if (shippingMethod === 'tucuman_moto' || shippingMethod === 'tucuman_retiro') {
+        if (shippingMethod === 'tucuman_moto') {
           setShippingMethod('correo_domicilio');
         }
       }
@@ -194,9 +184,8 @@ export default function CartDrawer({
         `• ${it.quantity}x ${it.name} (Talle: ${it.selectedSize}) - $${(it.price * it.quantity).toLocaleString('es-AR')}`
       ).join('%0A');
 
-      const addressInfo = shippingMethod === 'tucuman_retiro'
-        ? `*ENTREGA:* Retiro / Entrega Personal en Tucumán (A coordinar con SantoSpirito)` + (customerData.notes ? `%0A*NOTA / SUGERENCIA:* ${customerData.notes}` : '')
-        : `*DIRECCION:* ${customerData.address}, ${customerData.city} (${customerData.province || 'Tucumán'})${customerData.postalCode ? ` [CP: ${customerData.postalCode}]` : ''}`;
+      const addressInfo = `*DIRECCION:* ${customerData.address}, ${customerData.city} (${customerData.province || 'Tucumán'})${customerData.postalCode ? ` [CP: ${customerData.postalCode}]` : ''}` +
+        (customerData.notes ? `%0A*NOTA / SUGERENCIA:* ${customerData.notes}` : '');
 
       const shippingCostText = selectedShipping.isPayOnDelivery
         ? 'A abonar al recibir (al cadete en destino)'
@@ -485,7 +474,7 @@ export default function CartDrawer({
                     type="button"
                     onClick={() => {
                       setShippingZone('nacional');
-                      if (shippingMethod === 'tucuman_moto' || shippingMethod === 'tucuman_retiro') {
+                      if (shippingMethod === 'tucuman_moto') {
                         setShippingMethod('correo_domicilio');
                       }
                     }}
@@ -528,34 +517,6 @@ export default function CartDrawer({
                           </div>
                           <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
                             Válido para San Miguel de Tucumán y radio hasta 10 km. <strong>El costo del cadete lo abonás al recibir la prenda.</strong>
-                          </p>
-                        </div>
-                      </label>
-
-                      {/* Retiro Personal / Coordinado */}
-                      <label className={`flex items-start gap-2.5 p-2.5 rounded-xl border cursor-pointer transition ${
-                        shippingMethod === 'tucuman_retiro'
-                          ? "border-emerald-700 bg-emerald-50/70 ring-2 ring-emerald-700/20"
-                          : "border-neutral-200 hover:border-neutral-300 bg-white"
-                      }`}>
-                        <input
-                          type="radio"
-                          name="shippingMethod"
-                          value="tucuman_retiro"
-                          checked={shippingMethod === 'tucuman_retiro'}
-                          onChange={() => setShippingMethod('tucuman_retiro')}
-                          className="mt-0.5"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-neutral-900 text-xs flex items-center gap-1.5">
-                              🤝 Retiro / Entrega Personal SantoSpirito
-                              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.2 rounded">GRATIS</span>
-                            </span>
-                            <span className="font-extrabold text-xs text-emerald-700">$0,00</span>
-                          </div>
-                          <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
-                            Coordinamos día, horario y punto de entrega personal o retiro por WhatsApp en San Miguel.
                           </p>
                         </div>
                       </label>
@@ -683,71 +644,61 @@ export default function CartDrawer({
               </div>
 
               {/* STEP 2B: ADDRESS / LOCATION DETAILS */}
-              {shippingMethod === 'tucuman_retiro' ? (
-                <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-xs space-y-2">
-                  <div className="font-bold text-emerald-900 flex items-center gap-1.5">
-                    <span>🤝 Entrega personal / Retiro acordado</span>
-                  </div>
-                  <p className="text-emerald-800 text-[11px] leading-relaxed">
-                    ¡No necesitás ingresar domicilio ahora! Al confirmar tu compra nos pondremos en contacto con vos por WhatsApp al <strong>{customerData.phone || 'tu número'}</strong> para convenir el lugar de encuentro o entrega en San Miguel de Tucumán.
-                  </p>
-                  <div>
-                    <label className="font-bold text-neutral-700 block mb-1 text-[11px]">
-                      Aclaración, horario o punto sugerido (Opcional):
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ej: Paso por Plaza Urquiza al mediodía / Trabajo en Sanatorio..."
-                      value={customerData.notes || ''}
-                      onChange={e => setCustomerData({...customerData, notes: e.target.value})}
-                      className="w-full px-3 py-2 border border-emerald-300 bg-white rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
-                    />
-                  </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="font-bold text-neutral-700 block mb-1">
+                    {shippingMethod === 'tucuman_moto'
+                      ? "Dirección para el Cadete (San Miguel y hasta 10 km) *"
+                      : "Dirección de Entrega (Calle y Número) *"}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={shippingMethod === 'tucuman_moto' ? "Ej: San Martín 540, Consultorio 2A (Abonás al cadete)" : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"}
+                    value={customerData.address}
+                    onChange={e => setCustomerData({...customerData, address: e.target.value})}
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
+                  />
                 </div>
-              ) : (
-                <div className="space-y-3">
+
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="font-bold text-neutral-700 block mb-1">
-                      {shippingMethod === 'tucuman_moto'
-                        ? "Dirección para el Cadete (San Miguel y hasta 10 km) *"
-                        : "Dirección de Entrega (Calle y Número) *"}
-                    </label>
+                    <label className="font-bold text-neutral-700 block mb-1">Ciudad / Localidad *</label>
                     <input
                       type="text"
                       required
-                      placeholder={shippingMethod === 'tucuman_moto' ? "Ej: San Martín 540, Consultorio 2A (Abonás al cadete)" : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"}
-                      value={customerData.address}
-                      onChange={e => setCustomerData({...customerData, address: e.target.value})}
+                      placeholder={shippingZone === 'tucuman' ? "San Miguel de Tucumán" : "Ej: Rosario"}
+                      value={customerData.city}
+                      onChange={e => setCustomerData({...customerData, city: e.target.value})}
                       className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
                     />
                   </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="font-bold text-neutral-700 block mb-1">Ciudad / Localidad *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder={shippingZone === 'tucuman' ? "San Miguel de Tucumán" : "Ej: Rosario"}
-                        value={customerData.city}
-                        onChange={e => setCustomerData({...customerData, city: e.target.value})}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="font-bold text-neutral-700 block mb-1">Código Postal</label>
-                      <input
-                        type="text"
-                        placeholder="Ej: 4000"
-                        value={customerData.postalCode}
-                        onChange={handlePostalCodeChange}
-                        maxLength={8}
-                        className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
-                      />
-                    </div>
+                  <div>
+                    <label className="font-bold text-neutral-700 block mb-1">Código Postal</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: 4000"
+                      value={customerData.postalCode}
+                      onChange={handlePostalCodeChange}
+                      maxLength={8}
+                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
+                    />
                   </div>
                 </div>
-              )}
+
+                <div>
+                  <label className="font-bold text-neutral-700 block mb-1 text-[11px]">
+                    Aclaraciones para la entrega (Opcional):
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Tocar timbre 2B / Dejar en recepción..."
+                    value={customerData.notes || ''}
+                    onChange={e => setCustomerData({...customerData, notes: e.target.value})}
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
+                  />
+                </div>
+              </div>
 
               {/* Payment Method Selector */}
               <div className="pt-2 space-y-2">
@@ -1034,7 +985,7 @@ export default function CartDrawer({
                   </span>
                 </div>
 
-                {orderReceipt.shippingMethod !== 'tucuman_retiro' && customerData.address && (
+                {customerData.address && (
                   <div className="flex justify-between border-b border-neutral-200 pb-2">
                     <span className="text-neutral-500">Dirección de Entrega:</span>
                     <span className="text-right font-medium text-neutral-800">
@@ -1049,11 +1000,7 @@ export default function CartDrawer({
                 </div>
               </div>
 
-              {orderReceipt.shippingMethod === 'tucuman_retiro' ? (
-                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-[11px] text-emerald-950 text-left">
-                  🤝 <strong>Próximo paso:</strong> Nos comunicaremos por WhatsApp al <strong>{customerData.phone}</strong> para coordinar día, horario y punto de entrega en San Miguel de Tucumán.
-                </div>
-              ) : orderReceipt.shippingMethod === 'tucuman_moto' ? (
+              {orderReceipt.shippingMethod === 'tucuman_moto' ? (
                 <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-[11px] text-teal-950 text-left space-y-1">
                   <p>🛵 <strong>Próximo paso:</strong> Prepararemos tu pedido y coordinaremos el despacho con el cadete (Servimoto / PedidosYa) a <strong>{customerData.address}</strong>.</p>
                   <p className="text-teal-900 font-bold bg-white/80 p-1.5 rounded border border-teal-200">

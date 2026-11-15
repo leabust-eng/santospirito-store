@@ -180,7 +180,7 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
                 🛵 Cadetería Tucumán
               </span>
               <span className="bg-neutral-800 text-emerald-300 font-bold text-[10px] px-2.5 py-1 rounded border border-neutral-700">
-                🤝 Retiro Personal Gratis
+                🇦🇷 Envíos a todo el país
               </span>
             </div>
           </div>
