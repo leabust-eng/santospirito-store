@@ -3,7 +3,7 @@ import {
   X, Trash2, ShoppingBag, CreditCard, MessageCircle, 
   Truck, ArrowRight, ShieldCheck, Check, Sparkles, Tag,
   Lock, AlertCircle, Building2, CheckCircle2, ChevronRight,
-  MapPin
+  MapPin, Copy, CheckCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -20,6 +20,20 @@ export default function CartDrawer({
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState('');
+  
+  // Copy to clipboard helper for CVU / Alias
+  const [copiedField, setCopiedField] = useState(null);
+  const handleCopy = (text, field) => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2200);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   
   // Steps: 'cart' | 'checkout' | 'payment' | 'processing' | 'success'
   const [checkoutStep, setCheckoutStep] = useState('cart');
@@ -205,7 +219,10 @@ export default function CartDrawer({
         `*COSTO DE ENVIO:* ${shippingCostText}%0A` +
         `*TOTAL FINAL A TRANSFERIR:* $${finalTotal.toLocaleString('es-AR')}%0A%0A` +
         (selectedShipping.isPayOnDelivery ? `_🛵 Nota: El servicio de cadetería se abona directo al cadete al recibir la prenda._%0A%0A` : '') +
-        `_Aguardando CBU / Alias para enviar el comprobante._`;
+        `*DATOS PARA TRANSFERIR (MERCADO PAGO):*%0A` +
+        `• *Alias:* salazarchechu2025%0A` +
+        `• *CVU:* 0000003100071610252523%0A%0A` +
+        `_Adjunto a continuación la captura del comprobante de transferencia._`;
 
       window.open(`https://wa.me/5493815307474?text=${message}`, '_blank');
       setOrderReceipt({
@@ -736,11 +753,68 @@ export default function CartDrawer({
                     onChange={() => setCustomerData({...customerData, paymentMethod: 'transferencia'})}
                     className="mt-1"
                   />
-                  <div>
-                    <span className="font-bold text-neutral-900 block text-xs">Transferencia Bancaria Directa</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-neutral-900 block text-xs">Transferencia Bancaria Directa</span>
+                      <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">10% OFF</span>
+                    </div>
                     <span className="text-[11px] text-emerald-800 font-bold block mt-0.5">💵 10% DE DESCUENTO EXTRA AUTOMÁTICO</span>
                   </div>
                 </label>
+
+                {customerData.paymentMethod === 'transferencia' && (
+                  <div className="p-3 bg-emerald-50/80 border border-emerald-300 rounded-xl space-y-2 text-xs animate-fade-in">
+                    <div className="flex items-center justify-between pb-1.5 border-b border-emerald-200">
+                      <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+                        <Building2 size={14} className="text-emerald-700" />
+                        Datos para Transferir (Mercado Pago)
+                      </span>
+                      <span className="text-[10px] text-emerald-800 font-bold bg-white px-2 py-0.5 rounded border border-emerald-200">
+                        Acreditación inmediata
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
+                      <div>
+                        <span className="text-[10px] text-neutral-500 block uppercase font-bold">Alias</span>
+                        <span className="font-mono font-bold text-neutral-900 text-xs">salazarchechu2025</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy('salazarchechu2025', 'alias')}
+                        className="flex items-center gap-1 text-[11px] font-bold text-teal-800 hover:text-teal-950 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
+                      >
+                        {copiedField === 'alias' ? (
+                          <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
+                        ) : (
+                          <><Copy size={13} /> Copiar Alias</>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
+                      <div className="min-w-0 pr-2">
+                        <span className="text-[10px] text-neutral-500 block uppercase font-bold">CVU</span>
+                        <span className="font-mono font-bold text-neutral-900 text-[11px] break-all">0000003100071610252523</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy('0000003100071610252523', 'cvu')}
+                        className="flex-shrink-0 flex items-center gap-1 text-[11px] font-bold text-teal-800 hover:text-teal-950 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
+                      >
+                        {copiedField === 'cvu' ? (
+                          <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
+                        ) : (
+                          <><Copy size={13} /> Copiar CVU</>
+                        )}
+                      </button>
+                    </div>
+
+                    <p className="text-[11px] text-emerald-900 leading-snug pt-0.5">
+                      💡 Al presionar el botón de abajo se abrirá tu <strong>WhatsApp</strong> con el pedido listo para que nos envíes la captura del comprobante.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <button
@@ -999,6 +1073,67 @@ export default function CartDrawer({
                   <span>${orderReceipt.total?.toLocaleString('es-AR')},00</span>
                 </div>
               </div>
+
+              {/* Transfer Details on Receipt Screen */}
+              {orderReceipt.method?.includes('Transferencia') && (
+                <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-300 text-left space-y-2 text-xs">
+                  <div className="font-bold text-emerald-950 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Building2 size={14} className="text-emerald-700" />
+                      Datos para Transferir (Mercado Pago):
+                    </span>
+                    <span className="text-[10px] bg-emerald-200/70 text-emerald-900 px-2 py-0.5 rounded font-extrabold">10% OFF</span>
+                  </div>
+
+                  <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
+                    <div>
+                      <span className="text-[10px] text-neutral-500 block uppercase font-bold">Alias</span>
+                      <span className="font-mono font-bold text-neutral-900 text-xs">salazarchechu2025</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy('salazarchechu2025', 'receipt_alias')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
+                    >
+                      {copiedField === 'receipt_alias' ? (
+                        <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
+                      ) : (
+                        <><Copy size={13} /> Copiar Alias</>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
+                    <div className="min-w-0 pr-2">
+                      <span className="text-[10px] text-neutral-500 block uppercase font-bold">CVU</span>
+                      <span className="font-mono font-bold text-neutral-900 text-[11px] break-all">0000003100071610252523</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy('0000003100071610252523', 'receipt_cvu')}
+                      className="flex-shrink-0 flex items-center gap-1 text-[11px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
+                    >
+                      {copiedField === 'receipt_cvu' ? (
+                        <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
+                      ) : (
+                        <><Copy size={13} /> Copiar CVU</>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="pt-1">
+                    <a
+                      href={`https://wa.me/5493815307474?text=¡Hola%20SantoSpirito!%20Acabo%20de%20realizar%20la%20transferencia%20para%20el%20pedido%20${orderReceipt.id}.%20Adjunto%20el%20comprobante.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm"
+                    >
+                      <MessageCircle size={15} />
+                      <span>Enviar Comprobante por WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
+              )}
 
               {orderReceipt.shippingMethod === 'tucuman_moto' ? (
                 <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-[11px] text-teal-950 text-left space-y-1">
