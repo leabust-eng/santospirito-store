@@ -7,10 +7,78 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const promoJacketsList = [
+  {
+    id: "chaqueta-promo-celeste-marino",
+    name: "Chaqueta Celeste & Marino",
+    style: "Celeste pastel con vivos azul marino",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/179b70366be62483d6cb18922249ffa8d6bc8ac69ea53ce461ad61101bab8f2d466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-tricolor-menta",
+    name: "Chaqueta Tricolor Menta & Blanco",
+    style: "Base menta con blanco óptico y vivos",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-beige-negro",
+    name: "Chaqueta Beige & Negro",
+    style: "Tono camel distinguido con vivos negros",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-verde-oliva",
+    name: "Chaqueta Verde Oliva & Rosa",
+    style: "Verde oliva suave con vivos rosa pastel",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/a9b6ce1bd1c7323c23de5fab33c4a086f1ac731b411b63fa59537736a122db01466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-magenta-oliva",
+    name: "Chaqueta Magenta & Oliva",
+    style: "Magenta vibrante con vivos oliva",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-menta-negro",
+    name: "Chaqueta Menta & Negro",
+    style: "Menta sanitario con contraste negro",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-rosita-bordeaux",
+    name: "Chaqueta Rosita & Bordeaux",
+    style: "Rosa empolvado con vivos bordeaux",
+    image: "/products/ambo-rosita-bordeaux.jpg",
+    price: 55000,
+    originalPrice: 75000
+  },
+  {
+    id: "chaqueta-promo-azul-quirurgico",
+    name: "Chaqueta Azul Quirúrgico",
+    style: "Azul clásico institucional de alta resistencia",
+    image: "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg",
+    price: 55000,
+    originalPrice: 75000
+  }
+];
+
 export default function CartDrawer({ 
   isOpen, 
   onClose, 
   cartItems, 
+  onAddToCart,
   onUpdateQuantity, 
   onRemoveItem,
   onClearCart 
@@ -37,6 +105,37 @@ export default function CartDrawer({
   
   // Steps: 'cart' | 'checkout' | 'payment' | 'processing' | 'success'
   const [checkoutStep, setCheckoutStep] = useState('cart');
+
+  // Promo 2da Chaqueta state
+  const [selectedPromoJacketId, setSelectedPromoJacketId] = useState(promoJacketsList[0].id);
+  const [selectedPromoJacketSize, setSelectedPromoJacketSize] = useState('M');
+
+  React.useEffect(() => {
+    if (cartItems && cartItems.length > 0 && cartItems[0].selectedSize) {
+      setSelectedPromoJacketSize(cartItems[0].selectedSize);
+    }
+  }, [cartItems]);
+
+  const promoJacketInCart = (cartItems || []).find(it => it.id && it.id.startsWith('chaqueta-promo-'));
+  const selectedPromoJacket = promoJacketsList.find(j => j.id === selectedPromoJacketId) || promoJacketsList[0];
+
+  const handleAddPromoJacket = () => {
+    if (!onAddToCart) return;
+    onAddToCart({
+      id: selectedPromoJacket.id,
+      name: `${selectedPromoJacket.name} (2da Chaqueta Promo)`,
+      price: 55000,
+      originalPrice: 75000,
+      selectedSize: selectedPromoJacketSize,
+      quantity: 1,
+      images: [selectedPromoJacket.image]
+    });
+    confetti({
+      particleCount: 90,
+      spread: 75,
+      origin: { y: 0.6 }
+    });
+  };
 
   const [customerData, setCustomerData] = useState({
     name: '',
@@ -273,7 +372,7 @@ export default function CartDrawer({
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm animate-fade-in flex justify-end">
-      <div className="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col justify-between">
+      <div className="relative w-full max-w-full sm:max-w-xl md:max-w-2xl bg-white h-full shadow-2xl flex flex-col justify-between">
         
         {/* Drawer Header */}
         <div className="p-4 sm:p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/80">
@@ -452,6 +551,153 @@ export default function CartDrawer({
                       <p className="text-[11px] text-rose-600 mt-1">{couponError}</p>
                     )}
                   </div>
+
+                  {/* COMBO 3 PIEZAS: 2 CHAQUETAS + 1 PANTALÓN */}
+                  {promoJacketInCart ? (
+                    <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-300 text-xs text-emerald-950 space-y-2 animate-fade-in shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-extrabold flex items-center gap-1.5 text-emerald-900 text-xs sm:text-sm">
+                          <CheckCircle2 size={16} className="text-emerald-600 flex-shrink-0" />
+                          ¡Combo 3 Piezas Activado!
+                        </span>
+                        <span className="text-[10px] font-black bg-emerald-200/80 text-emerald-900 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                          Ahorraste $20.000
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-emerald-800 leading-snug">
+                        Sumaste tu segunda chaqueta a precio promocional de <strong>$55.000</strong>: <br />
+                        <strong>{promoJacketInCart.name}</strong> • Talle: <strong>{promoJacketInCart.selectedSize}</strong>
+                      </p>
+                      <div className="flex items-center justify-between pt-1 border-t border-emerald-200/70 text-[11px]">
+                        <span className="text-emerald-700 font-bold flex items-center gap-1">
+                          <Truck size={13} /> ¡Envío Gratis Desbloqueado!
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onRemoveItem(promoJacketInCart.id, promoJacketInCart.selectedSize)}
+                          className="text-rose-600 hover:text-rose-800 font-semibold underline"
+                        >
+                          Quitar chaqueta extra
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 sm:p-4 bg-gradient-to-br from-teal-50/90 via-amber-50/30 to-white rounded-2xl border-2 border-teal-600/40 shadow-sm space-y-3">
+                      {/* Header & Badges */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between flex-wrap gap-1.5">
+                          <span className="text-[10px] font-extrabold tracking-wider uppercase text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300 flex items-center gap-1">
+                            <Sparkles size={11} className="text-amber-600" />
+                            Combo 3 Piezas: 2 Chaquetas + 1 Pantalón
+                          </span>
+                          <span className="text-[11px] font-black text-teal-950 bg-white px-2 py-0.5 rounded-md border border-teal-300 shadow-2xs">
+                            2da Chaqueta a solo <strong className="text-teal-700 font-black">$55.000</strong>
+                          </span>
+                        </div>
+                        
+                        <h3 className="text-xs sm:text-sm font-black text-neutral-900 tracking-tight pt-0.5">
+                          Multiplicá tus combinaciones: ¡Sumá una 2da Chaqueta a elección!
+                        </h3>
+                      </div>
+
+                      {/* Persuasive copy */}
+                      <div className="text-[11px] text-neutral-700 leading-relaxed space-y-1.5 bg-white/90 p-2.5 rounded-xl border border-neutral-200/80">
+                        <p>
+                          El beneficio directo es que <strong>podés combinar ambas chaquetas con el mismo pantalón</strong>. De esa forma contás con <strong>2 looks completos, frescos y profesionales</strong> para tus guardias y consultorio, luciendo siempre impecable sin tener que pagar un segundo ambo entero.
+                        </p>
+                        <p className="text-emerald-900 font-bold flex items-center gap-1.5 pt-0.5">
+                          <Truck size={14} className="text-emerald-700 flex-shrink-0" />
+                          <span>¡Al sumarla superás los $150.000 y <strong>tu ENVÍO ES 100% GRATIS</strong> a todo el país!</span>
+                        </p>
+                      </div>
+
+                      {/* Jacket Selector */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11px] font-bold text-neutral-900 block">
+                            Elegí el modelo de tu 2da Chaqueta:
+                          </label>
+                          <span className="text-[10px] text-neutral-500 font-medium">
+                            {promoJacketsList.length} modelos disponibles
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-4 sm:grid-cols-4 gap-2">
+                          {promoJacketsList.map((jkt) => {
+                            const isSelected = selectedPromoJacketId === jkt.id;
+                            return (
+                              <button
+                                key={jkt.id}
+                                type="button"
+                                onClick={() => setSelectedPromoJacketId(jkt.id)}
+                                className={`group relative flex flex-col items-center p-1.5 rounded-xl border text-center transition-all ${
+                                  isSelected 
+                                    ? 'border-teal-700 bg-teal-50 ring-2 ring-teal-600/40 shadow-sm scale-[1.02]' 
+                                    : 'border-neutral-200 bg-white hover:border-neutral-400 hover:bg-neutral-50'
+                                }`}
+                              >
+                                <div className="w-full aspect-[3/4] rounded-lg overflow-hidden bg-neutral-100 mb-1 relative">
+                                  <img 
+                                    src={jkt.image} 
+                                    alt={jkt.name} 
+                                    className="w-full h-full object-cover object-top"
+                                    loading="lazy"
+                                  />
+                                  {isSelected && (
+                                    <div className="absolute top-1 right-1 bg-teal-700 text-white rounded-full p-0.5 shadow-md">
+                                      <Check size={10} />
+                                    </div>
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-bold text-neutral-900 line-clamp-1 leading-tight">
+                                  {jkt.name.replace('Chaqueta ', '')}
+                                </span>
+                                <div className="flex items-baseline gap-1 mt-0.5">
+                                  <span className="text-[10px] font-black text-teal-900">$55.000</span>
+                                  <span className="text-[9px] text-neutral-400 line-through">$75.000</span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Size selector & Add Button */}
+                      <div className="pt-1 space-y-2 border-t border-teal-200/50">
+                        <div className="flex items-center justify-between flex-wrap gap-1">
+                          <span className="text-[11px] font-bold text-neutral-800">
+                            Talle de tu chaqueta: <strong className="text-teal-900 font-black">{selectedPromoJacketSize}</strong>
+                          </span>
+                          <div className="flex items-center gap-1">
+                            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
+                              <button
+                                key={sz}
+                                type="button"
+                                onClick={() => setSelectedPromoJacketSize(sz)}
+                                className={`px-2 py-0.5 text-[10px] font-bold rounded border transition ${
+                                  selectedPromoJacketSize === sz
+                                    ? 'bg-teal-900 text-white border-teal-900 shadow-2xs'
+                                    : 'bg-white text-neutral-700 border-neutral-300 hover:border-neutral-400'
+                                }`}
+                              >
+                                {sz}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={handleAddPromoJacket}
+                          className="w-full bg-[#009ee3] hover:bg-[#0081ba] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95 duration-150"
+                        >
+                          <Sparkles size={14} className="text-amber-200" />
+                          <span>Sumar {selectedPromoJacket.name} por $55.000</span>
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </>
