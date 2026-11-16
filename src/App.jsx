@@ -591,7 +591,7 @@ export default function App() {
                   <>⏳ <strong>Aclaración importante:</strong> Prepararemos y despacharemos tu prenda apenas Rapipago / Mercado Pago nos notifique que el pago fue realizado en sucursal.</>
                 )}
                 {orderFeedback.type === 'rejected' && (
-                  <>💡 <strong>Sugerencia:</strong> Podés intentar con otra tarjeta o elegir la opción de <strong>Transferencia Bancaria (10% OFF adicional)</strong>.</>
+                  <>💡 <strong>Sugerencia:</strong> Podés intentar con otra tarjeta, débito o dinero en cuenta de Mercado Pago.</>
                 )}
               </div>
             </div>

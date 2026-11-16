@@ -3,7 +3,7 @@ import {
   X, Trash2, ShoppingBag, CreditCard, MessageCircle, 
   Truck, ArrowRight, ShieldCheck, Check, Sparkles, Tag,
   Lock, AlertCircle, Building2, CheckCircle2, ChevronRight,
-  MapPin, Copy, CheckCheck
+  MapPin, Copy, CheckCheck, Clock
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -171,10 +171,14 @@ export default function CartDrawer({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            items: cartItems,
+            items: cartItems.map(it => ({
+              ...it,
+              price: couponApplied ? Math.round(it.price * 0.90) : it.price
+            })),
             payer: customerData,
             shippingCost: estimatedShipping,
-            shippingTitle: selectedShipping.title
+            shippingTitle: selectedShipping.title,
+            shippingMethod: selectedShipping.id
           })
         });
 
@@ -280,7 +284,7 @@ export default function CartDrawer({
               {checkoutStep === 'checkout' && "1. Datos de Entrega y Envío"}
               {checkoutStep === 'payment' && "2. Pago con Tarjeta (Mercado Pago)"}
               {checkoutStep === 'processing' && "Procesando con Mercado Pago..."}
-              {checkoutStep === 'success' && "¡Pago Aprobado con Éxito!"}
+              {checkoutStep === 'success' && (orderReceipt?.method?.includes('Transferencia') ? "Esperamos tu Transferencia" : "¡Pago Aprobado con Éxito!")}
             </h2>
           </div>
 
@@ -717,111 +721,119 @@ export default function CartDrawer({
                 </div>
               </div>
 
-              {/* Payment Method Selector */}
+              {/* Payment Method Selector - 100% Automated with Mercado Pago */}
               <div className="pt-2 space-y-2">
-                <label className="font-bold text-neutral-900 block">¿Cómo querés pagar?</label>
+                <label className="font-bold text-neutral-900 block">Medio de Pago</label>
                 
-                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${
-                  customerData.paymentMethod === 'mercadopago' 
-                    ? "border-teal-800 bg-teal-50/60 ring-2 ring-teal-700/20" 
-                    : "border-neutral-200 hover:border-neutral-300"
-                }`}>
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="mercadopago"
-                    checked={customerData.paymentMethod === 'mercadopago'}
-                    onChange={() => setCustomerData({...customerData, paymentMethod: 'mercadopago'})}
-                    className="mt-1"
-                  />
-                  <div>
-                    <span className="font-bold text-neutral-900 block text-xs">Tarjeta de Crédito / Débito (Mercado Pago)</span>
-                    <span className="text-[11px] text-teal-800 font-bold block mt-0.5">💳 Hasta 3 Cuotas sin interés con todas las tarjetas</span>
-                  </div>
-                </label>
-
-                <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${
-                  customerData.paymentMethod === 'transferencia' 
-                    ? "border-emerald-700 bg-emerald-50/60 ring-2 ring-emerald-700/20" 
-                    : "border-neutral-200 hover:border-neutral-300"
-                }`}>
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="transferencia"
-                    checked={customerData.paymentMethod === 'transferencia'}
-                    onChange={() => setCustomerData({...customerData, paymentMethod: 'transferencia'})}
-                    className="mt-1"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-neutral-900 block text-xs">Transferencia Bancaria Directa</span>
-                      <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">10% OFF</span>
-                    </div>
-                    <span className="text-[11px] text-emerald-800 font-bold block mt-0.5">💵 10% DE DESCUENTO EXTRA AUTOMÁTICO</span>
-                  </div>
-                </label>
-
-                {customerData.paymentMethod === 'transferencia' && (
-                  <div className="p-3 bg-emerald-50/80 border border-emerald-300 rounded-xl space-y-2 text-xs animate-fade-in">
-                    <div className="flex items-center justify-between pb-1.5 border-b border-emerald-200">
-                      <span className="font-bold text-emerald-950 flex items-center gap-1.5">
-                        <Building2 size={14} className="text-emerald-700" />
-                        Datos para Transferir (Mercado Pago)
-                      </span>
-                      <span className="text-[10px] text-emerald-800 font-bold bg-white px-2 py-0.5 rounded border border-emerald-200">
-                        Acreditación inmediata
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
-                      <div>
-                        <span className="text-[10px] text-neutral-500 block uppercase font-bold">Alias</span>
-                        <span className="font-mono font-bold text-neutral-900 text-xs">salazarchechu2025</span>
+                <div className="p-3.5 rounded-xl border border-teal-800 bg-teal-50/70 ring-2 ring-teal-700/20 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-neutral-900 text-xs flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded bg-[#009ee3] text-white font-black flex items-center justify-center text-[9px]">
+                        MP
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleCopy('salazarchechu2025', 'alias')}
-                        className="flex items-center gap-1 text-[11px] font-bold text-teal-800 hover:text-teal-950 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
-                      >
-                        {copiedField === 'alias' ? (
-                          <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
-                        ) : (
-                          <><Copy size={13} /> Copiar Alias</>
-                        )}
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-white p-2 rounded-lg border border-emerald-200">
-                      <div className="min-w-0 pr-2">
-                        <span className="text-[10px] text-neutral-500 block uppercase font-bold">CVU</span>
-                        <span className="font-mono font-bold text-neutral-900 text-[11px] break-all">0000003100071610252523</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleCopy('0000003100071610252523', 'cvu')}
-                        className="flex-shrink-0 flex items-center gap-1 text-[11px] font-bold text-teal-800 hover:text-teal-950 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded transition border border-teal-200"
-                      >
-                        {copiedField === 'cvu' ? (
-                          <><CheckCheck size={13} className="text-emerald-600" /> ¡Copiado!</>
-                        ) : (
-                          <><Copy size={13} /> Copiar CVU</>
-                        )}
-                      </button>
-                    </div>
-
-                    <p className="text-[11px] text-emerald-900 leading-snug pt-0.5">
-                      💡 Al presionar el botón de abajo se abrirá tu <strong>WhatsApp</strong> con el pedido listo para que nos envíes la captura del comprobante.
-                    </p>
+                      Pasarela Oficial de Mercado Pago
+                    </span>
+                    <span className="text-[10px] text-teal-800 font-bold bg-white px-2 py-0.5 rounded border border-teal-200 flex items-center gap-1">
+                      <Lock size={10} /> 100% Seguro
+                    </span>
                   </div>
-                )}
+
+                  <p className="text-[11px] text-neutral-600 leading-snug">
+                    Aboná de forma automática e inmediata con el medio que prefieras:
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[11px] font-semibold text-neutral-800">
+                    <div className="bg-white p-1.5 rounded border border-neutral-200 flex items-center gap-1.5">
+                      <span>💳</span>
+                      <span>Hasta <strong>3 Cuotas sin interés</strong></span>
+                    </div>
+                    <div className="bg-white p-1.5 rounded border border-neutral-200 flex items-center gap-1.5">
+                      <span>🏦</span>
+                      <span><strong>Transferencia directa</strong> (Automática)</span>
+                    </div>
+                    <div className="bg-white p-1.5 rounded border border-neutral-200 flex items-center gap-1.5">
+                      <span>💳</span>
+                      <span>Tarjeta de <strong>Débito</strong></span>
+                    </div>
+                    <div className="bg-white p-1.5 rounded border border-neutral-200 flex items-center gap-1.5">
+                      <span>📱</span>
+                      <span><strong>Dinero en cuenta</strong> MP / Efectivo</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* RESUMEN DETALLADO DEL PEDIDO ANTES DE PAGAR */}
+              <div className="bg-neutral-50 rounded-xl p-3.5 border border-neutral-200 space-y-2 text-xs">
+                <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
+                  <span className="font-extrabold text-neutral-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                    <ShoppingBag size={14} className="text-teal-900" />
+                    Resumen de tu Pedido
+                  </span>
+                  <span className="text-[11px] text-neutral-500 font-medium">
+                    {cartItems.reduce((a, b) => a + b.quantity, 0)} {cartItems.reduce((a, b) => a + b.quantity, 0) === 1 ? 'prenda' : 'prendas'}
+                  </span>
+                </div>
+
+                {/* Detalle por prenda */}
+                <div className="space-y-1.5 py-1">
+                  {cartItems.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-start text-neutral-700">
+                      <span className="pr-2 leading-snug">
+                        <strong>{item.quantity}x</strong> {item.name} <span className="text-teal-900 font-bold">({item.selectedSize})</span>
+                      </span>
+                      <span className="font-bold text-neutral-900 flex-shrink-0">
+                        ${(item.price * item.quantity).toLocaleString('es-AR')},00
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-neutral-200 space-y-1.5 text-neutral-600">
+                  <div className="flex justify-between">
+                    <span>Subtotal prendas:</span>
+                    <span className="font-semibold text-neutral-900">${subtotal.toLocaleString('es-AR')},00</span>
+                  </div>
+
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-emerald-700 font-semibold">
+                      <span>Descuento cupón:</span>
+                      <span>-${discountAmount.toLocaleString('es-AR')},00</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center">
+                    <span>Envío ({selectedShipping.title}):</span>
+                    <span>
+                      {selectedShipping.isPayOnDelivery ? (
+                        <span className="text-teal-900 font-bold bg-teal-100/70 px-1.5 py-0.5 rounded text-[10px]">
+                          A abonar al cadete
+                        </span>
+                      ) : estimatedShipping === 0 ? (
+                        <strong className="text-emerald-700 font-bold">¡GRATIS!</strong>
+                      ) : (
+                        <span className="font-semibold text-neutral-900">${estimatedShipping.toLocaleString('es-AR')},00</span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t-2 border-neutral-900 flex justify-between items-baseline text-sm">
+                  <span className="font-black text-neutral-900 uppercase tracking-wide">Total a Pagar:</span>
+                  <span className="text-lg font-black text-neutral-900">${finalTotal.toLocaleString('es-AR')},00</span>
+                </div>
+
+                <div className="text-[11px] text-teal-800 font-semibold text-right">
+                  O hasta 3 cuotas sin interés de ${(Math.round(finalTotal / 3)).toLocaleString('es-AR')},00
+                </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
+                className="w-full bg-[#009ee3] hover:bg-[#0081ba] text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
               >
-                <span>Continuar al Pago • ${finalTotal.toLocaleString('es-AR')},00</span>
+                <Lock size={15} />
+                <span>Pagar de Forma Segura con Mercado Pago</span>
                 <ChevronRight size={16} />
               </button>
             </form>
@@ -1003,10 +1015,10 @@ export default function CartDrawer({
               <div>
                 <span className={`text-[10px] font-bold px-3 py-1 rounded-full border uppercase ${
                   orderReceipt.method?.includes('Transferencia')
-                    ? 'text-teal-800 bg-teal-50 border-teal-200'
+                    ? 'text-amber-800 bg-amber-50 border-amber-200'
                     : 'text-emerald-700 bg-emerald-50 border-emerald-200'
                 }`}>
-                  {orderReceipt.method?.includes('Transferencia') ? 'PEDIDO REGISTRADO • 10% OFF' : 'PAGO APROBADO ✓'}
+                  {orderReceipt.method?.includes('Transferencia') ? 'ESPERAMOS TU PAGO • ENVIAR COMPROBANTE' : 'PAGO APROBADO ✓'}
                 </span>
                 <h3 className="text-lg font-serif font-bold text-neutral-900 mt-2">
                   {orderReceipt.method?.includes('Transferencia')
@@ -1015,7 +1027,7 @@ export default function CartDrawer({
                 </h3>
                 <p className="text-xs text-neutral-500">
                   {orderReceipt.method?.includes('Transferencia')
-                    ? 'Tu pedido está reservado. Envianos el comprobante al chat de WhatsApp que se acaba de abrir para preparar tu paquete.'
+                    ? 'Tu pedido está reservado. Bien realices la transferencia, envianos el comprobante por WhatsApp para preparar y despachar tu paquete.'
                     : 'Tu pedido de SantoSpirito ya está confirmado y en preparación.'}
                 </p>
               </div>
@@ -1163,8 +1175,8 @@ export default function CartDrawer({
 
         </div>
 
-        {/* Drawer Footer with Totals (Shown on Cart & Checkout steps) */}
-        {cartItems.length > 0 && (checkoutStep === 'cart' || checkoutStep === 'checkout') && (
+        {/* Drawer Footer with Totals (Shown on Cart step) */}
+        {cartItems.length > 0 && checkoutStep === 'cart' && (
           <div className="p-4 sm:p-5 border-t border-neutral-200 bg-neutral-50/80 space-y-3">
             
             {/* Totals Breakdown */}
