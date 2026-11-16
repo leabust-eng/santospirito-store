@@ -112,9 +112,10 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
             <span className="font-bold text-teal-900">${installmentAmount.toLocaleString('es-AR')},00</span>
           </div>
 
-          {/* Transfer discount preview */}
-          <div className="text-[10px] text-emerald-700 font-medium mt-1">
-            o <strong className="font-bold">${transferPrice.toLocaleString('es-AR')},00</strong> pagando con Transferencia (10% OFF)
+          {/* Free shipping threshold callout */}
+          <div className="text-[11px] text-emerald-800 font-semibold mt-1 flex items-center gap-1">
+            <span className="text-emerald-600">🚚</span>
+            <span><strong>Envío Gratis</strong> superando $150.000</span>
           </div>
         </div>
 

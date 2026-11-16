@@ -297,16 +297,51 @@ export default function CartDrawer({
           </button>
         </div>
 
-        {/* Free Shipping Alert Banner */}
-        {subtotal > 0 && checkoutStep === 'cart' && (
-          <div className="bg-teal-900 text-white text-xs py-2 px-4 text-center font-medium">
-            {subtotal >= 150000 ? (
-              <span>🎉 ¡Tenés <strong>ENVÍO GRATIS</strong> en este pedido!</span>
-            ) : (
-              <span>Te faltan <strong>${(150000 - subtotal).toLocaleString('es-AR')}</strong> para tener <strong>ENVÍO GRATIS</strong></span>
-            )}
-          </div>
-        )}
+        {/* Free Shipping Interactive Gamified Progress Bar */}
+        {subtotal > 0 && checkoutStep === 'cart' && (() => {
+          const progress = Math.min(100, Math.round((subtotal / 150000) * 100));
+          const missing = 150000 - subtotal;
+          return (
+            <div className="bg-neutral-900 text-white p-3.5 border-b border-neutral-800 space-y-2">
+              <div className="flex items-center justify-between text-xs font-semibold">
+                {subtotal >= 150000 ? (
+                  <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                    <Sparkles size={14} className="text-emerald-400" />
+                    ¡Felicitaciones! Tenés ENVÍO GRATIS asegurado
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-neutral-200">
+                    <Truck size={14} className="text-amber-400" />
+                    Te faltan <strong className="text-amber-300 font-bold">${missing.toLocaleString('es-AR')}</strong> para <strong>ENVÍO GRATIS</strong>
+                  </span>
+                )}
+                <span className={`text-[11px] font-mono font-black px-1.5 py-0.5 rounded ${
+                  subtotal >= 150000 ? 'text-emerald-400 bg-emerald-950/80 border border-emerald-800/40' : 'text-amber-300 bg-amber-950/80 border border-amber-800/40'
+                }`}>
+                  {progress}%
+                </span>
+              </div>
+
+              {/* Visual Progress Bar Track */}
+              <div className="w-full h-2.5 bg-neutral-800 rounded-full overflow-hidden p-0.5 border border-white/10">
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ease-out ${
+                    subtotal >= 150000 
+                      ? 'bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]' 
+                      : 'bg-gradient-to-r from-amber-500 to-amber-300'
+                  }`}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              {subtotal < 150000 && (
+                <p className="text-[10px] text-neutral-400 leading-tight">
+                  💡 Sumá otro ambo o prenda a tu pedido y el envío por Correo Argentino te sale <strong>$0</strong>.
+                </p>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Drawer Body */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">

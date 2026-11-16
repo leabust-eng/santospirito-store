@@ -39,14 +39,17 @@ export default function AnnouncementBar({ onOpenSizeGuide, onOpenVirtualFitting 
         </div>
 
         {/* Center: Main Promo Callout */}
-        <div className="w-full md:w-auto flex items-center justify-center gap-2 sm:gap-3 font-medium tracking-wide">
+        <div className="w-full md:w-auto flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 font-medium tracking-wide">
           <span className="flex items-center gap-1 sm:gap-1.5 text-emerald-400 font-semibold uppercase text-[10px] sm:text-[11px] bg-emerald-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-800/40 shrink-0">
             <CreditCard size={11} />
             3 CUOTAS SIN INTERÉS
           </span>
-          <span className="text-neutral-300 text-[11px] flex items-center gap-1 shrink-0">
-            <Truck size={12} className="text-sky-400" />
-            Envíos a todo el país
+          <span className="flex items-center gap-1 sm:gap-1.5 text-amber-300 font-bold uppercase text-[10px] sm:text-[11px] bg-amber-950/50 px-2 sm:px-2.5 py-0.5 rounded-full border border-amber-800/40 shrink-0">
+            <Truck size={11} className="text-amber-400" />
+            ENVÍO GRATIS &gt; $150.000
+          </span>
+          <span className="hidden xl:flex text-neutral-400 text-[11px] items-center gap-1 shrink-0">
+            Todo el país
           </span>
         </div>
 
@@ -66,7 +69,9 @@ export default function AnnouncementBar({ onOpenSizeGuide, onOpenVirtualFitting 
             📏 Tabla de Talles
           </button>
           <span className="text-neutral-600">|</span>
-          <span className="text-emerald-400 font-medium">10% OFF Transferencia</span>
+          <span className="text-emerald-400 font-semibold flex items-center gap-1">
+            <span>🛡️</span> Compra 100% Segura
+          </span>
         </div>
       </div>
     </div>

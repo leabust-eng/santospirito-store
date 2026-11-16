@@ -226,9 +226,15 @@ export default function ProductDetailModal({
                     <span><strong>3 cuotas sin interés</strong> de <strong>${installmentAmount.toLocaleString('es-AR')},00</strong></span>
                   </div>
 
-                  {/* Transferencia discount */}
-                  <div className="text-xs text-emerald-700 font-medium bg-emerald-50/80 p-2 rounded-lg border border-emerald-200/60">
-                    💵 <strong>${transferPrice.toLocaleString('es-AR')},00</strong> pagando con Transferencia Bancaria (<strong>10% OFF</strong>)
+                  {/* Free Shipping Callout */}
+                  <div className="text-xs text-emerald-800 font-medium bg-emerald-50/90 p-2.5 rounded-lg border border-emerald-200 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-bold">
+                      <Truck size={14} className="text-emerald-700" />
+                      ENVÍO GRATIS a todo el país
+                    </span>
+                    <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                      Superando $150.000
+                    </span>
                   </div>
 
                   <button
@@ -361,6 +367,19 @@ export default function ProductDetailModal({
                   </button>
                 </div>
 
+                {/* Free Shipping Cross-sell incentive */}
+                <div className="flex items-center gap-2.5 p-2.5 bg-emerald-50/90 rounded-xl border border-emerald-200/80 text-emerald-950 text-xs">
+                  <span className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 flex-shrink-0">
+                    <Truck size={13} />
+                  </span>
+                  <div className="leading-tight">
+                    <span className="font-extrabold text-emerald-900 block">¿Querés tu Envío 100% Bonificado?</span>
+                    <span className="text-[11px] text-emerald-800">
+                      Sumá otra prenda o alcanzá los <strong>$150.000</strong> y el envío por Correo Argentino te sale <strong>$0</strong>.
+                    </span>
+                  </div>
+                </div>
+
                 {/* Shipping Estimator (Matching Plavusa's Correo Argentino logic) */}
                 <div className="pt-3 border-t border-neutral-200">
                   <form onSubmit={handleCalculateShipping} className="space-y-2">
@@ -435,6 +454,14 @@ export default function ProductDetailModal({
                           <span className="text-[10px] text-neutral-400 block -mt-1">{shippingQuote.diasDomicilio}</span>
                         </>
                       )}
+
+                      {/* Free shipping booster hint */}
+                      <div className="pt-2 border-t border-neutral-200 flex items-center justify-between text-[11px] text-emerald-900 bg-emerald-100/70 p-2 rounded-lg">
+                        <span className="flex items-center gap-1 font-semibold">
+                          <Sparkles size={12} className="text-emerald-700" />
+                          <span>¡Bonificable a <strong>$0</strong> en pedidos superiores a $150.000!</span>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
