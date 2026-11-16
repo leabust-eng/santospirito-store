@@ -595,19 +595,19 @@ export default function CartDrawer({
                           </span>
                         </div>
                         
-                        <h3 className="text-xs sm:text-sm font-black text-neutral-900 tracking-tight pt-0.5">
+                        <h3 className="text-sm sm:text-base font-black text-[#009ee3] tracking-tight pt-0.5">
                           Multiplicá tus combinaciones: ¡Sumá una 2da Chaqueta a elección!
                         </h3>
                       </div>
 
-                      {/* Persuasive copy */}
-                      <div className="text-[11px] text-neutral-700 leading-relaxed space-y-1.5 bg-white/90 p-2.5 rounded-xl border border-neutral-200/80">
+                      {/* Persuasive copy in warm amber tone */}
+                      <div className="text-[11px] sm:text-xs text-amber-950 leading-relaxed space-y-1.5 bg-amber-50/80 p-3 rounded-xl border border-amber-200">
                         <p>
-                          El beneficio directo es que <strong>podés combinar ambas chaquetas con el mismo pantalón</strong>. De esa forma contás con <strong>2 looks completos, frescos y profesionales</strong> para tus guardias y consultorio, luciendo siempre impecable sin tener que pagar un segundo ambo entero.
+                          El beneficio directo es que <strong className="text-amber-900 font-bold">podés combinar ambas chaquetas con el mismo pantalón</strong>. De esa forma contás con <strong className="text-amber-900 font-bold">2 looks completos, frescos y profesionales</strong> para tus guardias y consultorio, luciendo siempre impecable <strong className="text-amber-900 font-bold">sin tener que pagar un segundo ambo entero</strong>.
                         </p>
-                        <p className="text-emerald-900 font-bold flex items-center gap-1.5 pt-0.5">
-                          <Truck size={14} className="text-emerald-700 flex-shrink-0" />
-                          <span>¡Al sumarla superás los $150.000 y <strong>tu ENVÍO ES 100% GRATIS</strong> a todo el país!</span>
+                        <p className="text-emerald-800 font-bold flex items-center gap-1.5 pt-1 border-t border-amber-200/60">
+                          <Truck size={14} className="text-emerald-600 flex-shrink-0" />
+                          <span>¡Al sumarla superás los $150.000 y <strong className="text-emerald-900">tu ENVÍO ES 100% GRATIS</strong> a todo el país!</span>
                         </p>
                       </div>
 
