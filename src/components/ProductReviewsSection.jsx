@@ -99,20 +99,20 @@ export default function ProductReviewsSection({ product, productId }) {
                   {rev.stars === 5 ? "Excelente" : "Muy bueno"}
                 </span>
               </div>
-              <span className="text-[10px] text-neutral-400">{rev.date}</span>
+              <span className="text-[11px] text-neutral-400">{rev.date}</span>
             </div>
 
             {/* Texto del testimonio */}
-            <p className="text-xs text-neutral-700 leading-relaxed mb-2 font-normal">
+            <p className="text-[13px] text-neutral-700 leading-[1.6] mb-2 font-normal">
               "{rev.text}"
             </p>
 
             {/* Datos del profesional y etiqueta de comunidad */}
             <div className="flex flex-wrap items-center justify-between gap-1 pt-1.5 border-t border-neutral-100 text-[11px]">
               <div className="text-neutral-800">
-                <strong className="text-[#0f3d3e] font-semibold">{rev.name}</strong>
-                <span className="text-neutral-500"> · {rev.role}</span>
-                <span className="text-teal-700 font-medium"> · {rev.location}</span>
+                <strong className="text-[13px] text-[#0f3d3e] font-semibold">{rev.name}</strong>
+                <span className="text-[12px] text-neutral-500 font-normal"> · {rev.role}</span>
+                <span className="text-[12px] text-neutral-500 font-normal"> · {rev.location}</span>
               </div>
 
               {/* Distintivo de comunidad (transparente y ético, sin falsas afirmaciones de auditoría) */}

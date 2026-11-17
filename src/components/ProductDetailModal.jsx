@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, Star, CreditCard, Truck, ShieldCheck, Ruler, 
   Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw,
@@ -6,6 +7,9 @@ import {
 } from 'lucide-react';
 import ProductReviewsSection from './ProductReviewsSection';
 import { getProductReviews } from '../data/productReviews';
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export default function ProductDetailModal({ 
   product, 
@@ -32,6 +36,55 @@ export default function ProductDetailModal({
   const installmentAmount = Math.round(product.price / 3);
   const transferPrice = Math.round(product.price * 0.90);
   const reviewsData = getProductReviews(product.id);
+
+  // ── Accessibility: Dialog refs, focus trap, inert background ──
+  const modalRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    // Record what had focus before the modal opened
+    const previouslyFocused = document.activeElement;
+
+    // Mark the app root container as inert so screen readers / tab skip it
+    const appRoot = document.getElementById('root');
+    if (appRoot) appRoot.setAttribute('inert', '');
+
+    // Delay focus to let the portal mount
+    const focusTimer = setTimeout(() => closeButtonRef.current?.focus(), 30);
+
+    const handleKeyDown = (e) => {
+      // Escape closes the modal (unless the lightbox is open — that has its own handler)
+      if (e.key === 'Escape' && !isZoomOpen) {
+        e.stopPropagation();
+        onClose();
+        return;
+      }
+      // Tab trapping
+      if (e.key !== 'Tab') return;
+      const nodes = modalRef.current?.querySelectorAll(FOCUSABLE_SELECTOR);
+      if (!nodes || nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(focusTimer);
+      document.removeEventListener('keydown', handleKeyDown);
+      // Remove inert from app root
+      if (appRoot) appRoot.removeAttribute('inert');
+      // Restore focus to the element that opened the modal
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+    };
+  }, [onClose, isZoomOpen]);
 
   // Lightbox Zoom / Ampliación en pantalla completa
   const [isZoomOpen, setIsZoomOpen] = useState(false);
@@ -156,15 +209,22 @@ export default function ProductDetailModal({
 
   const currentSizeObj = (product.sizes || []).find(s => s.size === selectedSize);
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+  return createPortal(
+    <div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="product-detail-title"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in"
+    >
       <div className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
         
         {/* Modal Close Button */}
         <button
+          ref={closeButtonRef}
           onClick={onClose}
           className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center transition shadow-sm"
-          aria-label="Cerrar"
+          aria-label="Cerrar detalle de producto"
         >
           <X size={20} />
         </button>
@@ -311,7 +371,7 @@ export default function ProductDetailModal({
                     </div>
                   </div>
 
-                  <h1 className="text-xl sm:text-2xl font-black text-neutral-900 leading-tight">
+                  <h1 id="product-detail-title" className="text-xl sm:text-2xl font-black text-neutral-900 leading-tight">
                     {product.name}
                   </h1>
 
@@ -790,6 +850,7 @@ export default function ProductDetailModal({
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
