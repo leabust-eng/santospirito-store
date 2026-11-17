@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, Trash2, ShoppingBag, CreditCard, MessageCircle, 
   Truck, ArrowRight, ShieldCheck, Check, Sparkles, Tag,
@@ -106,11 +107,56 @@ export default function CartDrawer({
   // Steps: 'cart' | 'checkout' | 'payment' | 'processing' | 'success'
   const [checkoutStep, setCheckoutStep] = useState('cart');
 
-  // Promo 2da Chaqueta state
+  // Promo 2da Chaqueta state & Bottom Sheet
+  const [isJacketSheetOpen, setIsJacketSheetOpen] = useState(false);
   const [selectedPromoJacketId, setSelectedPromoJacketId] = useState(promoJacketsList[0].id);
   const [selectedPromoJacketSize, setSelectedPromoJacketSize] = useState('M');
+  const drawerContentRef = useRef(null);
+  const sheetRef = useRef(null);
+  const sheetCloseRef = useRef(null);
 
-  React.useEffect(() => {
+  // Accessibility: Focus trap, inert background and Escape key for 2da Chaqueta bottom sheet
+  useEffect(() => {
+    if (!isJacketSheetOpen) return;
+
+    const previousFocus = document.activeElement;
+    const drawerContainer = drawerContentRef.current;
+    if (drawerContainer) drawerContainer.setAttribute('inert', '');
+
+    const t = setTimeout(() => sheetCloseRef.current?.focus(), 30);
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setIsJacketSheetOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const nodes = sheetRef.current?.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!nodes || nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('keydown', onKeyDown);
+      if (drawerContainer) drawerContainer.removeAttribute('inert');
+      if (previousFocus instanceof HTMLElement) previousFocus.focus();
+    };
+  }, [isJacketSheetOpen]);
+
+  useEffect(() => {
     if (cartItems && cartItems.length > 0 && cartItems[0].selectedSize) {
       setSelectedPromoJacketSize(cartItems[0].selectedSize);
     }
@@ -407,10 +453,13 @@ export default function CartDrawer({
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm animate-fade-in flex justify-end">
-      <div className="relative w-full max-w-full sm:max-w-xl md:max-w-2xl bg-white h-full shadow-2xl flex flex-col justify-between">
+      <div 
+        ref={drawerContentRef}
+        className="relative w-full max-w-full sm:max-w-xl md:max-w-2xl bg-white h-full shadow-2xl flex flex-col justify-between"
+      >
         
         {/* Drawer Header */}
-        <div className="p-4 sm:p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/80">
+        <div className="shrink-0 p-4 sm:p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/80">
           <div className="flex items-center gap-2">
             <ShoppingBag size={20} className="text-teal-900" />
             <h2 className="text-sm sm:text-base font-bold text-neutral-900 tracking-tight">
@@ -431,12 +480,12 @@ export default function CartDrawer({
           </button>
         </div>
 
-        {/* Free Shipping Interactive Gamified Progress Bar */}
+        {/* Free Shipping Interactive Gamified Progress Bar (≤ 44px) */}
         {subtotal > 0 && checkoutStep === 'cart' && (() => {
           const progress = Math.min(100, Math.round((subtotal / 150000) * 100));
           const missing = 150000 - subtotal;
           return (
-            <div className="bg-neutral-900 text-white p-3.5 border-b border-neutral-800 space-y-2">
+            <div className="shrink-0 bg-neutral-900 text-white px-4 py-2 border-b border-neutral-800 space-y-1.5">
               <div className="flex items-center justify-between text-xs font-semibold">
                 {subtotal >= 150000 ? (
                   <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
@@ -444,20 +493,20 @@ export default function CartDrawer({
                     ¡Felicitaciones! Tenés ENVÍO GRATIS asegurado
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-neutral-200">
-                    <Truck size={14} className="text-amber-400" />
+                  <span className="flex items-center gap-1.5 text-neutral-200 text-[11px] sm:text-xs">
+                    <Truck size={13} className="text-amber-400" />
                     Te faltan <strong className="text-amber-300 font-bold">${missing.toLocaleString('es-AR')}</strong> para <strong>ENVÍO GRATIS</strong>
                   </span>
                 )}
-                <span className={`text-[11px] font-mono font-black px-1.5 py-0.5 rounded ${
+                <span className={`text-[10px] sm:text-[11px] font-mono font-black px-1.5 py-0.5 rounded ${
                   subtotal >= 150000 ? 'text-emerald-400 bg-emerald-950/80 border border-emerald-800/40' : 'text-amber-300 bg-amber-950/80 border border-amber-800/40'
                 }`}>
                   {progress}%
                 </span>
               </div>
 
-              {/* Visual Progress Bar Track */}
-              <div className="w-full h-2.5 bg-neutral-800 rounded-full overflow-hidden p-0.5 border border-white/10">
+              {/* Visual Progress Bar Track (4px) */}
+              <div className="w-full h-1 bg-neutral-800 rounded-full overflow-hidden border border-white/10">
                 <div 
                   className={`h-full rounded-full transition-all duration-500 ease-out ${
                     subtotal >= 150000 
@@ -467,18 +516,12 @@ export default function CartDrawer({
                   style={{ width: `${progress}%` }}
                 />
               </div>
-
-              {subtotal < 150000 && (
-                <p className="text-[10px] text-neutral-400 leading-tight">
-                  💡 Sumá otro ambo o prenda a tu pedido y el envío por Correo Argentino te sale <strong>$0</strong>.
-                </p>
-              )}
             </div>
           );
         })()}
 
         {/* Drawer Body */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
           
           {/* STEP 1: CART LIST */}
           {checkoutStep === 'cart' && (
@@ -617,121 +660,21 @@ export default function CartDrawer({
                       </div>
                     </div>
                   ) : (
-                    <div className="p-3.5 sm:p-4 bg-gradient-to-br from-teal-50/90 via-amber-50/30 to-white rounded-2xl border-2 border-teal-600/40 shadow-sm space-y-3">
-                      {/* Header & Badges */}
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between flex-wrap gap-1.5">
-                          <span className="text-[10px] font-extrabold tracking-wider uppercase text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300 flex items-center gap-1">
-                            <Sparkles size={11} className="text-amber-600" />
-                            Combo 3 Piezas: 2 Chaquetas + 1 Pantalón
-                          </span>
-                          <span className="text-[11px] font-black text-teal-950 bg-white px-2 py-0.5 rounded-md border border-teal-300 shadow-2xs">
-                            2da Chaqueta a solo <strong className="text-teal-700 font-black">$55.000</strong>
-                          </span>
-                        </div>
-                        
-                        <h3 className="text-sm sm:text-base font-black text-[#009ee3] tracking-tight pt-0.5">
-                          Multiplicá tus combinaciones: ¡Sumá una 2da Chaqueta a elección!
-                        </h3>
+                    <button
+                      type="button"
+                      onClick={() => setIsJacketSheetOpen(true)}
+                      className="w-full text-left bg-gradient-to-r from-teal-900 to-teal-800 text-white rounded-xl p-3 flex items-center gap-3 border border-teal-700/60 shadow-sm"
+                    >
+                      <div className="w-10 h-12 rounded-lg overflow-hidden bg-white/10 flex-shrink-0">
+                        <img src={promoJacketsList[0]?.image} alt="" className="w-full h-full object-cover object-top" />
                       </div>
-
-                      {/* Persuasive copy in warm amber tone */}
-                      <div className="text-[11px] sm:text-xs text-amber-950 leading-relaxed space-y-1.5 bg-amber-50/80 p-3 rounded-xl border border-amber-200">
-                        <p>
-                          El beneficio directo es que <strong className="text-amber-900 font-bold">podés combinar ambas chaquetas con el mismo pantalón</strong>. De esa forma contás con <strong className="text-amber-900 font-bold">2 looks completos, frescos y profesionales</strong> para tus guardias y consultorio, luciendo siempre impecable <strong className="text-amber-900 font-bold">sin tener que pagar un segundo ambo entero</strong>.
-                        </p>
-                        <p className="text-emerald-800 font-bold flex items-center gap-1.5 pt-1 border-t border-amber-200/60">
-                          <Truck size={14} className="text-emerald-600 flex-shrink-0" />
-                          <span>¡Al sumarla superás los $150.000 y <strong className="text-emerald-900">tu ENVÍO ES 100% GRATIS</strong> a todo el país!</span>
-                        </p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-black uppercase tracking-wider text-amber-300">Combo 3 piezas</p>
+                        <p className="text-xs font-bold leading-tight">Sumá tu 2da chaqueta por <span className="text-amber-300">$55.000</span></p>
+                        <p className="text-[10px] text-teal-200 leading-tight">Y desbloqueás el envío gratis</p>
                       </div>
-
-                      {/* Jacket Selector */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-bold text-neutral-900 block">
-                            Elegí el modelo de tu 2da Chaqueta:
-                          </label>
-                          <span className="text-[10px] text-neutral-500 font-medium">
-                            {promoJacketsList.length} modelos disponibles
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-4 sm:grid-cols-4 gap-2">
-                          {promoJacketsList.map((jkt) => {
-                            const isSelected = selectedPromoJacketId === jkt.id;
-                            return (
-                              <button
-                                key={jkt.id}
-                                type="button"
-                                onClick={() => setSelectedPromoJacketId(jkt.id)}
-                                className={`group relative flex flex-col items-center p-1.5 rounded-xl border text-center transition-all ${
-                                  isSelected 
-                                    ? 'border-teal-700 bg-teal-50 ring-2 ring-teal-600/40 shadow-sm scale-[1.02]' 
-                                    : 'border-neutral-200 bg-white hover:border-neutral-400 hover:bg-neutral-50'
-                                }`}
-                              >
-                                <div className="w-full aspect-[3/4] rounded-lg overflow-hidden bg-neutral-100 mb-1 relative">
-                                  <img 
-                                    src={jkt.image} 
-                                    alt={jkt.name} 
-                                    className="w-full h-full object-cover object-top"
-                                    loading="lazy"
-                                  />
-                                  {isSelected && (
-                                    <div className="absolute top-1 right-1 bg-teal-700 text-white rounded-full p-0.5 shadow-md">
-                                      <Check size={10} />
-                                    </div>
-                                  )}
-                                </div>
-                                <span className="text-[10px] font-bold text-neutral-900 line-clamp-1 leading-tight">
-                                  {jkt.name.replace('Chaqueta ', '')}
-                                </span>
-                                <div className="flex items-baseline gap-1 mt-0.5">
-                                  <span className="text-[10px] font-black text-teal-900">$55.000</span>
-                                  <span className="text-[9px] text-neutral-400 line-through">$75.000</span>
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Size selector & Add Button */}
-                      <div className="pt-1 space-y-2 border-t border-teal-200/50">
-                        <div className="flex items-center justify-between flex-wrap gap-1">
-                          <span className="text-[11px] font-bold text-neutral-800">
-                            Talle de tu chaqueta: <strong className="text-teal-900 font-black">{selectedPromoJacketSize}</strong>
-                          </span>
-                          <div className="flex items-center gap-1">
-                            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
-                              <button
-                                key={sz}
-                                type="button"
-                                onClick={() => setSelectedPromoJacketSize(sz)}
-                                className={`px-2 py-0.5 text-[10px] font-bold rounded border transition ${
-                                  selectedPromoJacketSize === sz
-                                    ? 'bg-teal-900 text-white border-teal-900 shadow-2xs'
-                                    : 'bg-white text-neutral-700 border-neutral-300 hover:border-neutral-400'
-                                }`}
-                              >
-                                {sz}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={handleAddPromoJacket}
-                          className="w-full bg-[#009ee3] hover:bg-[#0081ba] text-white py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95 duration-150"
-                        >
-                          <Sparkles size={14} className="text-amber-200" />
-                          <span>Sumar {selectedPromoJacket.name} por $55.000</span>
-                          <ArrowRight size={14} />
-                        </button>
-                      </div>
-                    </div>
+                      <span className="text-[11px] font-bold bg-white text-teal-900 px-2.5 py-1.5 rounded-full flex-shrink-0">Elegir →</span>
+                    </button>
                   )}
                 </div>
               )}
@@ -1493,10 +1436,10 @@ export default function CartDrawer({
 
         {/* Drawer Footer with Totals (Shown on Cart step) */}
         {cartItems.length > 0 && checkoutStep === 'cart' && (
-          <div className="p-4 sm:p-5 border-t border-neutral-200 bg-neutral-50/80 space-y-3">
+          <div className="shrink-0 px-4 py-3 border-t border-neutral-200 bg-neutral-50/80 space-y-2.5">
             
             {/* Totals Breakdown */}
-            <div className="space-y-1.5 text-xs text-neutral-600">
+            <div className="space-y-1 text-xs text-neutral-600">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
                 <span className="font-semibold text-neutral-900">${subtotal.toLocaleString('es-AR')},00</span>
@@ -1530,54 +1473,38 @@ export default function CartDrawer({
                   )}
                 </span>
               </div>
-              {selectedShipping.isPayOnDelivery && (
-                <p className="text-[10px] text-teal-800 text-right -mt-1 font-medium">
-                  🛵 Abonás el servicio directo al cadete al recibir la prenda
-                </p>
-              )}
 
-              <div className="flex justify-between text-base font-extrabold text-neutral-900 pt-2 border-t border-neutral-200">
+              <div className="flex justify-between items-baseline text-sm sm:text-base font-extrabold text-neutral-900 pt-1.5 border-t border-neutral-200">
                 <span>Total Final:</span>
-                <span>${finalTotal.toLocaleString('es-AR')},00</span>
-              </div>
-
-              <div className="text-[11px] text-teal-800 font-semibold text-right">
-                O hasta 3 cuotas sin interés de ${(Math.round(finalTotal / 3)).toLocaleString('es-AR')},00
+                <div className="text-right">
+                  <div>${finalTotal.toLocaleString('es-AR')},00</div>
+                  <div className="text-[10px] sm:text-[11px] font-semibold text-teal-800 -mt-0.5">
+                    O hasta 3 cuotas sin interés de ${(Math.round(finalTotal / 3)).toLocaleString('es-AR')},00
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Step 1 CTA & Urgency Timer (Opción 3 - Centrado y letras más grandes) */}
+            {/* Step 1 CTA & Urgency Timer (Compacto de 11px) */}
             {checkoutStep === 'cart' && (
-              <div className="space-y-2.5">
-                {/* Urgency Countdown Timer (Centrado y letras más grandes) */}
-                <div className="flex items-center justify-center gap-2 sm:gap-3 bg-amber-50/90 rounded-xl py-2.5 px-3 border border-amber-200 text-amber-950 shadow-2xs text-center flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-3 w-3 flex-shrink-0">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-600"></span>
-                    </span>
-                    <span className="text-xs sm:text-sm font-extrabold text-amber-900 tracking-tight">
-                      Talle y stock reservados por:
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5 font-mono font-black text-sm sm:text-base text-amber-950 bg-white px-3 py-1 rounded-lg border border-amber-300 shadow-2xs">
-                    <Clock size={16} className="text-amber-700 animate-pulse flex-shrink-0" />
-                    <span>{formattedTimer} min</span>
-                  </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-amber-900">
+                  <Clock size={12} className="text-amber-700 animate-pulse flex-shrink-0" />
+                  <span>⏱ Talle y stock reservados: <strong className="font-mono text-amber-950 font-black">{formattedTimer} min</strong></span>
                 </div>
 
                 <button
                   onClick={() => setCheckoutStep('checkout')}
-                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
+                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95"
                 >
                   <span>Iniciar Compra Segura</span>
-                  <ArrowRight size={16} />
+                  <ArrowRight size={15} />
                 </button>
               </div>
             )}
 
-            <div className="flex items-center justify-center gap-2 text-[11px] text-neutral-500 pt-0.5 pb-0.5">
-              <ShieldCheck size={14} className="text-emerald-600 flex-shrink-0" />
+            <div className="flex items-center justify-center gap-1.5 text-[10px] text-neutral-500 pt-0.5">
+              <ShieldCheck size={13} className="text-emerald-600 flex-shrink-0" />
               <span>Compra 100% segura con garantía de cambio de talle</span>
             </div>
 
@@ -1585,6 +1512,130 @@ export default function CartDrawer({
         )}
 
       </div>
+
+      {/* Bottom Sheet: Selector de 2da Chaqueta */}
+      {isJacketSheetOpen && createPortal(
+        <div
+          ref={sheetRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="jacket-sheet-title"
+          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsJacketSheetOpen(false);
+          }}
+        >
+          <div className="relative w-full max-w-lg sm:max-w-xl bg-white rounded-t-2xl sm:rounded-2xl max-h-[90vh] sm:max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in">
+            {/* Header */}
+            <div className="p-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/90 shrink-0">
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <Sparkles size={15} className="text-amber-500" />
+                  <h3 id="jacket-sheet-title" className="text-sm sm:text-base font-black text-neutral-900">
+                    Elegí tu 2da chaqueta
+                  </h3>
+                </div>
+                <p className="text-[11px] text-teal-800 font-semibold mt-0.5">
+                  2° chaqueta a $55.000 · envío gratis
+                </p>
+              </div>
+              <button
+                ref={sheetCloseRef}
+                onClick={() => setIsJacketSheetOpen(false)}
+                className="w-8 h-8 rounded-full bg-white hover:bg-neutral-100 text-neutral-600 flex items-center justify-center transition border border-neutral-200"
+                aria-label="Cerrar selección de chaquetas"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Scrollable list of 8 jackets in 2 columns */}
+            <div className="flex-1 min-h-0 overflow-y-auto p-3.5 sm:p-4">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                {promoJacketsList.map((jkt) => {
+                  const isSelected = selectedPromoJacketId === jkt.id;
+                  return (
+                    <button
+                      key={jkt.id}
+                      type="button"
+                      onClick={() => setSelectedPromoJacketId(jkt.id)}
+                      className={`group relative flex flex-col p-2 rounded-xl border text-left transition-all ${
+                        isSelected 
+                          ? 'border-teal-700 bg-teal-50/70 ring-2 ring-teal-600/40 shadow-sm' 
+                          : 'border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50'
+                      }`}
+                    >
+                      <div className="w-full aspect-[3/4] rounded-lg overflow-hidden bg-neutral-100 mb-1.5 relative">
+                        <img 
+                          src={jkt.image} 
+                          alt={jkt.name} 
+                          className="w-full h-full object-cover object-top"
+                          loading="lazy"
+                        />
+                        {isSelected && (
+                          <div className="absolute top-1.5 right-1.5 bg-teal-700 text-white rounded-full p-1 shadow-md">
+                            <Check size={12} />
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-xs font-bold text-neutral-900 line-clamp-1 leading-tight">
+                        {jkt.name.replace('Chaqueta ', '')}
+                      </span>
+                      <span className="text-[10px] text-neutral-500 line-clamp-1 mt-0.5">
+                        {jkt.style}
+                      </span>
+                      <div className="flex items-baseline gap-1.5 mt-1">
+                        <span className="text-xs font-black text-teal-900">$55.000</span>
+                        <span className="text-[10px] text-neutral-400 line-through">$75.000</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Sticky footer of Sheet: Talles & CTA */}
+            <div className="shrink-0 p-3.5 sm:p-4 border-t border-neutral-200 bg-white space-y-2.5 shadow-lg">
+              <div className="flex items-center justify-between flex-wrap gap-1">
+                <span className="text-xs font-bold text-neutral-800">
+                  Talle: <strong className="text-teal-900 font-black">{selectedPromoJacketSize}</strong>
+                </span>
+                <div className="flex items-center gap-1">
+                  {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((sz) => (
+                    <button
+                      key={sz}
+                      type="button"
+                      onClick={() => setSelectedPromoJacketSize(sz)}
+                      className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition ${
+                        selectedPromoJacketSize === sz
+                          ? 'bg-teal-900 text-white border-teal-900 shadow-2xs'
+                          : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:border-neutral-300'
+                      }`}
+                    >
+                      {sz}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleAddPromoJacket();
+                  setIsJacketSheetOpen(false);
+                }}
+                className="w-full bg-[#009ee3] hover:bg-[#0081ba] text-white py-3 px-4 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95 duration-150"
+              >
+                <Sparkles size={15} className="text-amber-200" />
+                <span>Sumar {selectedPromoJacket.name.replace('Chaqueta ', '')} por $55.000</span>
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
     </div>
   );
 }
