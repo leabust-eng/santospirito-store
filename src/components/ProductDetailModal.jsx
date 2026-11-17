@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, Star, CreditCard, Truck, ShieldCheck, Ruler, 
   Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw,
-  ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2
+  ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2, Move
 } from 'lucide-react';
 
 export default function ProductDetailModal({ 
@@ -33,7 +33,63 @@ export default function ProductDetailModal({
   // Lightbox Zoom / Ampliación en pantalla completa
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(0);
-  const [zoomLevel, setZoomLevel] = useState(1); // 1 = normal ajustado, 2 = zoom tela acercado
+  const [zoomLevel, setZoomLevel] = useState(1); // 1 = Vista Completa (100% de la foto con rostro y hombros), 2 = Zoom Detalle
+  const zoomContainerRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
+  const hasMovedRef = useRef(false);
+
+  const toggleZoom = (targetLevel) => {
+    const nextLevel = targetLevel !== undefined ? targetLevel : (zoomLevel === 1 ? 2 : 1);
+    setZoomLevel(nextLevel);
+    if (nextLevel === 2) {
+      setTimeout(() => {
+        if (zoomContainerRef.current) {
+          // Asegurar que el scroll empiece en 0 arriba (rostro, hombros y escote visibles de inmediato)
+          zoomContainerRef.current.scrollTop = 0;
+          const centerLeft = (zoomContainerRef.current.scrollWidth - zoomContainerRef.current.clientWidth) / 2;
+          zoomContainerRef.current.scrollLeft = Math.max(0, centerLeft);
+        }
+      }, 50);
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    if (zoomLevel !== 2 || !zoomContainerRef.current) return;
+    isDraggingRef.current = true;
+    hasMovedRef.current = false;
+    startPosRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      scrollLeft: zoomContainerRef.current.scrollLeft,
+      scrollTop: zoomContainerRef.current.scrollTop,
+    };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current || !zoomContainerRef.current) return;
+    const dx = e.clientX - startPosRef.current.x;
+    const dy = e.clientY - startPosRef.current.y;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+      hasMovedRef.current = true;
+    }
+    zoomContainerRef.current.scrollLeft = startPosRef.current.scrollLeft - dx;
+    zoomContainerRef.current.scrollTop = startPosRef.current.scrollTop - dy;
+  };
+
+  const handleMouseUp = () => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+    }
+  };
+
+  const handleImageClick = () => {
+    if (hasMovedRef.current) {
+      hasMovedRef.current = false;
+      return;
+    }
+    toggleZoom();
+  };
 
   useEffect(() => {
     if (!isZoomOpen) return;
@@ -133,7 +189,7 @@ export default function ProductDetailModal({
                   <img
                     src={images[safeSelectedImage]}
                     alt={`${product.name} vista frontal`}
-                    className="w-full h-full object-cover object-center transition duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105"
                   />
 
                   {/* Logo Oficial SantoSpirito en prenda */}
@@ -586,19 +642,25 @@ export default function ProductDetailModal({
               {/* Zoom In/Out Toggle */}
               <button
                 type="button"
-                onClick={() => setZoomLevel(prev => (prev === 1 ? 2 : 1))}
-                className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-semibold transition"
-                title={zoomLevel === 1 ? "Acercar imagen (2x)" : "Alejar imagen (1x)"}
+                onClick={() => toggleZoom()}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition shadow-sm ${
+                  zoomLevel === 2
+                    ? 'bg-amber-400 text-neutral-950 font-bold hover:bg-amber-300 ring-2 ring-amber-300/50'
+                    : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+                }`}
+                title={zoomLevel === 1 ? "Acercar tela y detalles (2x)" : "Ver foto completa (1x)"}
               >
                 {zoomLevel === 1 ? (
                   <>
                     <ZoomIn size={15} />
-                    <span className="hidden sm:inline">Acercar tela</span>
+                    <span className="hidden sm:inline">Acercar tela y modelo</span>
+                    <span className="sm:hidden">Zoom</span>
                   </>
                 ) : (
                   <>
                     <ZoomOut size={15} />
-                    <span className="hidden sm:inline">Alejar (1x)</span>
+                    <span className="hidden sm:inline">Ver foto completa</span>
+                    <span className="sm:hidden">Alejar</span>
                   </>
                 )}
               </button>
@@ -607,7 +669,7 @@ export default function ProductDetailModal({
               <button
                 type="button"
                 onClick={() => setIsZoomOpen(false)}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition border border-white/10"
                 aria-label="Cerrar ampliación"
               >
                 <X size={20} />
@@ -616,51 +678,65 @@ export default function ProductDetailModal({
           </div>
 
           {/* Lightbox Center Image Container */}
-          <div className="relative flex-1 flex items-center justify-center overflow-auto my-2 sm:my-3">
-            
-            {/* Prev Arrow */}
+          <div 
+            ref={zoomContainerRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            className={`relative flex-1 w-full my-2 sm:my-3 select-none no-scrollbar ${
+              zoomLevel === 1 
+                ? 'flex items-center justify-center overflow-hidden' 
+                : 'overflow-y-auto overflow-x-auto flex items-start justify-center cursor-grab active:cursor-grabbing'
+            }`}
+          >
+            {/* Prev Arrow (Fijo en el centro de la pantalla) */}
             {images.length > 1 && (
               <button
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setZoomIndex(prev => (prev - 1 + images.length) % images.length);
                   setZoomLevel(1);
                 }}
-                className="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition border border-white/20 shadow-lg active:scale-95"
+                className="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition border border-white/20 shadow-xl active:scale-95"
                 aria-label="Foto anterior"
               >
                 <ChevronLeft size={24} />
               </button>
             )}
 
-            {/* The Zoomed Image */}
+            {/* The Image Element */}
             <div 
-              className={`relative transition-all duration-300 ease-out flex items-center justify-center ${
-                zoomLevel === 1 ? 'cursor-zoom-in max-h-[75vh]' : 'cursor-zoom-out'
+              onClick={handleImageClick}
+              className={`transition-all duration-200 ${
+                zoomLevel === 1 
+                  ? 'cursor-zoom-in flex items-center justify-center max-h-[74vh]' 
+                  : 'py-2 sm:py-4 flex flex-col items-center'
               }`}
-              onClick={() => setZoomLevel(prev => (prev === 1 ? 2 : 1))}
-              title="Click para alternar zoom (acercar / alejar)"
             >
               <img
                 src={images[zoomIndex]}
                 alt={`${product.name} ampliada`}
-                className={`rounded-xl shadow-2xl transition-transform duration-300 object-contain ${
+                draggable={false}
+                className={`rounded-xl shadow-2xl transition-all duration-200 object-contain ${
                   zoomLevel === 1 
                     ? 'max-h-[72vh] max-w-[92vw] sm:max-w-[85vw]' 
-                    : 'scale-150 sm:scale-175 my-14 sm:my-20'
+                    : 'w-auto h-auto min-h-[140vh] sm:min-h-[165vh] max-w-none'
                 }`}
               />
             </div>
 
-            {/* Next Arrow */}
+            {/* Next Arrow (Fijo en el centro de la pantalla) */}
             {images.length > 1 && (
               <button
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setZoomIndex(prev => (prev + 1) % images.length);
                   setZoomLevel(1);
                 }}
-                className="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition border border-white/20 shadow-lg active:scale-95"
+                className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition border border-white/20 shadow-xl active:scale-95"
                 aria-label="Foto siguiente"
               >
                 <ChevronRight size={24} />
@@ -691,7 +767,9 @@ export default function ProductDetailModal({
             </div>
 
             <p className="text-[11px] text-neutral-400 text-center sm:text-right">
-              💡 Hacé clic en la imagen para acercar/alejar la tela • Flechas o miniaturas para cambiar de vista
+              {zoomLevel === 2 
+                ? '✨ Hombros y rostro visibles al inicio • Deslizá o scrolleá para ver detalles de tela y pantalón' 
+                : '💡 Hacé clic en la imagen o en "Acercar" para ver detalles de tela • Flechas o miniaturas para cambiar de vista'}
             </p>
           </div>
         </div>
