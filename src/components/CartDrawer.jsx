@@ -137,6 +137,41 @@ export default function CartDrawer({
     });
   };
 
+  // 15-minute countdown urgency timer (Opción 3)
+  const [timeLeft, setTimeLeft] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('santospirito_cart_timer');
+      if (saved) {
+        const remaining = Math.max(0, Math.floor((parseInt(saved, 10) - Date.now()) / 1000));
+        if (remaining > 0) return remaining;
+      }
+      const newExpiry = Date.now() + 15 * 60 * 1000;
+      sessionStorage.setItem('santospirito_cart_timer', newExpiry.toString());
+      return 15 * 60;
+    } catch (e) {
+      return 15 * 60;
+    }
+  });
+
+  React.useEffect(() => {
+    if (cartItems.length === 0) return;
+    const interval = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          const resetExpiry = Date.now() + 15 * 60 * 1000;
+          try { sessionStorage.setItem('santospirito_cart_timer', resetExpiry.toString()); } catch (e) {}
+          return 15 * 60;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cartItems.length]);
+
+  const timerMinutes = Math.floor(timeLeft / 60);
+  const timerSeconds = timeLeft % 60;
+  const formattedTimer = `${String(timerMinutes).padStart(2, '0')}:${String(timerSeconds).padStart(2, '0')}`;
+
   const [customerData, setCustomerData] = useState({
     name: '',
     email: '',
@@ -1511,15 +1546,34 @@ export default function CartDrawer({
               </div>
             </div>
 
-            {/* Step 1 CTA */}
+            {/* Step 1 CTA & Urgency Timer (Opción 3) */}
             {checkoutStep === 'cart' && (
-              <button
-                onClick={() => setCheckoutStep('checkout')}
-                className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
-              >
-                <span>Iniciar Compra Segura</span>
-                <ArrowRight size={16} />
-              </button>
+              <div className="space-y-2">
+                {/* Urgency Countdown Timer */}
+                <div className="flex items-center justify-between bg-amber-50/90 rounded-xl px-3 py-2 border border-amber-200 text-amber-950 text-xs shadow-2xs">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-600"></span>
+                    </span>
+                    <span className="text-[11px] font-semibold text-amber-900 leading-tight">
+                      Talle y stock reservados por:
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 font-mono font-black text-amber-950 bg-white px-2 py-0.5 rounded-md border border-amber-300 shadow-2xs">
+                    <Clock size={12} className="text-amber-700 animate-pulse" />
+                    <span>{formattedTimer} min</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setCheckoutStep('checkout')}
+                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
+                >
+                  <span>Iniciar Compra Segura</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
             )}
 
             <div className="flex items-center justify-center gap-2 text-[10px] text-neutral-400 pt-1">
