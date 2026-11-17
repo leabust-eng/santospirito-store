@@ -485,7 +485,7 @@ export default function CartDrawer({
           const progress = Math.min(100, Math.round((subtotal / 150000) * 100));
           const missing = 150000 - subtotal;
           return (
-            <div className="shrink-0 bg-neutral-900 text-white px-4 py-2 border-b border-neutral-800 space-y-1.5">
+            <div className="shrink-0 bg-neutral-900 text-white px-4 py-1.5 border-b border-neutral-800 space-y-1">
               <div className="flex items-center justify-between text-xs font-semibold">
                 {subtotal >= 150000 ? (
                   <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
@@ -1434,12 +1434,12 @@ export default function CartDrawer({
 
         </div>
 
-        {/* Drawer Footer with Totals (Shown on Cart step) */}
+        {/* Drawer Footer with Totals (Shown on Cart step, ≤ 180px) */}
         {cartItems.length > 0 && checkoutStep === 'cart' && (
-          <div className="shrink-0 px-4 py-3 border-t border-neutral-200 bg-neutral-50/80 space-y-2.5">
+          <div className="shrink-0 px-4 py-2 sm:py-2.5 border-t border-neutral-200 bg-neutral-50/80 space-y-2">
             
             {/* Totals Breakdown */}
-            <div className="space-y-1 text-xs text-neutral-600">
+            <div className="space-y-0.5 text-xs text-neutral-600">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
                 <span className="font-semibold text-neutral-900">${subtotal.toLocaleString('es-AR')},00</span>
@@ -1474,7 +1474,7 @@ export default function CartDrawer({
                 </span>
               </div>
 
-              <div className="flex justify-between items-baseline text-sm sm:text-base font-extrabold text-neutral-900 pt-1.5 border-t border-neutral-200">
+              <div className="flex justify-between items-baseline text-sm sm:text-base font-extrabold text-neutral-900 pt-1 border-t border-neutral-200">
                 <span>Total Final:</span>
                 <div className="text-right">
                   <div>${finalTotal.toLocaleString('es-AR')},00</div>
@@ -1487,7 +1487,7 @@ export default function CartDrawer({
 
             {/* Step 1 CTA & Urgency Timer (Compacto de 11px) */}
             {checkoutStep === 'cart' && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-amber-900">
                   <Clock size={12} className="text-amber-700 animate-pulse flex-shrink-0" />
                   <span>⏱ Talle y stock reservados: <strong className="font-mono text-amber-950 font-black">{formattedTimer} min</strong></span>
@@ -1495,7 +1495,7 @@ export default function CartDrawer({
 
                 <button
                   onClick={() => setCheckoutStep('checkout')}
-                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95"
+                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition active:scale-95"
                 >
                   <span>Iniciar Compra Segura</span>
                   <ArrowRight size={15} />
@@ -1503,7 +1503,7 @@ export default function CartDrawer({
               </div>
             )}
 
-            <div className="flex items-center justify-center gap-1.5 text-[10px] text-neutral-500 pt-0.5">
+            <div className="flex items-center justify-center gap-1.5 text-[10px] text-neutral-500">
               <ShieldCheck size={13} className="text-emerald-600 flex-shrink-0" />
               <span>Compra 100% segura con garantía de cambio de talle</span>
             </div>
