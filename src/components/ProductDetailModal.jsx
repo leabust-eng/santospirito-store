@@ -29,6 +29,15 @@ export default function ProductDetailModal({
   const [isCalculatingShipping, setIsCalculatingShipping] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
 
+  // Lightbox Zoom / Ampliación en pantalla completa
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [zoomIndex, setZoomIndex] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1); // 1 = Vista Completa (100% de la foto con rostro y hombros), 2 = Zoom Detalle
+  const zoomContainerRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
+  const hasMovedRef = useRef(false);
+
   const images = (product.images && product.images.length > 0) ? product.images : ["/brand/og-banner.jpg"];
   const safeSelectedImage = selectedImage < images.length ? selectedImage : 0;
   const secondaryImage = images.length > 1 ? (safeSelectedImage === 0 ? 1 : 0) : 0;
@@ -85,15 +94,6 @@ export default function ProductDetailModal({
       if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
     };
   }, [onClose, isZoomOpen]);
-
-  // Lightbox Zoom / Ampliación en pantalla completa
-  const [isZoomOpen, setIsZoomOpen] = useState(false);
-  const [zoomIndex, setZoomIndex] = useState(0);
-  const [zoomLevel, setZoomLevel] = useState(1); // 1 = Vista Completa (100% de la foto con rostro y hombros), 2 = Zoom Detalle
-  const zoomContainerRef = useRef(null);
-  const isDraggingRef = useRef(false);
-  const startPosRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
-  const hasMovedRef = useRef(false);
 
   const toggleZoom = (targetLevel) => {
     const nextLevel = targetLevel !== undefined ? targetLevel : (zoomLevel === 1 ? 2 : 1);
