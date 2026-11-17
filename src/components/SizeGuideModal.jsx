@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Ruler, CheckCircle2, AlertCircle, HelpCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { sizeGuideData } from '../data/sizeChart';
 
@@ -8,8 +9,8 @@ export default function SizeGuideModal({ isOpen, onClose, onOpenVirtualFitting }
   const [activeTab, setActiveTab] = useState('mujer');
   const currentGuide = sizeGuideData[activeTab];
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
       <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col">
         
         {/* Header */}
@@ -172,6 +173,7 @@ export default function SizeGuideModal({ isOpen, onClose, onOpenVirtualFitting }
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

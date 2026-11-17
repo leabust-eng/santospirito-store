@@ -1,11 +1,12 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, CreditCard, ShieldCheck, CheckCircle2, Percent, Building2 } from 'lucide-react';
 
 export default function PaymentMethodsModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
       <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden my-auto p-6 space-y-6">
         
         {/* Header */}
@@ -77,6 +78,7 @@ export default function PaymentMethodsModal({ isOpen, onClose }) {
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

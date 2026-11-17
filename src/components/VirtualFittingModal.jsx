@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, Sparkles, User, Ruler, ChevronRight, Check, 
   HelpCircle, MessageCircle, ArrowRight, ShieldCheck, 
@@ -22,8 +23,6 @@ export default function VirtualFittingModal({
   onSelectSizeFilter,
   initialGender = 'mujer' 
 }) {
-  if (!isOpen) return null;
-
   const [gender, setGender] = useState(initialGender); // 'mujer' | 'hombre'
   const [height, setHeight] = useState(gender === 'mujer' ? 165 : 175);
   const [weight, setWeight] = useState(gender === 'mujer' ? 62 : 78);
@@ -149,8 +148,10 @@ export default function VirtualFittingModal({
     window.open(`https://wa.me/5493815307474?text=${text}`, '_blank');
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fade-in">
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/75 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fade-in">
       <div className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[95vh] flex flex-col">
         
         {/* MODAL HEADER */}
@@ -833,6 +834,7 @@ export default function VirtualFittingModal({
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

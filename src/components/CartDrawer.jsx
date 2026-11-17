@@ -84,8 +84,6 @@ export default function CartDrawer({
   onRemoveItem,
   onClearCart 
 }) {
-  if (!isOpen) return null;
-
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState('');
@@ -114,6 +112,31 @@ export default function CartDrawer({
   const drawerContentRef = useRef(null);
   const sheetRef = useRef(null);
   const sheetCloseRef = useRef(null);
+
+  // Cart Drawer Accessibility: Foco al abrir y cerrar con Escape
+  const closeButtonRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
+
+  const isJacketSheetOpenRef = useRef(isJacketSheetOpen);
+  useEffect(() => { isJacketSheetOpenRef.current = isJacketSheetOpen; }, [isJacketSheetOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const focusTimer = setTimeout(() => closeButtonRef.current?.focus({ preventScroll: true }), 50);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (isJacketSheetOpenRef.current) return;
+        e.stopPropagation();
+        onCloseRef.current?.();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      clearTimeout(focusTimer);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   // Accessibility: Focus trap, inert background and Escape key for 2da Chaqueta bottom sheet
   useEffect(() => {
@@ -461,8 +484,15 @@ export default function CartDrawer({
     }, 2200);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm animate-fade-in flex justify-end">
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cart-drawer-title"
+      className="fixed inset-0 z-[60] overflow-hidden bg-black/60 backdrop-blur-sm animate-fade-in flex justify-end"
+    >
       <div 
         ref={drawerContentRef}
         className="relative w-full max-w-full sm:max-w-xl md:max-w-2xl bg-white h-full shadow-2xl flex flex-col justify-between"
@@ -472,7 +502,7 @@ export default function CartDrawer({
         <div className="shrink-0 p-4 sm:p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50/80">
           <div className="flex items-center gap-2">
             <ShoppingBag size={20} className="text-teal-900" />
-            <h2 className="text-sm sm:text-base font-bold text-neutral-900 tracking-tight">
+            <h2 id="cart-drawer-title" className="text-sm sm:text-base font-bold text-neutral-900 tracking-tight">
               {checkoutStep === 'cart' && `Mi Carrito (${cartItems.reduce((a, b) => a + b.quantity, 0)})`}
               {checkoutStep === 'checkout' && "1. Datos de Entrega y Envío"}
               {checkoutStep === 'payment' && "2. Pago con Tarjeta (Mercado Pago)"}
@@ -482,6 +512,7 @@ export default function CartDrawer({
           </div>
 
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-white hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition border border-neutral-200"
             aria-label="Cerrar carrito"
@@ -1550,7 +1581,7 @@ export default function CartDrawer({
           role="dialog"
           aria-modal="true"
           aria-labelledby="jacket-sheet-title"
-          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs animate-fade-in"
+          className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs animate-fade-in"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsJacketSheetOpen(false);
           }}
@@ -1666,6 +1697,7 @@ export default function CartDrawer({
         document.body
       )}
 
-    </div>
+    </div>,
+    document.body
   );
 }

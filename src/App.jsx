@@ -135,6 +135,7 @@ export default function App() {
       }
       return [...prev, itemToAdd];
     });
+    setSelectedProduct(null);   // cerrar el detalle: el carrito pasa a ser la capa activa
     setIsCartOpen(true);
   };
 
@@ -450,7 +451,10 @@ export default function App() {
             setSelectedProduct(null);
             handleOpenVirtualFitting(g);
           }}
-          onOpenPaymentMethods={() => setIsPaymentModalOpen(true)}
+          onOpenPaymentMethods={() => {
+            setSelectedProduct(null);
+            setIsPaymentModalOpen(true);
+          }}
         />
       )}
 
