@@ -1546,29 +1546,29 @@ export default function CartDrawer({
               </div>
             </div>
 
-            {/* Step 1 CTA & Urgency Timer (Opción 3) */}
+            {/* Step 1 CTA & Urgency Timer (Opción 3 - Centrado y letras más grandes) */}
             {checkoutStep === 'cart' && (
-              <div className="space-y-2">
-                {/* Urgency Countdown Timer */}
-                <div className="flex items-center justify-between bg-amber-50/90 rounded-xl px-3 py-2 border border-amber-200 text-amber-950 text-xs shadow-2xs">
+              <div className="space-y-2.5">
+                {/* Urgency Countdown Timer (Centrado y letras más grandes) */}
+                <div className="flex items-center justify-center gap-2 sm:gap-3 bg-amber-50/90 rounded-xl py-2.5 px-3 border border-amber-200 text-amber-950 shadow-2xs text-center flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
+                    <span className="relative flex h-3 w-3 flex-shrink-0">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-600"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-600"></span>
                     </span>
-                    <span className="text-[11px] font-semibold text-amber-900 leading-tight">
+                    <span className="text-xs sm:text-sm font-extrabold text-amber-900 tracking-tight">
                       Talle y stock reservados por:
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 font-mono font-black text-amber-950 bg-white px-2 py-0.5 rounded-md border border-amber-300 shadow-2xs">
-                    <Clock size={12} className="text-amber-700 animate-pulse" />
+                  <div className="flex items-center gap-1.5 font-mono font-black text-sm sm:text-base text-amber-950 bg-white px-3 py-1 rounded-lg border border-amber-300 shadow-2xs">
+                    <Clock size={16} className="text-amber-700 animate-pulse flex-shrink-0" />
                     <span>{formattedTimer} min</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setCheckoutStep('checkout')}
-                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
+                  className="w-full bg-neutral-900 hover:bg-teal-900 text-white py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95"
                 >
                   <span>Iniciar Compra Segura</span>
                   <ArrowRight size={16} />
@@ -1576,8 +1576,8 @@ export default function CartDrawer({
               </div>
             )}
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-neutral-400 pt-1">
-              <ShieldCheck size={13} className="text-emerald-600" />
+            <div className="flex items-center justify-center gap-2 text-[11px] text-neutral-500 pt-0.5 pb-0.5">
+              <ShieldCheck size={14} className="text-emerald-600 flex-shrink-0" />
               <span>Compra 100% segura con garantía de cambio de talle</span>
             </div>
 
