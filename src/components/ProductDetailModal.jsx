@@ -5,6 +5,7 @@ import {
   ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2, Move
 } from 'lucide-react';
 import ProductReviewsSection from './ProductReviewsSection';
+import { getProductReviews } from '../data/productReviews';
 
 export default function ProductDetailModal({ 
   product, 
@@ -30,6 +31,7 @@ export default function ProductDetailModal({
 
   const installmentAmount = Math.round(product.price / 3);
   const transferPrice = Math.round(product.price * 0.90);
+  const reviewsData = getProductReviews(product.id);
 
   // Lightbox Zoom / Ampliación en pantalla completa
   const [isZoomOpen, setIsZoomOpen] = useState(false);
@@ -283,7 +285,7 @@ export default function ProductDetailModal({
 
               {/* Reseñas de Clientes Satisfechos (Visible en Desktop para ocupar el espacio en blanco) */}
               <div className="hidden lg:block">
-                <ProductReviewsSection productId={product.id} productName={product.name} />
+                <ProductReviewsSection product={product} />
               </div>
 
             </div>
@@ -293,16 +295,19 @@ export default function ProductDetailModal({
               
               <div className="space-y-4">
                 
-                {/* Header: Gender & Category & Rating */}
+                {/* Header: Gender & Category & Rating (Unificado 100% con las reseñas del producto) */}
                 <div>
                   <div className="flex items-center justify-between text-xs text-neutral-500 font-semibold mb-1">
                     <span className="uppercase tracking-wider text-teal-800">
                       {product.gender} • {product.category}
                     </span>
-                    <div className="flex items-center gap-1 text-amber-500">
-                      <Star size={13} fill="currentColor" />
-                      <span className="font-bold text-neutral-800">{product.rating}</span>
-                      <span className="text-neutral-400">({product.reviewsCount})</span>
+                    <div 
+                      className="flex items-center gap-1 text-amber-500"
+                      title={`Puntaje promedio: ${reviewsData.rating} / 5 (${reviewsData.totalReviews} opiniones de colegas)`}
+                    >
+                      <Star size={13} className="fill-amber-400 text-amber-400" />
+                      <span className="font-bold text-neutral-800">{reviewsData.rating}</span>
+                      <span className="text-neutral-400">({reviewsData.totalReviews})</span>
                     </div>
                   </div>
 
@@ -612,9 +617,9 @@ export default function ProductDetailModal({
                   <span><strong>Garantía SantoSpirito:</strong> Si el talle no te queda como esperabas, podés cambiarlo de forma rápida y sencilla.</span>
                 </div>
 
-                {/* Reseñas de Clientes Satisfechos (Visible en Móvil al final para no entorpecer el botón de compra) */}
+                {/* Reseñas de la Comunidad (Visible en Móvil al final para no entorpecer el botón de compra) */}
                 <div className="lg:hidden pt-2">
-                  <ProductReviewsSection productId={product.id} productName={product.name} />
+                  <ProductReviewsSection product={product} />
                 </div>
 
               </div>

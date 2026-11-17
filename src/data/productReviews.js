@@ -491,23 +491,28 @@ export const productReviewsData = {
   }
 };
 
-// Función para obtener reseñas de un producto (o un conjunto representativo de respaldo)
+// Función para obtener reseñas de un producto (calculando el promedio real matemáticamente con reduce)
 export function getProductReviews(productId, fallbackCategory = "Ambos") {
-  if (productReviewsData[productId]) {
-    return productReviewsData[productId];
-  }
+  const productEntry = productReviewsData[productId];
+  
+  const reviews = productEntry?.reviews || [
+    productReviewsData["ambo-celeste-marino"].reviews[0],
+    productReviewsData["ambo-beige-negro"].reviews[1],
+    productReviewsData["ambo-tricolor-menta-blanco"].reviews[0],
+    productReviewsData["ambo-verde-oliva-rosa"].reviews[0],
+    productReviewsData["ambo-menta-negro"].reviews[3],
+    productReviewsData["ambo-azul-quirurgico"].reviews[0],
+  ];
 
-  // Si no tiene ficha específica, retornamos un combo de las mejores valoraciones verificadas
+  const totalReviews = reviews.length;
+  const totalStars = reviews.reduce((sum, r) => sum + r.stars, 0);
+  const rawAverage = totalReviews > 0 ? totalStars / totalReviews : 5.0;
+  // Promedio matemático real exacto a 1 decimal
+  const rating = parseFloat(rawAverage.toFixed(1));
+
   return {
-    rating: 4.8,
-    totalReviews: 6,
-    reviews: [
-      productReviewsData["ambo-celeste-marino"].reviews[0],
-      productReviewsData["ambo-beige-negro"].reviews[1],
-      productReviewsData["ambo-tricolor-menta-blanco"].reviews[0],
-      productReviewsData["ambo-verde-oliva-rosa"].reviews[0],
-      productReviewsData["ambo-menta-negro"].reviews[3],
-      productReviewsData["ambo-azul-quirurgico"].reviews[0],
-    ]
+    rating,
+    totalReviews,
+    reviews
   };
 }
