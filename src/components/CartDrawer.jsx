@@ -138,6 +138,22 @@ export default function CartDrawer({
     };
   }, [isOpen]);
 
+  // Al cerrar el carrito, volver siempre a la lista de prendas.
+  // 'processing' y 'success' se conservan: son un pago en curso o terminado.
+  useEffect(() => {
+    if (isOpen) return;
+    setCheckoutStep((prev) =>
+      prev === 'checkout' || prev === 'payment' ? 'cart' : prev
+    );
+  }, [isOpen]);
+
+  // Protección si el carrito queda vacío en un paso avanzado
+  useEffect(() => {
+    if ((checkoutStep === 'checkout' || checkoutStep === 'payment') && cartItems.length === 0) {
+      setCheckoutStep('cart');
+    }
+  }, [checkoutStep, cartItems.length]);
+
   // Accessibility: Focus trap, inert background and Escape key for 2da Chaqueta bottom sheet
   useEffect(() => {
     if (!isJacketSheetOpen) return;
@@ -1149,6 +1165,14 @@ export default function CartDrawer({
                 <Lock size={15} />
                 <span>Pagar de Forma Segura con Mercado Pago</span>
                 <ChevronRight size={16} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setCheckoutStep('cart')}
+                className="w-full text-center text-xs text-neutral-500 hover:text-black font-semibold py-1"
+              >
+                ← Volver al carrito y editar prendas
               </button>
             </form>
           )}
