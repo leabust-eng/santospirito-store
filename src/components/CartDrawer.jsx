@@ -282,8 +282,14 @@ export default function CartDrawer({
   const [orderReceipt, setOrderReceipt] = useState(null);
 
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const selectedShipping = shippingMethodsData[shippingMethod] || shippingMethodsData.tucuman_moto;
   const isFreeShipping = subtotal >= 150000;
+  const rawShipping = shippingMethodsData[shippingMethod] || shippingMethodsData.tucuman_moto;
+  const isCurrentPayOnDelivery = rawShipping.isPayOnDelivery && !isFreeShipping;
+  const selectedShipping = {
+    ...rawShipping,
+    shortName: (rawShipping.id === 'tucuman_moto' && isFreeShipping) ? 'Cadetería Express' : rawShipping.shortName,
+    isPayOnDelivery: isCurrentPayOnDelivery
+  };
   const estimatedShipping = selectedShipping.price === 0 ? 0 : (isFreeShipping ? 0 : selectedShipping.price);
 
   const discountAmount = couponApplied ? Math.round(subtotal * 0.10) : 0;
@@ -402,7 +408,11 @@ export default function CartDrawer({
         `*DESCUENTO TRANSFERENCIA (10%):* -$${transferDiscount.toLocaleString('es-AR')}%0A` +
         `*COSTO DE ENVIO:* ${shippingCostText}%0A` +
         `*TOTAL FINAL A TRANSFERIR:* $${finalTotal.toLocaleString('es-AR')}%0A%0A` +
-        (selectedShipping.isPayOnDelivery ? `_🛵 Nota: El servicio de cadetería se abona directo al cadete al recibir la prenda._%0A%0A` : '') +
+        (selectedShipping.isPayOnDelivery
+          ? `_🛵 Nota: El servicio de cadetería se abona directo al cadete al recibir la prenda._%0A%0A`
+          : (selectedShipping.id === 'tucuman_moto' && isFreeShipping)
+          ? `_🛵 Nota: ¡Envío por Cadetería Servimoto 100% GRATIS y bonificado por superar los $150.000!_%0A%0A`
+          : '') +
         `*DATOS PARA TRANSFERIR (MERCADO PAGO):*%0A` +
         `• *Alias:* salazarchechu2025%0A` +
         `• *CVU:* 0000003100071610252523%0A%0A` +
@@ -791,12 +801,22 @@ export default function CartDrawer({
                             <span className="font-bold text-neutral-900 text-xs">
                               🛵 Cadetería Express (Servimoto / PedidosYa)
                             </span>
-                            <span className="text-[10px] font-bold text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded border border-teal-300">
-                              A abonar en destino
-                            </span>
+                            {isFreeShipping ? (
+                              <span className="font-extrabold text-xs text-emerald-700">
+                                ¡GRATIS!
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-bold text-teal-800 bg-teal-100/70 px-2 py-0.5 rounded border border-teal-300">
+                                A abonar en destino
+                              </span>
+                            )}
                           </div>
                           <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">
-                            Válido para San Miguel de Tucumán y radio hasta 10 km. <strong>El costo del cadete lo abonás al recibir la prenda.</strong>
+                            {isFreeShipping ? (
+                              <>Válido para San Miguel de Tucumán y radio hasta 10 km. <strong className="text-emerald-800 font-bold">¡Envío gratis bonificado por superar los $150.000!</strong></>
+                            ) : (
+                              <>Válido para San Miguel de Tucumán y radio hasta 10 km. <strong>El costo del cadete lo abonás al recibir la prenda.</strong></>
+                            )}
                           </p>
                         </div>
                       </label>
@@ -934,7 +954,11 @@ export default function CartDrawer({
                   <input
                     type="text"
                     required
-                    placeholder={shippingMethod === 'tucuman_moto' ? "Ej: San Martín 540, Consultorio 2A (Abonás al cadete)" : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"}
+                    placeholder={
+                      shippingMethod === 'tucuman_moto' 
+                        ? (isFreeShipping ? "Ej: San Martín 540, Consultorio 2A (Envío gratis)" : "Ej: San Martín 540, Consultorio 2A (Abonás al cadete)") 
+                        : "Ej: Av. Aconquija 1400, Piso 3 Dpto B"
+                    }
                     value={customerData.address}
                     onChange={e => setCustomerData({...customerData, address: e.target.value})}
                     className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-700 focus:outline-none"
@@ -1409,9 +1433,15 @@ export default function CartDrawer({
               {orderReceipt.shippingMethod === 'tucuman_moto' ? (
                 <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-[11px] text-teal-950 text-left space-y-1">
                   <p>🛵 <strong>Próximo paso:</strong> Prepararemos tu pedido y coordinaremos el despacho con el cadete (Servimoto / PedidosYa) a <strong>{customerData.address}</strong>.</p>
-                  <p className="text-teal-900 font-bold bg-white/80 p-1.5 rounded border border-teal-200">
-                    💡 Recordá que el costo del viaje del cadete lo abonás directo al recibir la prenda en mano.
-                  </p>
+                  {orderReceipt.isPayOnDelivery ? (
+                    <p className="text-teal-900 font-bold bg-white/80 p-1.5 rounded border border-teal-200">
+                      💡 Recordá que el costo del viaje del cadete lo abonás directo al recibir la prenda en mano.
+                    </p>
+                  ) : (
+                    <p className="text-emerald-900 font-bold bg-emerald-100/80 p-1.5 rounded border border-emerald-300">
+                      ✨ ¡Tu envío por cadetería es 100% GRATIS bonificado por superar los $150.000!
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="p-3 bg-sky-50 rounded-xl border border-sky-200 text-[11px] text-sky-950 text-left">
