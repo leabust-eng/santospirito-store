@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, Star, CreditCard, Truck, ShieldCheck, Ruler, 
-  Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw
+  Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw,
+  ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2
 } from 'lucide-react';
 
 export default function ProductDetailModal({ 
@@ -28,6 +29,28 @@ export default function ProductDetailModal({
 
   const installmentAmount = Math.round(product.price / 3);
   const transferPrice = Math.round(product.price * 0.90);
+
+  // Lightbox Zoom / Ampliación en pantalla completa
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [zoomIndex, setZoomIndex] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1); // 1 = normal ajustado, 2 = zoom tela acercado
+
+  useEffect(() => {
+    if (!isZoomOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsZoomOpen(false);
+      } else if (e.key === 'ArrowRight') {
+        setZoomIndex(prev => (prev + 1) % images.length);
+        setZoomLevel(1);
+      } else if (e.key === 'ArrowLeft') {
+        setZoomIndex(prev => (prev - 1 + images.length) % images.length);
+        setZoomLevel(1);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isZoomOpen, images.length]);
 
   const handleCalculateShipping = (e) => {
     e.preventDefault();
@@ -98,7 +121,15 @@ export default function ProductDetailModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 
                 {/* Imagen Horizontal 1: Vista Frontal / Chaqueta */}
-                <div className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
+                <div 
+                  onClick={() => {
+                    setZoomIndex(safeSelectedImage);
+                    setZoomLevel(1);
+                    setIsZoomOpen(true);
+                  }}
+                  className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group cursor-zoom-in"
+                  title="Click para ampliar imagen y ver detalles de la tela"
+                >
                   <img
                     src={images[safeSelectedImage]}
                     alt={`${product.name} vista frontal`}
@@ -115,16 +146,28 @@ export default function ProductDetailModal({
                     {product.badge || "Vista Frontal"}
                   </span>
 
-                  <div className="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full">
-                    Foto {safeSelectedImage + 1} de {images.length}
+                  <div className="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span>Foto {safeSelectedImage + 1} de {images.length}</span>
+                  </div>
+
+                  {/* Click to expand hover hint */}
+                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                    <div className="bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg transform -translate-y-1 group-hover:translate-y-0 transition-transform">
+                      <ZoomIn size={14} className="text-teal-400" />
+                      <span>Click para ampliar</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Imagen Horizontal 2: Vista Detalle / Confección / Pantalón */}
                 <div 
-                  onClick={() => setSelectedImage(secondaryImage)}
-                  className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group cursor-pointer"
-                  title="Click para alternar vista"
+                  onClick={() => {
+                    setZoomIndex(secondaryImage);
+                    setZoomLevel(1);
+                    setIsZoomOpen(true);
+                  }}
+                  className="relative aspect-[4/3] bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group cursor-zoom-in"
+                  title="Click para ampliar imagen y ver detalles de la tela"
                 >
                   <img
                     src={images[secondaryImage]}
@@ -142,8 +185,16 @@ export default function ProductDetailModal({
                     Detalle & Confección
                   </span>
 
-                  <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full">
-                    Foto {secondaryImage + 1} de {images.length}
+                  <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span>Foto {secondaryImage + 1} de {images.length}</span>
+                  </div>
+
+                  {/* Click to expand hover hint */}
+                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                    <div className="bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg transform -translate-y-1 group-hover:translate-y-0 transition-transform">
+                      <ZoomIn size={14} className="text-teal-400" />
+                      <span>Click para ampliar</span>
+                    </div>
                   </div>
                 </div>
 
@@ -507,6 +558,144 @@ export default function ProductDetailModal({
         </div>
 
       </div>
+
+      {/* FULLSCREEN LIGHTBOX / ZOOM MODAL */}
+      {isZoomOpen && (
+        <div 
+          className="fixed inset-0 z-[70] bg-black/95 backdrop-blur-md flex flex-col justify-between p-3 sm:p-6 animate-fade-in select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsZoomOpen(false);
+          }}
+        >
+          {/* Lightbox Top Bar */}
+          <div className="flex items-center justify-between text-white pb-3 border-b border-white/10">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xs sm:text-sm font-bold tracking-wide uppercase font-serif text-teal-300">
+                SantoSpirito
+              </span>
+              <span className="text-neutral-500">|</span>
+              <span className="text-xs sm:text-sm font-semibold text-neutral-100 line-clamp-1">
+                {product.name}
+              </span>
+              <span className="text-xs text-neutral-400 hidden md:inline">
+                • Foto {zoomIndex + 1} de {images.length}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Zoom In/Out Toggle */}
+              <button
+                type="button"
+                onClick={() => setZoomLevel(prev => (prev === 1 ? 2 : 1))}
+                className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-semibold transition"
+                title={zoomLevel === 1 ? "Acercar imagen (2x)" : "Alejar imagen (1x)"}
+              >
+                {zoomLevel === 1 ? (
+                  <>
+                    <ZoomIn size={15} />
+                    <span className="hidden sm:inline">Acercar tela</span>
+                  </>
+                ) : (
+                  <>
+                    <ZoomOut size={15} />
+                    <span className="hidden sm:inline">Alejar (1x)</span>
+                  </>
+                )}
+              </button>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsZoomOpen(false)}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+                aria-label="Cerrar ampliación"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
+
+          {/* Lightbox Center Image Container */}
+          <div className="relative flex-1 flex items-center justify-center overflow-auto my-2 sm:my-3">
+            
+            {/* Prev Arrow */}
+            {images.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setZoomIndex(prev => (prev - 1 + images.length) % images.length);
+                  setZoomLevel(1);
+                }}
+                className="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition border border-white/20 shadow-lg active:scale-95"
+                aria-label="Foto anterior"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
+            {/* The Zoomed Image */}
+            <div 
+              className={`relative transition-all duration-300 ease-out flex items-center justify-center ${
+                zoomLevel === 1 ? 'cursor-zoom-in max-h-[75vh]' : 'cursor-zoom-out'
+              }`}
+              onClick={() => setZoomLevel(prev => (prev === 1 ? 2 : 1))}
+              title="Click para alternar zoom (acercar / alejar)"
+            >
+              <img
+                src={images[zoomIndex]}
+                alt={`${product.name} ampliada`}
+                className={`rounded-xl shadow-2xl transition-transform duration-300 object-contain ${
+                  zoomLevel === 1 
+                    ? 'max-h-[72vh] max-w-[92vw] sm:max-w-[85vw]' 
+                    : 'scale-150 sm:scale-175 my-14 sm:my-20'
+                }`}
+              />
+            </div>
+
+            {/* Next Arrow */}
+            {images.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setZoomIndex(prev => (prev + 1) % images.length);
+                  setZoomLevel(1);
+                }}
+                className="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition border border-white/20 shadow-lg active:scale-95"
+                aria-label="Foto siguiente"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+          </div>
+
+          {/* Lightbox Bottom Controls: Thumbnails & Tip */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-white/10">
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 no-scrollbar">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setZoomIndex(idx);
+                    setZoomLevel(1);
+                  }}
+                  className={`relative h-12 w-14 rounded-lg overflow-hidden border-2 transition flex-shrink-0 ${
+                    zoomIndex === idx 
+                      ? 'border-teal-400 ring-2 ring-teal-400/50 scale-105' 
+                      : 'border-white/20 opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+
+            <p className="text-[11px] text-neutral-400 text-center sm:text-right">
+              💡 Hacé clic en la imagen para acercar/alejar la tela • Flechas o miniaturas para cambiar de vista
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
