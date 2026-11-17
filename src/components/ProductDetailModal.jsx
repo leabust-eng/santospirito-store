@@ -4,6 +4,7 @@ import {
   Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw,
   ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2, Move
 } from 'lucide-react';
+import ProductReviewsSection from './ProductReviewsSection';
 
 export default function ProductDetailModal({ 
   product, 
@@ -279,6 +280,11 @@ export default function ProductDetailModal({
                   "{product.tagline}"
                 </p>
               )}
+
+              {/* Reseñas de Clientes Satisfechos (Visible en Desktop para ocupar el espacio en blanco) */}
+              <div className="hidden lg:block">
+                <ProductReviewsSection productId={product.id} productName={product.name} />
+              </div>
 
             </div>
 
@@ -604,6 +610,11 @@ export default function ProductDetailModal({
                 <div className="flex items-center gap-2 p-3 bg-teal-50/80 rounded-xl border border-teal-100 text-teal-900 text-xs">
                   <RefreshCw size={16} className="text-teal-700 flex-shrink-0" />
                   <span><strong>Garantía SantoSpirito:</strong> Si el talle no te queda como esperabas, podés cambiarlo de forma rápida y sencilla.</span>
+                </div>
+
+                {/* Reseñas de Clientes Satisfechos (Visible en Móvil al final para no entorpecer el botón de compra) */}
+                <div className="lg:hidden pt-2">
+                  <ProductReviewsSection productId={product.id} productName={product.name} />
                 </div>
 
               </div>
