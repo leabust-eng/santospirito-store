@@ -103,7 +103,7 @@ export const SIZES_REAL = {
     { size: "S", stock: 0, status: "a-pedido" },
     { size: "M", stock: 0, status: "a-pedido" },
     { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "a-pedido" },
   ],
   // fila 26 - AMBO PLUMETI ROSA C/ROSA
   "ambo-plumeti-rosa": [
