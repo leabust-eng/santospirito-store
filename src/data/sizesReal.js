@@ -42,12 +42,12 @@ export const SIZES_REAL = {
   ],
   // sin equivalente en el deposito
   "ambo-azul-quirurgico": [
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 0, status: "a-pedido" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
-    { size: "3XL", stock: 0, status: "a-pedido" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+    { size: "3XL", stock: 0, status: "agotado" },
   ],
   // sin equivalente en el deposito
   "ambo-menta-negro": [

@@ -200,6 +200,7 @@ export default function ProductDetailModal({
   };
 
   const handleAdd = () => {
+    if (!isCurrentAvailable) return;
     onAddToCart({
       ...product,
       selectedSize,
@@ -210,6 +211,7 @@ export default function ProductDetailModal({
   };
 
   const currentSizeObj = (product.sizes || []).find(s => s.size === selectedSize);
+  const isCurrentAvailable = currentSizeObj && getSizeStatus(currentSizeObj) !== 'agotado';
 
   return createPortal(
     <div
@@ -543,14 +545,22 @@ export default function ProductDetailModal({
                   </div>
 
                   <button
+                    disabled={!isCurrentAvailable}
                     onClick={handleAdd}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-bold uppercase tracking-wider text-xs shadow-lg transition active:scale-95 duration-150 ${
-                      addedSuccess
+                      !isCurrentAvailable
+                        ? "bg-neutral-200 text-neutral-400 cursor-not-allowed border border-neutral-300 shadow-none"
+                        : addedSuccess
                         ? "bg-emerald-600 hover:bg-emerald-700 text-white"
                         : "bg-teal-800 hover:bg-teal-900 text-white"
                     }`}
                   >
-                    {addedSuccess ? (
+                    {!isCurrentAvailable ? (
+                      <>
+                        <AlertCircle size={16} />
+                        <span>Agotado por el Momento</span>
+                      </>
+                    ) : addedSuccess ? (
                       <>
                         <Check size={16} />
                         <span>¡Agregado al Carrito!</span>
