@@ -1,0 +1,1456 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de control · Santo Spirito</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#18181b; --mut:#71717a; --line:#e6e7eb;
+    --accent:#0f766e; --accent2:#0d9488; --accentSoft:#f0fdfa;
+    --warn:#b45309; --warnSoft:#fffbeb; --danger:#b91c1c; --dangerSoft:#fef2f2;
+    --ok:#15803d; --okSoft:#f0fdf4;
+    --r:10px; --sh:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  ::selection{background:#ccfbf1}
+
+  .shell{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  /* ---------- sidebar ---------- */
+  .side{background:#101013;color:#e4e4e7;padding:18px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0f766e,#134e4a);display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:.02em}
+  .brand b{font-size:13.5px;letter-spacing:.02em;display:block;line-height:1.2}
+  .brand span{font-size:10.5px;color:#8b8b93;letter-spacing:.06em;text-transform:uppercase}
+  .nav{display:flex;flex-direction:column;gap:1px}
+  .nav .grp{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#6b6b74;padding:14px 10px 6px}
+  .nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#c9c9cf;font-size:13.2px}
+  .nav a:hover{background:#1c1c21;color:#fff}
+  .nav a.on{background:#1f2b29;color:#fff;box-shadow:inset 2px 0 0 var(--accent2)}
+  .nav a .ic{width:16px;height:16px;opacity:.85;flex:0 0 16px}
+  .nav a .pill{margin-left:auto;font-size:10.5px;background:#27272a;color:#d4d4d8;border-radius:20px;padding:1px 7px;font-weight:700}
+  .nav a.on .pill{background:#0f766e;color:#fff}
+  .sidefoot{margin-top:auto;font-size:11px;color:#71717a;padding:12px 10px 4px;border-top:1px solid #232327}
+  .sidefoot b{color:#a1a1aa;font-weight:600;display:block;margin-bottom:3px}
+
+  /* ---------- top ---------- */
+  main{min-width:0;display:flex;flex-direction:column}
+  .top{position:sticky;top:0;z-index:20;background:rgba(246,247,249,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:14px 30px;display:flex;align-items:center;gap:16px}
+  .top h1{font-size:17px;margin:0;letter-spacing:-.01em}
+  .top .sub{font-size:12.5px;color:var(--mut);margin-top:1px}
+  .top .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .save{font-size:12px;color:var(--mut);display:flex;align-items:center;gap:6px}
+  .save i{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block}
+  .wrap{padding:24px 30px 60px;max-width:1420px}
+
+  /* ---------- primitives ---------- */
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;box-shadow:var(--sh);transition:.12s}
+  .btn:hover{border-color:#cfd0d6;background:#fcfcfd}
+  .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.pri:hover{background:#0b5f59;border-color:#0b5f59}
+  .btn.gh{background:transparent;box-shadow:none;border-color:transparent;color:var(--mut)}
+  .btn.gh:hover{background:#ededf0;color:var(--ink)}
+  .btn.dz{color:var(--danger);border-color:#f3d5d5;background:#fff}
+  .btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
+  .btn .ic{width:15px;height:15px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+  .card .hd{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+  .card .hd h2{font-size:14px;margin:0}
+  .card .hd .mut{font-size:12.5px;color:var(--mut)}
+  .card .bd{padding:16px 18px}
+  .card .bd.flush{padding:0;overflow-x:auto}
+  .grid{display:grid;gap:14px}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}}
+  .mut{color:var(--mut)}
+  .ic{width:16px;height:16px;flex:0 0 auto;display:block}
+  .small{font-size:12px}
+  .mono{font-variant-numeric:tabular-nums}
+  .nw{white-space:nowrap}
+
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--sh)}
+  .stat .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:700}
+  .stat .v{font-size:26px;font-weight:750;letter-spacing:-.02em;margin-top:6px;line-height:1}
+  .stat .d{font-size:12px;color:var(--mut);margin-top:7px}
+  .stat.k{border-color:#99e6dc;background:var(--accentSoft)} .stat.k .v{color:var(--accent)}
+  .stat.w{border-color:#f0d9a8;background:var(--warnSoft)} .stat.w .v{color:var(--warn)}
+  .stat.r{border-color:#f3cfcf;background:var(--dangerSoft)} .stat.r .v{color:var(--danger)}
+
+  /* ---------- table ---------- */
+  .tbl{width:100%;border-collapse:separate;border-spacing:0}
+  .tbl th{position:sticky;top:0;background:#fbfbfc;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:700;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:1}
+  .tbl td{padding:10px 14px;border-bottom:1px solid #f1f1f4;vertical-align:middle}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl tbody tr:hover{background:#fcfcfd}
+  .tbl .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tbl .acts{text-align:right;white-space:nowrap}
+  .tbl .acts button{opacity:.55;padding:4px 6px;border-radius:6px}
+  .tbl .acts button:hover{opacity:1;background:#f1f1f4}
+  .totrow td{background:#18181b;color:#fff;border-bottom:0;font-weight:750;padding-top:11px;padding-bottom:11px}
+  .totrow td .sk{font-weight:600;color:#a1a1aa}
+  .thumb{width:38px;height:38px;border-radius:8px;object-fit:cover;background:#f4f4f5;border:1px solid var(--line);display:block}
+  .prodcell{display:flex;align-items:center;gap:11px;min-width:0}
+  .prodcell .nm{font-weight:650;font-size:13px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:320px}
+  @media(max-width:1250px){
+    .tbl th,.tbl td{padding-left:10px;padding-right:10px}
+    .prodcell .nm{max-width:190px}
+    .prodcell{gap:8px}
+    .thumb{width:34px;height:34px}
+  }
+  .prodcell .sk{font-size:11.5px;color:var(--mut);margin-top:2px}
+
+  .tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .tag i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+  .t-pub{background:var(--okSoft);color:#166534}
+  .t-draft{background:#f4f4f5;color:#52525b}
+  .t-pause{background:var(--warnSoft);color:#92400e}
+  .t-cancel{background:var(--dangerSoft);color:#991b1b}
+  .t-info{background:#eff6ff;color:#1d4ed8}
+
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .search{position:relative;flex:1;min-width:220px;max-width:380px}
+  .search input{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--line);border-radius:8px;background:#fff;box-shadow:var(--sh);outline:0}
+  .search input:focus{border-color:#9bd8d0;box-shadow:0 0 0 3px #ccfbf1}
+  .search .ic{position:absolute;left:10px;top:9px;width:15px;height:15px;color:#a1a1aa}
+  select.f, input.f, textarea.f{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;outline:0}
+  select.f:focus,input.f:focus,textarea.f:focus{border-color:#9bd8d0;box-shadow:0 0 0 3px #ccfbf1}
+  .f.sm{padding:6px 8px;font-size:12.5px}
+  label.lb{display:block;font-size:12px;font-weight:700;color:#3f3f46;margin:0 0 5px}
+  .hint{font-size:11.5px;color:var(--mut);margin-top:4px}
+
+  .empty{padding:44px 20px;text-align:center;color:var(--mut)}
+  .empty b{display:block;color:var(--ink);font-size:14px;margin-bottom:4px}
+
+  /* ---------- drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(15,17,20,.42);z-index:40;opacity:0;pointer-events:none;transition:.18s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100vh;width:min(760px,96vw);background:#fff;z-index:41;transform:translateX(102%);transition:transform .2s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(0,0,0,.14)}
+  .drawer.on{transform:none}
+  .drawer header{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+  .drawer header h3{margin:0;font-size:15.5px}
+  .drawer header .mut{font-size:12px}
+  .drawer .body{overflow:auto;padding:20px 22px;flex:1}
+  .drawer footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;background:#fcfcfd}
+  .sect{margin-bottom:22px}
+  .sect h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .row{display:grid;gap:12px;margin-bottom:12px}
+  .row.c2{grid-template-columns:1fr 1fr}
+  .row.c3{grid-template-columns:1fr 1fr 1fr}
+  .row.c4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:600px){.row.c2,.row.c3,.row.c4{grid-template-columns:1fr}}
+
+  /* ---------- pantallas chicas ---------- */
+  @media(max-width:860px){
+    .shell{grid-template-columns:1fr}
+    .side{position:static;height:auto;flex-direction:row;align-items:center;gap:6px;padding:10px 12px;overflow-x:auto}
+    .brand{padding:0 12px 0 2px;flex:0 0 auto}
+    .brand span{display:none}
+    .nav{flex-direction:row;gap:2px;overflow-x:auto}
+    .nav .grp{display:none}
+    .nav a{white-space:nowrap;padding:7px 10px}
+    .nav a.on{box-shadow:inset 0 -2px 0 var(--accent2)}
+    .sidefoot{display:none}
+    .top{padding:12px 16px;flex-wrap:wrap}
+    .wrap{padding:16px 16px 50px}
+    .g4{grid-template-columns:1fr 1fr}
+  }
+
+  .sizes{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+  .sizes .sz{border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;background:#fcfcfd}
+  .sizes .sz b{display:block;font-size:11px;color:var(--mut);letter-spacing:.04em}
+  .sizes .sz input{width:100%;border:0;background:transparent;text-align:center;font-size:15px;font-weight:700;outline:0;padding:2px 0}
+  .sizes .sz input:focus{background:#fff;border-radius:5px;box-shadow:0 0 0 2px #ccfbf1}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:11.5px;background:#f4f4f5;border:1px solid var(--line);border-radius:20px;padding:2px 8px;color:#3f3f46}
+
+  .photoitem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:9px;padding:8px;margin-bottom:8px;background:#fcfcfd}
+  .photoitem img{width:54px;height:54px;object-fit:cover;border-radius:7px;background:#eee;cursor:zoom-in}
+  .photoitem .u{font-size:11.5px;color:var(--mut);word-break:break-all;flex:1}
+
+  /* ---------- visor de fotos ---------- */
+  img.thumb{cursor:zoom-in}
+  .lightbox{position:fixed;inset:0;z-index:120;display:none;place-items:center;padding:44px 36px;background:rgba(9,9,11,.88);backdrop-filter:blur(3px);cursor:zoom-out}
+  .lightbox.on{display:grid}
+  .lightbox img{max-width:92vw;max-height:84vh;border-radius:10px;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.55);cursor:default}
+  .lbx-x{position:fixed;top:16px;right:18px;width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:26px;line-height:1;display:grid;place-items:center;cursor:pointer}
+  .lbx-x:hover{background:rgba(255,255,255,.22)}
+  .lbx-cap{position:fixed;left:0;right:0;bottom:16px;text-align:center;color:#d4d4d8;font-size:12.5px;padding:0 20px;pointer-events:none}
+  .lbx-cap:empty{display:none}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:#18181b;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .toast.err{background:#991b1b}
+
+  .steps{display:flex;gap:6px;margin:4px 0 2px}
+  .steps button{flex:1;padding:7px 4px;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:7px}
+  .steps button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .steps button.done{background:var(--accentSoft);border-color:#99e6dc;color:var(--accent)}
+
+  .kvs{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+  .kvs .k{color:var(--mut)}
+  .kvs .v{text-align:right;font-variant-numeric:tabular-nums}
+
+  .timeline{list-style:none;margin:0;padding:0}
+  .timeline li{position:relative;padding:0 0 14px 20px;border-left:2px solid #e9e9ec;margin-left:5px}
+  .timeline li:last-child{border-left-color:transparent;padding-bottom:0}
+  .timeline li:before{content:"";position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:#d4d4d8;border:2px solid #fff}
+  .timeline li.on:before{background:var(--accent)}
+  .timeline .tt{font-size:12.5px;font-weight:650}
+  .timeline .ss{font-size:11.5px;color:var(--mut)}
+
+  .note{background:var(--accentSoft);border:1px solid #b8ece4;border-radius:9px;padding:12px 14px;font-size:12.5px;color:#115e59;line-height:1.5}
+  .warnbox{background:var(--warnSoft);border:1px solid #f3e0b8;border-radius:9px;padding:12px 14px;font-size:12.5px;color:#92400e}
+
+  .alertrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f1f1f4}
+  .alertrow:last-child{border-bottom:0}
+  .alertrow .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+  .alertrow .t{flex:1;min-width:0}
+  .alertrow .t b{font-size:13px;display:block;line-height:1.3}
+  .alertrow .t span{font-size:11.5px;color:var(--mut)}
+  .alertrow .go{font-size:12px;font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">SS</div>
+      <div><b>Santo Spirito</b><span>Panel de control</span></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="sidefoot">
+      <b>Prototipo local</b>
+      Los cambios se guardan en este navegador. Usá «Publicar» para exportar el catálogo.
+    </div>
+  </aside>
+  <main>
+    <header class="top">
+      <div>
+        <h1 id="vtitle">Resumen</h1>
+        <div class="sub" id="vsub"></div>
+      </div>
+      <div class="right">
+        <span class="save"><i></i><span id="savetxt">Guardado</span></span>
+        <button class="btn" data-act="export">Publicar</button>
+      </div>
+    </header>
+    <div class="wrap" id="app"></div>
+  </main>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="lightbox" id="lightbox">
+  <img alt="">
+  <button class="lbx-x" data-act="close-zoom" title="Cerrar (Esc)">&times;</button>
+  <div class="lbx-cap"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="seed.js"></script>
+<script>
+/* ============================================================
+   PANEL SANTO SPIRITO · prototipo funcional (sin dependencias)
+   Los datos viven en localStorage; «Publicar» exporta el catálogo.
+   ============================================================ */
+const KEY = 'ss_panel_v1';
+const clone = o => JSON.parse(JSON.stringify(o));
+let DB = (() => {
+  try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) {}
+  return clone(window.SEED);
+})();
+
+const UI = { view: 'resumen', q: '', fStatus: '', fCat: '', fOrder: '', draft: null, drawer: null };
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => n == null || n === '' ? '—' : new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+const nf = n => new Intl.NumberFormat('es-AR').format(n || 0);
+const fdate = d => !d ? '—' : d.slice(8, 10) + '/' + d.slice(5, 7) + '/' + d.slice(0, 4);
+const today = () => new Date().toISOString().slice(0, 10);
+const uid = p => p + '-' + Math.random().toString(36).slice(2, 7);
+const setPath = (o, path, v) => {
+  const ks = path.split('.'); let t = o;
+  for (let i = 0; i < ks.length - 1; i++) { if (t[ks[i]] == null) t[ks[i]] = {}; t = t[ks[i]]; }
+  t[ks[ks.length - 1]] = v;
+};
+function save(quiet) {
+  localStorage.setItem(KEY, JSON.stringify(DB));
+  $('#savetxt').textContent = 'Guardado ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  if (!quiet) toast('Cambios guardados');
+}
+let tt;
+function toast(msg, err) {
+  const el = $('#toast'); el.textContent = msg; el.className = 'toast on' + (err ? ' err' : '');
+  clearTimeout(tt); tt = setTimeout(() => el.className = 'toast', 2200);
+}
+
+/* ---------- iconos ---------- */
+const svg = p => '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+const I = {
+  grid: svg('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'),
+  tag: svg('<path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.4"/>'),
+  box: svg('<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/>'),
+  bag: svg('<path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/>'),
+  users: svg('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>'),
+  truck: svg('<path d="M1 3h13v13H1z"/><path d="M14 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/>'),
+  card: svg('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>'),
+  ticket: svg('<path d="M3 9a2 2 0 0 1 0 6v3h18v-3a2 2 0 0 1 0-6V6H3v3Z"/><path d="M13 6v12" stroke-dasharray="2 3"/>'),
+  layout: svg('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>'),
+  cog: svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>'),
+  plus: svg('<path d="M12 5v14M5 12h14"/>'),
+  search: svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
+  edit: svg('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'),
+  eye: svg('<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/>'),
+  copy: svg('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
+  trash: svg('<path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6"/>'),
+  down: svg('<path d="M12 3v13M6 11l6 6 6-6"/><path d="M4 21h16"/>'),
+  up: svg('<path d="M12 21V8M6 13l6-6 6 6"/><path d="M4 3h16"/>'),
+  x: svg('<path d="M18 6 6 18M6 6l12 12"/>'),
+  check: svg('<path d="M20 6 9 17l-5-5"/>'),
+  ext: svg('<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/>'),
+};
+
+/* ---------- modelo ---------- */
+const SIZE_ORDER = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'ESPECIAL'];
+const totalStock = p => (p.sizes || []).reduce((a, s) => a + (+s.stock || 0), 0);
+const mainPhoto = p => { const f = (p.photos || []).find(x => x.main); return (f || (p.photos || [])[0] || {}).url || ''; };
+const thumb = p => { const u = mainPhoto(p); return u
+  ? `<img class="thumb" src="${esc(u)}" alt="" onerror="this.style.visibility='hidden'">`
+  : `<div class="thumb" style="display:grid;place-items:center;font-size:11px;font-weight:800;color:#a1a1aa">${esc((p.name || '?').trim().slice(0, 2))}</div>`; };
+const salePrice = p => p.price == null ? null : Math.round(p.price);
+const statusTag = s => ({
+  published: '<span class="tag t-pub"><i></i>Publicado</span>',
+  draft: '<span class="tag t-draft"><i></i>Borrador</span>',
+  paused: '<span class="tag t-pause"><i></i>Pausado</span>',
+  archived: '<span class="tag t-draft"><i></i>Archivado</span>',
+}[s] || s);
+const orderTag = s => ({
+  pendiente: '<span class="tag t-draft"><i></i>Pendiente</span>',
+  pagado: '<span class="tag t-info"><i></i>Pagado</span>',
+  preparando: '<span class="tag t-pause"><i></i>En preparación</span>',
+  enviado: '<span class="tag t-info"><i></i>Enviado</span>',
+  entregado: '<span class="tag t-pub"><i></i>Entregado</span>',
+  cancelado: '<span class="tag t-cancel"><i></i>Cancelado</span>',
+}[s] || s);
+const readyToPublish = () => DB.products.filter(p => p.status === 'draft' && totalStock(p) > 0);
+const pendingOrders = () => DB.orders.filter(o => ['pendiente', 'pagado', 'preparando'].includes(o.status));
+const salesTotal = () => DB.orders.filter(o => o.status !== 'cancelado').reduce((a, o) => a + (+o.total || 0), 0);
+
+/* ---------- navegación ---------- */
+const NAV = [
+  { grp: 'TIENDA' },
+  { id: 'resumen', label: 'Resumen', ic: 'grid' },
+  { id: 'productos', label: 'Productos', ic: 'tag' },
+  { id: 'stock', label: 'Stock', ic: 'box' },
+  { id: 'pedidos', label: 'Pedidos', ic: 'bag', badge: () => pendingOrders().length },
+  { grp: 'GESTIÓN' },
+  { id: 'clientes', label: 'Clientes', ic: 'users' },
+  { id: 'envios', label: 'Envíos', ic: 'truck' },
+  { id: 'cobros', label: 'Cobros', ic: 'card' },
+  { id: 'cupones', label: 'Cupones', ic: 'ticket' },
+  { grp: 'SITIO' },
+  { id: 'contenido', label: 'Contenido', ic: 'layout' },
+  { id: 'ajustes', label: 'Ajustes', ic: 'cog' },
+];
+const TITLES = {
+  resumen: ['Resumen', 'Estado general de la tienda'],
+  productos: ['Productos', 'Catálogo, precios y publicación'],
+  stock: ['Stock', 'Unidades por talle y movimientos'],
+  pedidos: ['Pedidos', 'Ventas web y de mostrador'],
+  clientes: ['Clientes', 'Base de clientes y saldo'],
+  envios: ['Envíos', 'Despachos y seguimiento'],
+  cobros: ['Cobros', 'Pagos recibidos y cuenta corriente'],
+  cupones: ['Cupones', 'Descuentos y promociones'],
+  contenido: ['Contenido', 'Portada, banners y textos del sitio'],
+  ajustes: ['Ajustes', 'Datos del negocio e integración con la web'],
+};
+
+function renderNav() {
+  $('#nav').innerHTML = NAV.map(n => {
+    if (n.grp) return `<div class="grp">${n.grp}</div>`;
+    const b = n.badge ? n.badge() : 0;
+    return `<a href="#${n.id}" class="${UI.view === n.id ? 'on' : ''}">${I[n.ic]}<span>${n.label}</span>${b ? `<span class="pill">${b}</span>` : ''}</a>`;
+  }).join('');
+}
+function render() {
+  const raw = (location.hash || '#resumen').slice(1);
+  const [v, arg] = raw.split('/');
+  UI.view = TITLES[v] ? v : 'resumen';
+  const [t, s] = TITLES[UI.view];
+  $('#vtitle').textContent = t; $('#vsub').textContent = s;
+  renderNav();
+  $('#app').innerHTML = VIEWS[UI.view]();
+  if (arg && UI.view === 'productos' && DB.products.some(p => p.id === arg)) openProduct(arg);
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', render);
+
+/* ---------- vistas ---------- */
+const VIEWS = {};
+
+/* recalcula la fila SUMA TOTAL sin volver a dibujar la vista */
+function refreshStockTotals() {
+  const ids = UI.stockIds || DB.products.map(p => p.id);
+  const list = ids.map(id => DB.products.find(p => p.id === id)).filter(Boolean);
+  const units = list.reduce((a, p) => a + totalStock(p), 0);
+  SIZE_ORDER.forEach(s => {
+    const cell = document.querySelector('[data-coltotal="' + s + '"]');
+    if (!cell) return;
+    const n = list.reduce((a, p) => a + (+(((p.sizes || []).find(x => x.size === s) || {}).stock) || 0), 0);
+    cell.textContent = n || '—';
+  });
+  const g = $('#grandtotal'); if (g) g.textContent = nf(units);
+  const ul = $('#unitsline'); if (ul) ul.textContent = nf(units) + ' unidades · ' + list.length + ' modelos';
+}
+
+/* ===== RESUMEN ===== */
+VIEWS.resumen = () => {
+  const pub = DB.products.filter(p => p.status === 'published');
+  const units = DB.products.reduce((a, p) => a + totalStock(p), 0);
+  const sales = salesTotal();
+  const nOrders = DB.orders.filter(o => o.status !== 'cancelado').length;
+  const pend = pendingOrders();
+  const ready = readyToPublish();
+  const noPhoto = DB.products.filter(p => !(p.photos || []).length);
+  const noPrice = DB.products.filter(p => p.price == null);
+  const noStock = DB.products.filter(p => totalStock(p) === 0);
+  const last = [...DB.orders].sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 6);
+  const lowStock = DB.products.filter(p => totalStock(p) > 0 && totalStock(p) <= 2)
+    .sort((a, b) => totalStock(a) - totalStock(b)).slice(0, 5);
+
+  const alert = (color, title, sub, href) =>
+    `<div class="alertrow"><span class="dot" style="background:${color}"></span>
+      <div class="t"><b>${title}</b><span>${sub}</span></div>
+      <a class="go" href="#${href}">Ver →</a></div>`;
+
+  return `
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="stat"><div class="k">Publicados</div><div class="v">${pub.length}<span class="small mut" style="font-size:14px;font-weight:600"> / ${DB.products.length}</span></div>
+      <div class="d">${ready.length} borradores con stock listos para publicar</div></div>
+    <div class="stat"><div class="k">Unidades en depósito</div><div class="v">${nf(units)}</div>
+      <div class="d">${DB.products.filter(p => totalStock(p) > 0).length} modelos con stock</div></div>
+    <div class="stat k"><div class="k">Ventas registradas</div><div class="v">${money(sales)}</div>
+      <div class="d">${nOrders} pedidos · ticket ${money(nOrders ? sales / nOrders : 0)}</div></div>
+    <div class="stat w"><div class="k">Pedidos a despachar</div><div class="v">${pend.length}</div>
+      <div class="d">${DB.orders.filter(o => o.status === 'pendiente').length} sin pago confirmado</div></div>
+  </div>
+
+  <div class="grid g3" style="margin-bottom:14px">
+    <div class="card"><div class="hd"><h2>Qué falta cargar</h2></div><div class="bd" style="padding:6px 18px">
+      ${alert('#0f766e', ready.length + ' modelos con stock sin publicar', 'Son ventas que hoy se pierden', 'productos')}
+      ${alert('#b45309', noPhoto.length + ' modelos sin foto', 'No se pueden publicar sin imagen', 'productos')}
+      ${alert('#b91c1c', noPrice.length + ' modelos sin precio', 'Falta el precio de venta', 'productos')}
+      ${alert('#71717a', noStock.length + ' modelos sin stock', 'Quedan visibles con 0 unidades', 'stock')}
+    </div></div>
+
+    <div class="card"><div class="hd"><h2>Stock crítico</h2><span class="mut" style="margin-left:auto">1–2 u</span></div>
+      <div class="bd" style="padding:6px 18px">
+      ${lowStock.map(p => `<div class="alertrow">
+        ${thumb(p)}
+        <div class="t"><b>${esc(p.name)}</b><span>${esc(p.category)} · ${totalStock(p)} u</span></div>
+        <span class="tag t-pause">${totalStock(p)} u</span>
+      </div>`).join('') || '<div class="empty">Sin alertas</div>'}
+    </div></div>
+
+    <div class="card"><div class="hd"><h2>Últimos pedidos</h2><a class="go small" href="#pedidos" style="margin-left:auto;color:var(--accent);font-weight:700">Ver todos</a></div>
+      <div class="bd" style="padding:6px 18px">
+      ${last.map(o => `<div class="alertrow">
+        <div class="t"><b>${esc(o.clientName || o.clientId)}</b><span>${fdate(o.date)} · ${esc(o.id)}</span></div>
+        <div style="text-align:right"><b class="mono">${money(o.total)}</b><div>${orderTag(o.status)}</div></div>
+      </div>`).join('') || '<div class="empty">Sin pedidos</div>'}
+    </div></div>
+  </div>
+
+  <div class="card"><div class="hd"><h2>Para publicar ya</h2>
+      <span class="mut">Modelos con stock real que no están en la tienda</span>
+      <button class="btn sm" style="margin-left:auto" data-act="bulk-publish">Publicar todos</button></div>
+    <div class="bd flush"><table class="tbl">
+      <thead><tr><th></th><th>Modelo</th><th>Categoría</th><th class="num">Stock</th><th class="num">Precio</th><th class="num"></th></tr></thead>
+      <tbody>${ready.slice(0, 8).map(p => `<tr>
+        <td style="width:54px">${thumb(p)}</td>
+        <td><div class="prodcell"><div><div class="nm">${esc(p.name)}</div><div class="sk">${esc(p.sku)} · fila ${p.excelRow || '—'}</div></div></div></td>
+        <td class="mut">${esc(p.category)}</td>
+        <td class="num">${totalStock(p)} u</td>
+        <td class="num">${money(p.price)}</td>
+        <td class="acts"><button class="btn sm" data-act="edit" data-id="${p.id}">Completar</button></td>
+      </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><b>Todo publicado</b>No quedan borradores con stock.</div></td></tr>'}</tbody>
+    </table></div></div>`;
+};
+
+/* ===== PRODUCTOS ===== */
+VIEWS.productos = () => {
+  let list = [...DB.products];
+  if (UI.q) { const q = UI.q.toLowerCase(); list = list.filter(p => (p.name + ' ' + p.sku + ' ' + p.category).toLowerCase().includes(q)); }
+  if (UI.fStatus) list = list.filter(p => p.status === UI.fStatus);
+  if (UI.fCat) list = list.filter(p => p.category === UI.fCat);
+  list.sort((a, b) => (a.excelRow || 999) - (b.excelRow || 999));
+  const cats = [...new Set(DB.products.map(p => p.category))].sort();
+
+  return `
+  <div class="bar">
+    <div class="search">${I.search}<input id="q" placeholder="Buscar por nombre, SKU o categoría…" value="${esc(UI.q)}"></div>
+    <select class="f" id="fstatus" style="width:160px">
+      <option value="">Todos los estados</option>
+      ${['published', 'draft', 'paused'].map(s => `<option value="${s}" ${UI.fStatus === s ? 'selected' : ''}>${{ published: 'Publicados', draft: 'Borradores', paused: 'Pausados' }[s]}</option>`).join('')}
+    </select>
+    <select class="f" id="fcat" style="width:180px">
+      <option value="">Todas las categorías</option>
+      ${cats.map(c => `<option ${UI.fCat === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+    </select>
+    <span class="mut small" style="margin-left:auto">${list.length} de ${DB.products.length}</span>
+    <button class="btn pri" data-act="new">${I.plus}Nuevo producto</button>
+  </div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th style="width:54px"></th><th>Producto</th><th>Categoría</th><th class="num">Precio</th><th class="num">Stock</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${list.map(p => {
+      const st = totalStock(p);
+      return `<tr>
+        <td>${thumb(p)}</td>
+        <td><div class="prodcell"><div><div class="nm">${esc(p.name)}</div>
+          <div class="sk">${esc(p.sku)}${p.excelRow ? ' · fila ' + p.excelRow : ''}${p.webId ? ' · web: ' + esc(p.webId) : ''}</div></div></div></td>
+        <td class="mut">${esc(p.category)}${p.gender ? '<div class="sk">' + esc(p.gender) + '</div>' : ''}</td>
+        <td class="num">${p.price == null ? '<span class="tag t-cancel">sin precio</span>' : money(p.price)}</td>
+        <td class="num">${st === 0 ? '<span class="mut">0</span>' : '<b>' + st + '</b>'}</td>
+        <td>${statusTag(p.status)}</td>
+        <td class="acts">
+          <button title="Editar" data-act="edit" data-id="${p.id}">${I.edit}</button>
+          <button title="Duplicar" data-act="dup" data-id="${p.id}">${I.copy}</button>
+          <button title="${p.status === 'published' ? 'Pausar' : 'Publicar'}" data-act="toggle" data-id="${p.id}">${p.status === 'published' ? I.eye : I.up}</button>
+          <button title="Eliminar" data-act="del" data-id="${p.id}">${I.trash}</button>
+        </td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="7"><div class="empty"><b>Sin resultados</b>Probá con otro filtro.</div></td></tr>'}</tbody>
+  </table></div></div>`;
+};
+/* ===== STOCK ===== */
+VIEWS.stock = () => {
+  let list = [...DB.products];
+  if (UI.q) { const q = UI.q.toLowerCase(); list = list.filter(p => p.name.toLowerCase().includes(q)); }
+  if (UI.fStock === 'con') list = list.filter(p => totalStock(p) > 0);
+  if (UI.fStock === 'sin') list = list.filter(p => totalStock(p) === 0);
+  list.sort((a, b) => (a.excelRow || 999) - (b.excelRow || 999));
+  UI.stockIds = list.map(p => p.id);
+  const units = list.reduce((a, p) => a + totalStock(p), 0);
+  const colTotals = SIZE_ORDER.map(s =>
+    list.reduce((a, p) => a + (+(((p.sizes || []).find(x => x.size === s) || {}).stock) || 0), 0));
+  const moves = [...DB.movements].reverse().slice(0, 12);
+
+  return `
+  <div class="bar">
+    <div class="search">${I.search}<input id="q" placeholder="Buscar modelo…" value="${esc(UI.q)}"></div>
+    <select class="f" id="fstock" style="width:170px">
+      <option value="">Todos</option>
+      <option value="con" ${UI.fStock === 'con' ? 'selected' : ''}>Solo con stock</option>
+      <option value="sin" ${UI.fStock === 'sin' ? 'selected' : ''}>Solo sin stock</option>
+    </select>
+    <span class="mut small" style="margin-left:auto" id="unitsline">${nf(units)} unidades · ${list.length} modelos</span>
+    <button class="btn pri" data-act="stock-move">${I.plus}Registrar movimiento</button>
+  </div>
+
+  <div class="card" style="margin-bottom:14px"><div class="bd flush" style="overflow:auto">
+    <table class="tbl">
+      <thead><tr><th>Modelo</th>${SIZE_ORDER.map(s => `<th class="num" style="text-align:center">${s === 'ESPECIAL' ? 'ESP' : s}</th>`).join('')}<th class="num">Total</th></tr></thead>
+      <tbody>${list.map(p => {
+        const tot = totalStock(p);
+        return `<tr data-row="${p.id}">
+          <td><div class="prodcell"><div><div class="nm">${esc(p.name)}</div><div class="sk">${esc(p.sku)} · fila ${p.excelRow || '—'}</div></div></div></td>
+          ${SIZE_ORDER.map(s => {
+            const it = (p.sizes || []).find(x => x.size === s) || { stock: 0 };
+            return `<td class="num" style="padding:4px 6px"><input class="f sm" type="number" min="0" style="width:48px;text-align:center;padding:4px" data-stock="${p.id}|${s}" value="${it.stock || 0}"></td>`;
+          }).join('')}
+          <td class="num rowtotal" style="font-weight:750">${tot}</td>
+        </tr>`;
+      }).join('') || '<tr><td colspan="10"><div class="empty"><b>Sin resultados</b></div></td></tr>'}</tbody>
+      <tfoot><tr class="totrow">
+        <td><b>SUMA TOTAL</b><div class="sk" style="color:#a1a1aa">${list.length} modelos</div></td>
+        ${SIZE_ORDER.map((s, i) => `<td class="num" style="text-align:center" data-coltotal="${s}">${colTotals[i] || '—'}</td>`).join('')}
+        <td class="num" id="grandtotal">${nf(units)}</td>
+      </tr></tfoot>
+    </table>
+  </div></div>
+
+  <div class="card"><div class="hd"><h2>Últimos movimientos</h2><span class="mut" style="margin-left:auto">Entradas, salidas y ajustes</span></div>
+    <div class="bd flush"><table class="tbl">
+      <thead><tr><th>Fecha</th><th>Modelo</th><th>Talle</th><th>Tipo</th><th class="num">Cantidad</th><th>Motivo</th></tr></thead>
+      <tbody>${moves.map(m => {
+        const p = DB.products.find(x => x.id === m.productId);
+        const t = { entrada: '<span class="tag t-pub">Entrada</span>', salida: '<span class="tag t-cancel">Salida</span>', ajuste: '<span class="tag t-info">Ajuste</span>' }[m.type] || m.type;
+        return `<tr><td class="mut">${fdate(m.date)}</td><td>${esc(p ? p.name : m.productId)}</td><td>${esc(m.size)}</td><td>${t}</td>
+          <td class="num">${m.type === 'salida' ? '−' : ''}${m.qty}</td><td class="mut">${esc(m.motive || '')}</td></tr>`;
+      }).join('') || '<tr><td colspan="6"><div class="empty"><b>Sin movimientos</b>Registrá una entrada o un ajuste.</div></td></tr>'}</tbody>
+    </table></div></div>`;
+};
+
+/* ===== PEDIDOS ===== */
+VIEWS.pedidos = () => {
+  let list = [...DB.orders].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  if (UI.fOrder) list = list.filter(o => o.status === UI.fOrder);
+  if (UI.q) { const q = UI.q.toLowerCase(); list = list.filter(o => (o.clientName + o.id).toLowerCase().includes(q)); }
+  const counts = {};
+  DB.orders.forEach(o => counts[o.status] = (counts[o.status] || 0) + 1);
+  const chips = [['', 'Todos', DB.orders.length], ['pendiente', 'Pendientes', counts.pendiente || 0], ['pagado', 'Pagados', counts.pagado || 0],
+    ['preparando', 'En preparación', counts.preparando || 0], ['enviado', 'Enviados', counts.enviado || 0],
+    ['entregado', 'Entregados', counts.entregado || 0], ['cancelado', 'Cancelados', counts.cancelado || 0]];
+
+  return `
+  <div class="bar">
+    <div class="search">${I.search}<input id="q" placeholder="Buscar por cliente o número…" value="${esc(UI.q)}"></div>
+    ${chips.map(([v, l, n]) => `<button class="btn sm" data-act="forder" data-v="${v}" style="${UI.fOrder === v ? 'background:#18181b;color:#fff;border-color:#18181b' : ''}">${l} <span style="opacity:.6">${n}</span></button>`).join('')}
+    <button class="btn pri" style="margin-left:auto" data-act="order-new">${I.plus}Nuevo pedido</button>
+  </div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Canal</th><th class="num">Total</th><th>Cobro</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${list.map(o => `<tr>
+      <td><b class="nw">${esc(o.id)}</b><div class="sk nw">${(o.lines || []).length} ítem(s)</div></td>
+      <td class="mut">${fdate(o.date)}</td>
+      <td>${esc(o.clientName || o.clientId)}</td>
+      <td class="mut">${esc(o.channel || 'Web')}</td>
+      <td class="num"><b>${money(o.total)}</b></td>
+      <td>${o.paid >= (o.total || 0) - 1 ? '<span class="tag t-pub"><i></i>Pagado</span>' : (o.paid > 0 ? '<span class="tag t-pause"><i></i>Parcial</span>' : '<span class="tag t-cancel"><i></i>Sin cobrar</span>')}</td>
+      <td>${orderTag(o.status)}</td>
+      <td class="acts"><button data-act="order-view" data-id="${o.id}" title="Ver">${I.eye}</button></td>
+    </tr>`).join('') || '<tr><td colspan="8"><div class="empty"><b>Sin pedidos</b></div></td></tr>'}</tbody>
+  </table></div></div>`;
+};
+
+/* ===== CLIENTES ===== */
+VIEWS.clientes = () => {
+  let list = [...DB.clients];
+  if (UI.q) { const q = UI.q.toLowerCase(); list = list.filter(c => (c.name + c.email + c.phone).toLowerCase().includes(q)); }
+  const stats = c => {
+    const os = DB.orders.filter(o => o.clientId === c.id && o.status !== 'cancelado');
+    return { n: os.length, total: os.reduce((a, o) => a + (+o.total || 0), 0), paid: os.reduce((a, o) => a + (+o.paid || 0), 0) };
+  };
+  return `
+  <div class="bar">
+    <div class="search">${I.search}<input id="q" placeholder="Buscar cliente…" value="${esc(UI.q)}"></div>
+    <span class="mut small" style="margin-left:auto">${list.length} clientes</span>
+    <button class="btn pri" data-act="client-new">${I.plus}Nuevo cliente</button>
+  </div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th>Cliente</th><th>Contacto</th><th class="num">Pedidos</th><th class="num">Comprado</th><th class="num">Saldo</th><th></th></tr></thead>
+    <tbody>${list.map(c => { const s = stats(c); const saldo = s.total - s.paid; return `<tr>
+      <td><b>${esc(c.name)}</b><div class="sk">${esc(c.id)}${c.cuit ? ' · ' + esc(c.cuit) : ''}</div></td>
+      <td class="mut small">${esc(c.email || '—')}<div>${esc(c.phone || '')}</div></td>
+      <td class="num">${s.n}</td>
+      <td class="num">${money(s.total)}</td>
+      <td class="num">${saldo > 0 ? '<b style="color:#b45309">' + money(saldo) + '</b>' : '<span class="mut">—</span>'}</td>
+      <td class="acts"><button data-act="client-edit" data-id="${c.id}">${I.edit}</button></td>
+    </tr>`; }).join('') || '<tr><td colspan="6"><div class="empty"><b>Sin clientes</b></div></td></tr>'}</tbody>
+  </table></div></div>`;
+};
+
+/* ===== ENVÍOS ===== */
+VIEWS.envios = () => {
+  const list = DB.orders.filter(o => o.shipping && o.shipping.method && o.shipping.method !== 'Retiro')
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  return `
+  <div class="bar"><span class="mut small">${list.length} envíos registrados</span></div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th>Pedido</th><th>Cliente</th><th>Transporte</th><th>Seguimiento</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${list.map(o => `<tr>
+      <td><b>${esc(o.id)}</b><div class="sk">${fdate(o.date)}</div></td>
+      <td>${esc(o.clientName)}<div class="sk">${esc(o.shipping.address || '')}</div></td>
+      <td>${esc(o.shipping.method)}</td>
+      <td class="mut">${esc(o.shipping.tracking || '—')}</td>
+      <td>${orderTag(o.status)}</td>
+      <td class="acts"><button data-act="order-view" data-id="${o.id}">${I.edit}</button></td>
+    </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><b>Sin envíos</b>Todos los pedidos son retiro en el local.</div></td></tr>'}</tbody>
+  </table></div></div>`;
+};
+
+/* ===== COBROS ===== */
+VIEWS.cobros = () => {
+  const list = [...DB.payments].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const total = list.reduce((a, p) => a + (+p.amount || 0), 0);
+  const porCobrar = DB.orders.filter(o => o.status !== 'cancelado').reduce((a, o) => a + Math.max(0, (+o.total || 0) - (+o.paid || 0)), 0);
+  return `
+  <div class="grid g3" style="margin-bottom:14px">
+    <div class="stat k"><div class="k">Cobrado</div><div class="v">${money(total)}</div><div class="d">${list.length} movimientos</div></div>
+    <div class="stat w"><div class="k">Saldo por cobrar</div><div class="v">${money(porCobrar)}</div><div class="d">${DB.orders.filter(o => (+o.total || 0) - (+o.paid || 0) > 1).length} pedidos con saldo</div></div>
+    <div class="stat"><div class="k">Ticket promedio</div><div class="v">${money(DB.orders.length ? salesTotal() / DB.orders.length : 0)}</div><div class="d">sobre ${DB.orders.length} pedidos</div></div>
+  </div>
+  <div class="bar"><span class="mut small">${list.length} cobros</span>
+    <button class="btn pri" style="margin-left:auto" data-act="pay-new">${I.plus}Registrar cobro</button></div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th>Fecha</th><th>Comprobante</th><th>Pedido</th><th>Cliente</th><th>Medio</th><th class="num">Importe</th></tr></thead>
+    <tbody>${list.map(p => { const o = DB.orders.find(x => x.id === p.orderId); return `<tr>
+      <td class="mut">${fdate(p.date)}</td><td class="mono small">${esc(p.id)}</td>
+      <td>${esc(p.orderId || '—')}</td><td>${esc(o ? o.clientName : '')}</td>
+      <td class="mut">${esc(p.method || '—')}</td><td class="num"><b>${money(p.amount)}</b></td>
+    </tr>`; }).join('') || '<tr><td colspan="6"><div class="empty"><b>Sin cobros</b></div></td></tr>'}</tbody>
+  </table></div></div>`;
+};
+
+/* ===== CUPONES ===== */
+VIEWS.cupones = () => `
+  <div class="bar"><span class="mut small">${DB.coupons.length} cupones</span>
+    <button class="btn pri" style="margin-left:auto" data-act="coupon-new">${I.plus}Nuevo cupón</button></div>
+  <div class="card"><div class="bd flush"><table class="tbl">
+    <thead><tr><th>Código</th><th>Tipo</th><th class="num">Valor</th><th>Vigencia</th><th class="num">Usos</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${DB.coupons.map(c => `<tr>
+      <td><b style="letter-spacing:.04em">${esc(c.code)}</b></td>
+      <td class="mut">${{ percent: 'Porcentaje', amount: 'Monto fijo', shipping: 'Envío gratis' }[c.type] || c.type}</td>
+      <td class="num">${c.type === 'percent' ? c.value + '%' : c.type === 'shipping' ? '—' : money(c.value)}</td>
+      <td class="mut small">${fdate(c.from)} → ${fdate(c.to)}</td>
+      <td class="num">${c.uses || 0} / ${c.maxUses || '∞'}</td>
+      <td>${c.active ? '<span class="tag t-pub"><i></i>Activo</span>' : '<span class="tag t-draft"><i></i>Inactivo</span>'}</td>
+      <td class="acts"><button data-act="coupon-edit" data-id="${c.id}">${I.edit}</button></td>
+    </tr>`).join('') || '<tr><td colspan="7"><div class="empty"><b>Sin cupones</b></div></td></tr>'}</tbody>
+  </table></div></div>`;
+
+/* ===== CONTENIDO ===== */
+VIEWS.contenido = () => {
+  const c = DB.content || {};
+  return `<div class="note" style="margin-bottom:14px">Estos textos son los que ve el cliente en la portada. Al guardar quedan listos para exportar al sitio.</div>
+  <form id="f-content" class="grid g2">
+    <div class="card"><div class="hd"><h2>Portada</h2></div><div class="bd">
+      <div class="row"><div><label class="lb">Título principal</label><input class="f" name="heroTitle" value="${esc(c.heroTitle || 'Confección premium para tu día a día')}"></div></div>
+      <div class="row"><div><label class="lb">Subtítulo</label><textarea class="f" name="heroSub" rows="2">${esc(c.heroSub || '')}</textarea></div></div>
+      <div class="row c2"><div><label class="lb">Texto del botón</label><input class="f" name="heroCta" value="${esc(c.heroCta || 'Ver colección')}"></div>
+      <div><label class="lb">Enlace del botón</label><input class="f" name="heroHref" value="${esc(c.heroHref || '#productos')}"></div></div>
+    </div></div>
+    <div class="card"><div class="hd"><h2>Barra de anuncios</h2></div><div class="bd">
+      <div class="row"><div><label class="lb">Mensaje</label><input class="f" name="announce" value="${esc(c.announce || 'Envío gratis en compras superiores a $150.000')}"></div></div>
+      <div class="row c2"><div><label class="lb">Color de fondo</label><input class="f" type="color" name="announceBg" value="${esc(c.announceBg || '#0f766e')}" style="height:38px;padding:3px"></div>
+      <div><label class="lb">Texto</label><input class="f" type="color" name="announceTx" value="${esc(c.announceTx || '#ffffff')}" style="height:38px;padding:3px"></div></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" name="announceOn" ${c.announceOn !== false ? 'checked' : ''}> Mostrar la barra en el sitio</label></div>
+    </div></div>
+    <div class="card" style="grid-column:1/-1"><div class="hd"><h2>Textos legales y de ayuda</h2></div><div class="bd">
+      <div class="row c2"><div><label class="lb">Cambios y devoluciones</label><textarea class="f" rows="3" name="policyReturn">${esc(c.policyReturn || '')}</textarea></div>
+      <div><label class="lb">Envíos</label><textarea class="f" rows="3" name="policyShip">${esc(c.policyShip || '')}</textarea></div></div>
+      <div class="row c2"><div><label class="lb">Medios de pago</label><textarea class="f" rows="3" name="policyPay">${esc(c.policyPay || '')}</textarea></div>
+      <div><label class="lb">Preguntas frecuentes</label><textarea class="f" rows="3" name="faq">${esc(c.faq || '')}</textarea></div></div>
+    </div></div>
+    <div style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px">
+      <button type="submit" class="btn pri">Guardar contenido</button>
+    </div>
+  </form>`;
+};
+
+/* ===== AJUSTES ===== */
+VIEWS.ajustes = () => {
+  const s = DB.settings || {};
+  return `<div class="grid g2">
+    <form id="f-settings" class="card"><div class="hd"><h2>Datos del negocio</h2></div><div class="bd">
+      <div class="row c2"><div><label class="lb">Nombre comercial</label><input class="f" name="business" value="${esc(s.business || 'Santo Spirito')}"></div>
+      <div><label class="lb">CUIT</label><input class="f" name="cuit" value="${esc(s.cuit || '')}"></div></div>
+      <div class="row c2"><div><label class="lb">WhatsApp</label><input class="f" name="whatsapp" value="${esc(s.whatsapp || '')}"></div>
+      <div><label class="lb">Email</label><input class="f" name="email" value="${esc(s.email || '')}"></div></div>
+      <div class="row c2"><div><label class="lb">Instagram</label><input class="f" name="instagram" value="${esc(s.instagram || '')}"></div>
+      <div><label class="lb">Dirección</label><input class="f" name="address" value="${esc(s.address || '')}"></div></div>
+      <div class="row c3"><div><label class="lb">Moneda</label><input class="f" name="currency" value="${esc(s.currency || 'ARS')}"></div>
+      <div><label class="lb">IVA por defecto (%)</label><input class="f" type="number" name="ivaDefault" value="${s.ivaDefault || 21}"></div>
+      <div><label class="lb">Stock mínimo de alerta</label><input class="f" type="number" name="lowStock" value="${s.lowStock || 1}"></div></div>
+      <div class="row"><div><label class="lb">Ruta base de las imágenes al exportar</label>
+        <input class="f" name="imageBase" value="${esc(s.imageBase || 'media/')}">
+        <div class="hint">Si copiás <code>admin/media</code> a <code>public/products</code>, poné <code>/products/</code>.</div></div></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn pri" type="submit">Guardar datos</button></div>
+    </div></form>
+
+    <form id="f-shipping" class="card"><div class="hd"><h2>Envíos y pagos</h2></div><div class="bd">
+      <div class="row c2"><div><label class="lb">Costo de envío</label><input class="f" type="number" name="shippingCost" value="${s.shippingCost || 0}"></div>
+      <div><label class="lb">Envío gratis desde</label><input class="f" type="number" name="freeShippingFrom" value="${s.freeShippingFrom || 0}"></div></div>
+      <div class="row"><div><label class="lb">Zonas de entrega</label><textarea class="f" rows="2" name="zones">${esc(s.zones || '')}</textarea></div></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" name="mpOn" ${s.mpOn !== false ? 'checked' : ''}> MercadoPago activo</label></div>
+      <div class="row"><div><label class="lb">Access token (se guarda en el servidor, no acá)</label><input class="f" name="mpToken" value="${s.mpToken || ''}" placeholder="APP_USR-…"></div></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" name="cashOn" ${s.cashOn !== false ? 'checked' : ''}> Efectivo / transferencia</label></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn pri" type="submit">Guardar envíos y pagos</button></div>
+    </div></form>
+
+    <div class="card" style="grid-column:1/-1"><div class="hd"><h2>Integración con la tienda</h2>
+      <span class="mut">El panel es la fuente de verdad; la web lee este catálogo</span></div><div class="bd">
+      <div class="grid g3" style="margin-bottom:14px">
+        <div style="border:1px solid var(--line);border-radius:9px;padding:14px">
+          <div class="k small mut" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:10.5px">Paso 1</div>
+          <b style="display:block;margin:4px 0 6px">Exportar catálogo</b>
+          <div class="small mut">Genera el JSON con los productos publicados, precios, talles y fotos.</div>
+          <button class="btn sm" style="margin-top:10px" data-act="export">${I.down}Exportar</button>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:9px;padding:14px">
+          <div class="k small mut" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:10.5px">Paso 2</div>
+          <b style="display:block;margin:4px 0 6px">Publicar en la web</b>
+          <div class="small mut">Reemplaza <code>src/data/products.js</code> por el archivo exportado y subí los cambios.</div>
+          <button class="btn sm" style="margin-top:10px" data-act="export">${I.up}Ver cómo</button>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:9px;padding:14px">
+          <div class="k small mut" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:10.5px">Paso 3</div>
+          <b style="display:block;margin:4px 0 6px">Sincronización automática</b>
+          <div class="small mut">Con API y base de datos, el stock se descuenta solo con cada venta.</div>
+          <button class="btn sm" style="margin-top:10px" data-act="sync-info">${I.ext}Cómo funciona</button>
+        </div>
+      </div>
+      <div class="warnbox"><b>Estado actual:</b> el prototipo guarda todo en este navegador. Para que la web y el depósito queden sincronizados hace falta conectar el panel a una base de datos (paso 3).</div>
+    </div></div>
+
+    <div class="card" style="grid-column:1/-1"><div class="hd"><h2>Datos del prototipo</h2></div><div class="bd" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span class="mut small" style="flex:1">Semilla generada el ${esc(DB.meta.generated)} desde ${esc(DB.meta.source)} · ${DB.products.length} productos, ${DB.orders.length} pedidos, ${DB.clients.length} clientes.</span>
+      <button class="btn" data-act="reset-demo">Restablecer al estado inicial</button>
+    </div></div>
+  </div>`;
+};
+
+/* ============================================================
+   DRAWER
+   ============================================================ */
+function openDrawer(kind, html) {
+  UI.drawer = kind;
+  $('#drawer').innerHTML = html;
+  $('#drawer').classList.add('on');
+  $('#scrim').classList.add('on');
+}
+function closeDrawer() {
+  $('#drawer').classList.remove('on');
+  $('#scrim').classList.remove('on');
+  UI.draft = null; UI.drawer = null;
+}
+
+/* ---------- visor de fotos ---------- */
+function imgCaption(im) {
+  if (im.alt) return im.alt;
+  const ar = im.closest('.alertrow');
+  if (ar) { const b = ar.querySelector('.t b'); if (b) return b.textContent.trim(); }
+  const tr = im.closest('tr');
+  if (tr) { const nm = tr.querySelector('.nm'); if (nm) return nm.textContent.trim(); }
+  if ($('#drawer').classList.contains('on')) { const h = $('#drawer h3'); if (h) return h.textContent.trim(); }
+  return '';
+}
+function openZoom(src, cap) {
+  const lb = $('#lightbox');
+  lb.querySelector('img').src = src;
+  lb.querySelector('.lbx-cap').textContent = cap || '';
+  lb.classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeZoom() {
+  $('#lightbox').classList.remove('on');
+  document.body.style.overflow = '';
+}
+function drawerShell(title, sub, body, footer, wide) {
+  return `<header><div><h3>${title}</h3><div class="mut">${sub || ''}</div></div>
+    <button class="btn gh" style="margin-left:auto" data-act="close-drawer">${I.x}</button></header>
+    <div class="body">${body}</div><footer>${footer}</footer>`;
+}
+
+const CATS = ['Ambos', 'Chaquetas', 'Pantalones', 'Delantales', 'Accesorios'];
+const GENDERS = ['Mujer', 'Hombre', 'Unisex', 'Infantil'];
+
+function blankProduct() {
+  return {
+    id: uid('prd'), sku: 'SS-' + String(DB.products.length + 1).padStart(3, '0'),
+    name: '', slug: '', excelRow: null, section: '', category: 'Ambos', subCategory: '',
+    gender: 'Mujer', fabric: '', price: null, listPrice: null, cost: null, iva: 21,
+    status: 'draft', featured: false, badge: '', tagline: '',
+    description: { intro: '', casaca: '', pantalon: '', composicion: '', cuidados: [] },
+    colors: [{ name: '', hex: '#c9ccd1', active: true }],
+    sizes: SIZE_ORDER.map(s => ({ size: s, stock: 0, reserved: 0 })),
+    photos: [], weight: null, notes: '', webId: '', seo: { title: '', description: '' },
+    updatedAt: today(),
+  };
+}
+
+function openProduct(id) {
+  UI.draft = id ? clone(DB.products.find(p => p.id === id)) : blankProduct();
+  renderProductDrawer();
+}
+function renderProductDrawer() {
+  const p = UI.draft;
+  const isNew = !DB.products.some(x => x.id === p.id);
+  const body = `
+  <form id="f-product">
+    <div class="sect"><h4>Identificación</h4>
+      <div class="row c2">
+        <div><label class="lb">Nombre del producto *</label><input class="f" data-b="name" value="${esc(p.name)}" placeholder="AMBO TOPACIO CUELLO MAO"></div>
+        <div><label class="lb">SKU / código</label><input class="f" data-b="sku" value="${esc(p.sku)}"></div>
+      </div>
+      <div class="row c3">
+        <div><label class="lb">Categoría</label><select class="f" data-b="category">${CATS.map(c => `<option ${p.category === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+        <div><label class="lb">Subcategoría / tela</label><input class="f" data-b="subCategory" value="${esc(p.subCategory)}" placeholder="Spandex, Gabardina…"></div>
+        <div><label class="lb">Género</label><select class="f" data-b="gender"><option value="">—</option>${GENDERS.map(g => `<option ${p.gender === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
+      </div>
+      <div class="row c3">
+        <div><label class="lb">Sección del depósito</label><input class="f" data-b="section" value="${esc(p.section)}"></div>
+        <div><label class="lb">Fila del Excel</label><input class="f" type="number" data-b="excelRow" value="${p.excelRow || ''}"></div>
+        <div><label class="lb">Composición / tela</label><input class="f" data-b="fabric" value="${esc(p.fabric)}" placeholder="97% algodón, 3% elastano"></div>
+      </div>
+    </div>
+
+    <div class="sect"><h4>Precio</h4>
+      <div class="row c4">
+        <div><label class="lb">Precio de venta *</label><input class="f" type="number" data-b="price" value="${p.price == null ? '' : p.price}"></div>
+        <div><label class="lb">Precio de lista</label><input class="f" type="number" data-b="listPrice" value="${p.listPrice == null ? '' : p.listPrice}"></div>
+        <div><label class="lb">Costo</label><input class="f" type="number" data-b="cost" value="${p.cost == null ? '' : p.cost}"></div>
+        <div><label class="lb">IVA %</label><input class="f" type="number" data-b="iva" value="${p.iva}"></div>
+      </div>
+      <div class="hint">Margen estimado: <b>${p.price && p.cost ? Math.round((1 - p.cost / p.price) * 100) + '%' : '—'}</b></div>
+    </div>
+
+    <div class="sect"><h4>Descripción para la web</h4>
+      <div class="row"><div><label class="lb">Frase corta</label><input class="f" data-b="tagline" value="${esc(p.tagline)}"></div></div>
+      <div class="row"><div><label class="lb">Descripción general</label><textarea class="f" rows="3" data-b="description.intro">${esc(p.description.intro)}</textarea></div></div>
+      <div class="row c2">
+        <div><label class="lb">Detalle de la chaqueta</label><textarea class="f" rows="2" data-b="description.casaca">${esc(p.description.casaca)}</textarea></div>
+        <div><label class="lb">Detalle del pantalón</label><textarea class="f" rows="2" data-b="description.pantalon">${esc(p.description.pantalon)}</textarea></div>
+      </div>
+      <div class="row c2">
+        <div><label class="lb">Composición</label><input class="f" data-b="description.composicion" value="${esc(p.description.composicion)}"></div>
+        <div><label class="lb">Cuidados (uno por línea)</label><textarea class="f" rows="2" data-b="cuidados">${esc((p.description.cuidados || []).join('\n'))}</textarea></div>
+      </div>
+    </div>
+
+    <div class="sect"><h4>Colores</h4>
+      ${(p.colors || []).map((c, i) => `<div class="row" style="grid-template-columns:1fr 74px 36px;align-items:end;margin-bottom:8px">
+        <div><label class="lb">Nombre del color</label><input class="f" data-b="colors.${i}.name" value="${esc(c.name)}" placeholder="Azul Francia"></div>
+        <div><label class="lb">Muestra</label><input class="f" type="color" data-b="colors.${i}.hex" value="${esc(c.hex || '#cccccc')}" style="padding:3px;height:38px"></div>
+        <button type="button" class="btn gh" data-act="del-color" data-i="${i}">${I.trash}</button>
+      </div>`).join('')}
+      <button type="button" class="btn sm" data-act="add-color">${I.plus}Agregar color</button>
+    </div>
+
+    <div class="sect"><h4>Talles y stock</h4>
+      <div class="sizes">${SIZE_ORDER.map((s, i) => {
+        const it = (p.sizes || []).find(x => x.size === s) || { stock: 0 };
+        return `<div class="sz"><b>${s === 'ESPECIAL' ? 'ESP' : s}</b><input type="number" min="0" data-b="sizes.${i}.stock" value="${it.stock || 0}"></div>`;
+      }).join('')}</div>
+      <div class="hint">Total: <b>${totalStock(p)}</b> unidades. XS no existe en el depósito: si se vende, hay que confeccionarlo.</div>
+    </div>
+
+    <div class="sect"><h4>Fotos</h4>
+      ${(p.photos || []).map((ph, i) => `<div class="photoitem">
+        <img src="${esc(ph.url)}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="u">${esc(ph.url)}</div>
+        <button type="button" class="btn sm ${ph.main ? 'pri' : ''}" data-act="set-main" data-i="${i}">${ph.main ? 'Principal' : 'Usar'}</button>
+        <button type="button" class="btn gh" data-act="del-photo" data-i="${i}">${I.trash}</button>
+      </div>`).join('') || '<div class="hint" style="margin-bottom:8px">Sin fotos. El producto no se puede publicar así.</div>'}
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <input class="f" id="newphoto" placeholder="media/foto.jpg o https://…">
+        <button type="button" class="btn" data-act="add-photo">Agregar</button>
+        <label class="btn" style="white-space:nowrap">Subir<input type="file" accept="image/*" id="upload" hidden></label>
+      </div>
+    </div>
+
+    <div class="sect"><h4>Publicación</h4>
+      <div class="row c3">
+        <div><label class="lb">Estado</label><select class="f" data-b="status">
+          <option value="draft" ${p.status === 'draft' ? 'selected' : ''}>Borrador</option>
+          <option value="published" ${p.status === 'published' ? 'selected' : ''}>Publicado</option>
+          <option value="paused" ${p.status === 'paused' ? 'selected' : ''}>Pausado</option>
+          <option value="archived" ${p.status === 'archived' ? 'selected' : ''}>Archivado</option>
+        </select></div>
+        <div><label class="lb">Etiqueta / badge</label><input class="f" data-b="badge" value="${esc(p.badge)}" placeholder="EDICIÓN ESPECIAL"></div>
+        <div><label class="lb">Peso (kg)</label><input class="f" type="number" step="0.1" data-b="weight" value="${p.weight == null ? '' : p.weight}"></div>
+      </div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" data-b="featured" ${p.featured ? 'checked' : ''}> Destacar en la portada</label></div>
+      <div class="row c2">
+        <div><label class="lb">SEO · título</label><input class="f" data-b="seo.title" value="${esc(p.seo.title)}"></div>
+        <div><label class="lb">SEO · descripción</label><input class="f" data-b="seo.description" value="${esc(p.seo.description)}"></div>
+      </div>
+      <div class="row"><div><label class="lb">Notas internas</label><textarea class="f" rows="2" data-b="notes">${esc(p.notes)}</textarea></div></div>
+    </div>
+  </form>`;
+  openDrawer('product', drawerShell(
+    isNew ? 'Nuevo producto' : esc(p.name || 'Producto'),
+    isNew ? 'Cargá los datos para publicarlo en la tienda' : `${esc(p.sku)}${p.webId ? ' · publicado como ' + esc(p.webId) : ''}`,
+    body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button>
+     <button class="btn pri" data-act="save-product">${I.check}${isNew ? 'Crear producto' : 'Guardar cambios'}</button>`
+  ));
+}
+
+function openClient(id) {
+  UI.draft = id ? clone(DB.clients.find(c => c.id === id)) : {
+    id: nextId('CLI-', DB.clients, 3), name: '', cuit: '', phone: '',
+    email: '', address: '', since: today(), notes: '', status: 'ACTIVO', channel: 'Web',
+  };
+  const c = UI.draft;
+  const os = DB.orders.filter(o => o.clientId === c.id);
+  const body = `<form id="f-client">
+    <div class="sect"><h4>Datos del cliente</h4>
+      <div class="row c2"><div><label class="lb">Nombre y apellido</label><input class="f" data-b="name" value="${esc(c.name)}"></div>
+      <div><label class="lb">CUIT / DNI</label><input class="f" data-b="cuit" value="${esc(c.cuit)}"></div></div>
+      <div class="row c2"><div><label class="lb">Email</label><input class="f" type="email" data-b="email" value="${esc(c.email)}"></div>
+      <div><label class="lb">Teléfono</label><input class="f" data-b="phone" value="${esc(c.phone)}"></div></div>
+      <div class="row"><div><label class="lb">Dirección</label><input class="f" data-b="address" value="${esc(c.address)}"></div></div>
+      <div class="row c2"><div><label class="lb">Estado</label><select class="f" data-b="status">${['ACTIVO', 'INACTIVO'].map(x => `<option ${c.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+      <div><label class="lb">Canal de alta</label><select class="f" data-b="channel">${['Web', 'WhatsApp', 'Instagram', 'Mostrador'].map(x => `<option ${c.channel === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div></div>
+      <div class="row"><div><label class="lb">Observaciones</label><textarea class="f" rows="2" data-b="notes">${esc(c.notes)}</textarea></div></div>
+    </div>
+    ${os.length ? `<div class="sect"><h4>Historial</h4><table class="tbl"><tbody>
+      ${os.map(o => `<tr><td>${esc(o.id)}</td><td class="mut">${fdate(o.date)}</td><td>${orderTag(o.status)}</td><td class="num">${money(o.total)}</td></tr>`).join('')}
+    </tbody></table></div>` : ''}
+  </form>`;
+  openDrawer('client', drawerShell(esc(c.name || 'Nuevo cliente'), c.id, body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button><button class="btn pri" data-act="save-client">${I.check}Guardar</button>`));
+}
+
+function openOrder(id) {
+  const o = DB.orders.find(x => x.id === id);
+  if (!o) return;
+  const saldo = (+o.total || 0) - (+o.paid || 0);
+  const steps = ['pendiente', 'pagado', 'preparando', 'enviado', 'entregado'];
+  const idx = steps.indexOf(o.status);
+  const body = `
+    <div class="sect"><h4>Estado</h4>
+      <div class="steps">${steps.map((s, i) => `<button data-act="order-status" data-id="${o.id}" data-s="${s}"
+        class="${o.status === s ? 'on' : (i < idx ? 'done' : '')}">${{ pendiente: 'Pendiente', pagado: 'Pagado', preparando: 'Preparando', enviado: 'Enviado', entregado: 'Entregado' }[s]}</button>`).join('')}</div>
+      ${o.status !== 'cancelado' ? `<button class="btn sm dz" style="margin-top:8px" data-act="order-status" data-id="${o.id}" data-s="cancelado">Cancelar pedido</button>` : ''}
+    </div>
+    <div class="sect"><h4>Cliente</h4>
+      <div class="kvs">
+        <span class="k">Nombre</span><span class="v">${esc(o.clientName || '—')}</span>
+        <span class="k">ID</span><span class="v">${esc(o.clientId || '—')}</span>
+        <span class="k">Fecha</span><span class="v">${fdate(o.date)}</span>
+        <span class="k">Canal</span><span class="v">${esc(o.channel || 'Web')}</span>
+      </div>
+    </div>
+    <div class="sect"><h4>Ítems</h4>
+      <table class="tbl"><thead><tr><th>Producto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead>
+      <tbody>${(o.lines || []).map(l => `<tr><td>${esc(l.description || (DB.products.find(p => p.id === l.productId) || {}).name || '—')}
+        ${l.size ? `<div class="sk">Talle ${esc(l.size)}</div>` : ''}</td>
+        <td class="num">${l.qty}</td><td class="num">${money(l.price)}</td><td class="num">${money(l.qty * l.price)}</td></tr>`).join('')}</tbody></table>
+      <div class="kvs" style="margin-top:12px">
+        <span class="k">Subtotal</span><span class="v">${money((o.lines || []).reduce((a, l) => a + l.qty * l.price, 0))}</span>
+        ${o.discount ? `<span class="k">Descuento</span><span class="v">− ${money(o.discount)}</span>` : ''}
+        ${o.shippingCost ? `<span class="k">Envío</span><span class="v">${money(o.shippingCost)}</span>` : ''}
+        <span class="k"><b>Total</b></span><span class="v"><b>${money(o.total)}</b></span>
+        <span class="k">Cobrado</span><span class="v">${money(o.paid)}</span>
+        <span class="k">Saldo</span><span class="v" style="color:${saldo > 1 ? '#b45309' : '#15803d'}">${money(saldo)}</span>
+      </div>
+    </div>
+    <div class="sect"><h4>Pago y envío</h4>
+      <div class="kvs">
+        <span class="k">Medio de pago</span><span class="v">${esc((o.payment && o.payment.method) || '—')}</span>
+        <span class="k">Estado del pago</span><span class="v">${esc((o.payment && o.payment.status) || '—')}</span>
+        <span class="k">Entrega</span><span class="v">${esc((o.shipping && o.shipping.method) || 'Retiro')}</span>
+        <span class="k">Seguimiento</span><span class="v">${esc((o.shipping && o.shipping.tracking) || '—')}</span>
+      </div>
+      ${o.notes ? `<div class="hint" style="margin-top:8px">${esc(o.notes)}</div>` : ''}
+    </div>`;
+  openDrawer('order', drawerShell(esc(o.id), `${esc(o.clientName)} · ${fdate(o.date)}`, body,
+    `<button class="btn" data-act="close-drawer">Cerrar</button>
+     ${saldo > 1 ? `<button class="btn pri" data-act="pay-for" data-id="${o.id}">Registrar cobro</button>` : ''}`));
+}
+
+function openStockMove() {
+  const opts = DB.products.map(p => `<option value="${p.id}">${esc(p.name)} (${totalStock(p)} u)</option>`).join('');
+  const body = `<form id="f-move">
+    <div class="sect"><h4>Movimiento de stock</h4>
+      <div class="row"><div><label class="lb">Producto</label><select class="f" name="productId">${opts}</select></div></div>
+      <div class="row c3">
+        <div><label class="lb">Talle</label><select class="f" name="size">${SIZE_ORDER.map(s => `<option>${s}</option>`).join('')}</select></div>
+        <div><label class="lb">Tipo</label><select class="f" name="type"><option value="entrada">Entrada</option><option value="salida">Salida</option><option value="ajuste">Ajuste (fijar)</option></select></div>
+        <div><label class="lb">Cantidad</label><input class="f" type="number" name="qty" value="1" min="0"></div>
+      </div>
+      <div class="row c2"><div><label class="lb">Motivo</label><select class="f" name="motive">
+        <option>Compra a proveedor</option><option>Devolución de cliente</option><option>Venta</option>
+        <option>Rotura / pérdida</option><option>Recuento</option><option>Otro</option></select></div>
+        <div><label class="lb">Fecha</label><input class="f" type="date" name="date" value="${today()}"></div></div>
+      <div class="row"><div><label class="lb">Nota</label><input class="f" name="note"></div></div>
+    </div></form>`;
+  openDrawer('move', drawerShell('Registrar movimiento', 'Actualiza el stock del depósito', body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button><button class="btn pri" data-act="save-move">${I.check}Aplicar</button>`));
+}
+
+function openCoupon(id) {
+  UI.draft = id ? clone(DB.coupons.find(c => c.id === id)) : {
+    id: uid('CUP'), code: '', type: 'percent', value: 10, minTotal: 0,
+    from: today(), to: today(), maxUses: 0, uses: 0, active: true, scope: 'todos',
+  };
+  const c = UI.draft;
+  const body = `<form id="f-coupon">
+    <div class="sect"><h4>Cupón</h4>
+      <div class="row c2"><div><label class="lb">Código</label><input class="f" data-b="code" value="${esc(c.code)}" placeholder="BIENVENIDA10" style="text-transform:uppercase"></div>
+      <div><label class="lb">Tipo</label><select class="f" data-b="type">
+        <option value="percent" ${c.type === 'percent' ? 'selected' : ''}>Porcentaje</option>
+        <option value="amount" ${c.type === 'amount' ? 'selected' : ''}>Monto fijo</option>
+        <option value="shipping" ${c.type === 'shipping' ? 'selected' : ''}>Envío gratis</option></select></div></div>
+      <div class="row c3"><div><label class="lb">Valor</label><input class="f" type="number" data-b="value" value="${c.value}" ${c.type === 'shipping' ? 'disabled' : ''}></div>
+      <div><label class="lb">Compra mínima</label><input class="f" type="number" data-b="minTotal" value="${c.minTotal || 0}"></div>
+      <div><label class="lb">Usos máximos (0 = sin límite)</label><input class="f" type="number" data-b="maxUses" value="${c.maxUses || 0}"></div></div>
+      <div class="row c2"><div><label class="lb">Desde</label><input class="f" type="date" data-b="from" value="${c.from}"></div>
+      <div><label class="lb">Hasta</label><input class="f" type="date" data-b="to" value="${c.to}"></div></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" data-b="active" ${c.active ? 'checked' : ''}> Activo</label></div>
+    </div></form>`;
+  openDrawer('coupon', drawerShell(c.code || 'Nuevo cupón', 'Descuentos para la tienda', body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button><button class="btn pri" data-act="save-coupon">${I.check}Guardar</button>`));
+}
+
+const nextId = (prefix, list, pad = 4) => {
+  const max = list.reduce((a, o) => { const n = parseInt(String(o.id).replace(/\D/g, ''), 10); return isNaN(n) ? a : Math.max(a, n); }, 0);
+  return prefix + String(max + 1).padStart(pad, '0');
+};
+
+function openNewOrder() {
+  UI.draft = { id: nextId('PED-', DB.orders), date: today(), clientId: '',
+    clientName: '', channel: 'Web', lines: [{ productId: '', size: 'M', qty: 1, price: 0 }],
+    discount: 0, shippingCost: 0, total: 0, status: 'pendiente', notes: '', deduct: true };
+  renderNewOrder();
+}
+function renderNewOrder() {
+  const o = UI.draft;
+  const pOpts = sel => DB.products.map(p => `<option value="${p.id}" ${sel === p.id ? 'selected' : ''}>${esc(p.name)} — ${money(p.price)}</option>`).join('');
+  const body = `<form id="f-order">
+    <div class="sect"><h4>Datos del pedido</h4>
+      <div class="row c3">
+        <div><label class="lb">N°</label><input class="f" data-b="id" value="${esc(o.id)}"></div>
+        <div><label class="lb">Fecha</label><input class="f" type="date" data-b="date" value="${o.date}"></div>
+        <div><label class="lb">Canal</label><select class="f" data-b="channel">${['Web', 'WhatsApp', 'Instagram', 'Mostrador'].map(c => `<option ${o.channel === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+      </div>
+      <div class="row c2"><div><label class="lb">Cliente</label><select class="f" data-b="clientId">
+        <option value="">— elegir —</option>${DB.clients.map(c => `<option value="${c.id}" ${o.clientId === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div>
+        <div><label class="lb">o nombre libre</label><input class="f" data-b="clientName" value="${esc(o.clientName)}" placeholder="Cliente ocasional"></div></div>
+    </div>
+    <div class="sect"><h4>Ítems</h4>
+      ${o.lines.map((l, i) => `<div class="row" style="grid-template-columns:1fr 90px 80px 110px 36px;align-items:end;margin-bottom:8px">
+        <div><label class="lb">Producto</label><select class="f" data-line="${i}" data-lf="productId">${pOpts(l.productId)}</select></div>
+        <div><label class="lb">Talle</label><select class="f" data-b="lines.${i}.size">${SIZE_ORDER.map(s => `<option ${l.size === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+        <div><label class="lb">Cant.</label><input class="f" type="number" min="1" data-b="lines.${i}.qty" value="${l.qty}"></div>
+        <div><label class="lb">Precio</label><input class="f" type="number" data-b="lines.${i}.price" value="${l.price}"></div>
+        <button type="button" class="btn gh" data-act="del-line" data-i="${i}">${I.trash}</button>
+      </div>`).join('')}
+      <button type="button" class="btn sm" data-act="add-line">${I.plus}Agregar ítem</button>
+    </div>
+    <div class="sect"><h4>Totales</h4>
+      <div class="row c3"><div><label class="lb">Descuento</label><input class="f" type="number" data-b="discount" value="${o.discount}"></div>
+      <div><label class="lb">Envío</label><input class="f" type="number" data-b="shippingCost" value="${o.shippingCost}"></div>
+      <div><label class="lb">Total</label><div class="f" style="background:#f4f4f5;font-weight:700">${money((o.lines || []).reduce((a, l) => a + l.qty * l.price, 0) - (o.discount || 0) + (o.shippingCost || 0))}</div></div></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" data-b="deduct" ${o.deduct ? 'checked' : ''}> Descontar del stock ahora</label></div>
+      <div class="row"><div><label class="lb">Notas</label><input class="f" data-b="notes" value="${esc(o.notes)}"></div></div>
+    </div></form>`;
+  openDrawer('neworder', drawerShell('Nuevo pedido', 'Venta manual o pedido tomado por WhatsApp', body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button><button class="btn pri" data-act="save-order">${I.check}Crear pedido</button>`));
+}
+
+function openPay(orderId) {
+  UI.payOrder = orderId || '';
+  const o = DB.orders.find(x => x.id === orderId);
+  const saldo = o ? (+o.total || 0) - (+o.paid || 0) : 0;
+  const body = `<form id="f-pay">
+    <div class="sect"><h4>Cobro</h4>
+      <div class="row c2"><div><label class="lb">Pedido</label><input class="f" value="${esc(orderId || '')}" disabled></div>
+      <div><label class="lb">Fecha</label><input class="f" type="date" name="date" value="${today()}"></div></div>
+      <div class="row c2"><div><label class="lb">Importe</label><input class="f" type="number" name="amount" value="${saldo || 0}"></div>
+      <div><label class="lb">Medio</label><select class="f" name="method"><option>Efectivo</option><option>Transferencia</option><option>MercadoPago</option><option>Tarjeta</option></select></div></div>
+      <div class="row"><div><label class="lb">Comprobante / referencia</label><input class="f" name="ref"></div></div>
+    </div></form>`;
+  openDrawer('pay', drawerShell('Registrar cobro', esc(orderId || 'Cobro general'), body,
+    `<button class="btn" data-act="close-drawer">Cancelar</button><button class="btn pri" data-act="save-pay">${I.check}Registrar</button>`));
+}
+
+/* ---------- exportación ---------- */
+function catalog() {
+  return DB.products.filter(p => p.status === 'published').map(p => ({
+    id: p.webId || p.slug, slug: p.webId || p.slug, name: p.name,
+    tagline: p.tagline || '', gender: p.gender || 'Mujer', category: p.category,
+    subCategory: p.subCategory || '', fabric: p.fabric || '',
+    price: p.price || 0, originalPrice: p.listPrice || p.price || 0,
+    discount: p.listPrice && p.price ? Math.round((1 - p.price / p.listPrice) * 100) + '% OFF' : '',
+    featured: !!p.featured, badge: p.badge || '', rating: 5, reviewsCount: 0,
+    images: (p.photos || []).map(x => x.url.startsWith('media/') ? (DB.settings.imageBase || 'media/') + x.url.slice(6) : x.url),
+    colors: (p.colors || []).filter(c => c.name).map(c => ({ name: c.name, hex: c.hex, inStock: totalStock(p) > 0 })),
+    sizes: (p.sizes || []).map(s => ({ size: s.size, stock: +s.stock || 0 })),
+    description: {
+      intro: p.description.intro, casaca: p.description.casaca, pantalon: p.description.pantalon,
+      composicion: p.description.composicion, cuidados: p.description.cuidados,
+    },
+    seo: p.seo,
+  }));
+}
+function download(name, text, type) {
+  const b = new Blob([text], { type: type || 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+}
+function openExport() {
+  const cat = catalog();
+  const missing = cat.filter(p => !p.price || !p.images.length);
+  const json = JSON.stringify(cat, null, 2);
+  const js = '// Catálogo generado por el panel de Santo Spirito — ' + today() + '\n\nexport const products = ' + json + ';\n';
+  const body = `
+    <div class="note" style="margin-bottom:14px"><b>${cat.length} productos publicados</b> listos para exportar.
+    ${missing.length ? `<br><b>${missing.length} tienen datos incompletos</b> (precio o foto): ${missing.slice(0, 4).map(p => esc(p.name)).join(', ')}${missing.length > 4 ? '…' : ''}` : ''}</div>
+    <div class="sect"><h4>Opciones</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn pri" data-act="dl-json">${I.down}catalog.json</button>
+        <button class="btn" data-act="dl-js">${I.down}products.js</button>
+        <button class="btn" data-act="dl-csv">${I.down}stock.csv</button>
+        <button class="btn" data-act="copy-json">${I.copy}Copiar JSON</button>
+      </div>
+      <div class="hint">El sitio actual importa <code>src/data/products.js</code>. Reemplazalo por el archivo descargado y volvé a compilar.</div>
+    </div>
+    <div class="sect"><h4>Vista previa</h4>
+      <pre style="background:#18181b;color:#d4d4d8;border-radius:9px;padding:14px;font-size:11.5px;line-height:1.5;max-height:340px;overflow:auto">${esc(json.slice(0, 2400))}${json.length > 2400 ? '\n…' : ''}</pre>
+    </div>`;
+  openDrawer('export', drawerShell('Publicar en la tienda', 'Exportá el catálogo y subilo al sitio', body,
+    `<button class="btn" data-act="close-drawer">Cerrar</button>`));
+}
+
+/* ---------- acciones ---------- */
+document.addEventListener('click', e => {
+  if (e.target.closest('#lightbox')) return closeZoom();
+  const im = e.target.closest('img');
+  if (im && im.closest('#app, #drawer') && im.getAttribute('src')) {
+    return openZoom(im.currentSrc || im.src, imgCaption(im));
+  }
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const a = el.dataset.act, id = el.dataset.id, i = +el.dataset.i;
+  const P = () => DB.products.find(p => p.id === id);
+
+  if (a === 'close-zoom') return closeZoom();
+  if (a === 'edit') return openProduct(id);
+  if (a === 'new') return openProduct(null);
+  if (a === 'close-drawer') return closeDrawer();
+  if (a === 'dup') {
+    const p = clone(P()); p.id = uid('prd'); p.name += ' (copia)'; p.status = 'draft'; p.webId = ''; p.excelRow = null;
+    DB.products.push(p); save(); render(); return toast('Producto duplicado');
+  }
+  if (a === 'toggle') {
+    const p = P(); p.status = p.status === 'published' ? 'paused' : 'published'; p.updatedAt = today();
+    save(); render(); return toast(p.status === 'published' ? 'Publicado en la tienda' : 'Pausado');
+  }
+  if (a === 'del') {
+    if (!confirm('¿Eliminar «' + P().name + '»? Esta acción no se puede deshacer.')) return;
+    DB.products = DB.products.filter(p => p.id !== id); save(); render(); return toast('Producto eliminado');
+  }
+  if (a === 'bulk-publish') {
+    const r = readyToPublish(); if (!r.length) return toast('No hay borradores con stock');
+    r.forEach(p => p.status = 'published'); save(); render(); return toast(r.length + ' productos publicados');
+  }
+  if (a === 'add-color') { UI.draft.colors.push({ name: '', hex: '#cccccc', active: true }); return renderProductDrawer(); }
+  if (a === 'del-color') { UI.draft.colors.splice(i, 1); return renderProductDrawer(); }
+  if (a === 'set-main') { UI.draft.photos.forEach((ph, j) => ph.main = j === i); return renderProductDrawer(); }
+  if (a === 'del-photo') { UI.draft.photos.splice(i, 1); return renderProductDrawer(); }
+  if (a === 'add-photo') {
+    const v = ($('#newphoto') || {}).value; if (!v) return;
+    UI.draft.photos.push({ url: v, alt: '', main: !UI.draft.photos.length });
+    return renderProductDrawer();
+  }
+  if (a === 'save-product') return saveProduct();
+  if (a === 'stock-move') return openStockMove();
+  if (a === 'save-move') return saveMove();
+  if (a === 'order-view') return openOrder(id);
+  if (a === 'order-new') return openNewOrder();
+  if (a === 'forder') { UI.fOrder = el.dataset.v; return render(); }
+  if (a === 'add-line') { UI.draft.lines.push({ productId: '', size: 'M', qty: 1, price: 0 }); return renderNewOrder(); }
+  if (a === 'del-line') { UI.draft.lines.splice(i, 1); return renderNewOrder(); }
+  if (a === 'save-order') return saveOrder();
+  if (a === 'order-status') {
+    const o = DB.orders.find(x => x.id === id); o.status = el.dataset.s;
+    if (o.status === 'entregado') o.paid = o.total;
+    save(); openOrder(id); render(); return toast('Pedido ' + o.status);
+  }
+  if (a === 'client-new') return openClient(null);
+  if (a === 'client-edit') return openClient(id);
+  if (a === 'save-client') return saveClient();
+  if (a === 'coupon-new') return openCoupon(null);
+  if (a === 'coupon-edit') return openCoupon(id);
+  if (a === 'save-coupon') return saveCoupon();
+  if (a === 'pay-new') return openPay(null);
+  if (a === 'pay-for') return openPay(id);
+  if (a === 'save-pay') return savePay();
+  if (a === 'export') return openExport();
+  if (a === 'dl-json') return download('catalog.json', JSON.stringify(catalog(), null, 2));
+  if (a === 'dl-js') return download('products.js', '// Catálogo generado por el panel — ' + today() + '\n\nexport const products = ' + JSON.stringify(catalog(), null, 2) + ';\n');
+  if (a === 'dl-csv') return download('stock.csv', 'sku;producto;talle;stock\n' + DB.products.flatMap(p => (p.sizes || []).map(s => [p.sku, p.name, s.size, s.stock].join(';'))).join('\n'), 'text/csv;charset=utf-8');
+  if (a === 'copy-json') { navigator.clipboard.writeText(JSON.stringify(catalog(), null, 2)); return toast('JSON copiado'); }
+  if (a === 'sync-info') return openSync();
+  if (a === 'reset-demo') {
+    if (!confirm('¿Volver al estado inicial? Se pierden los cambios de este navegador.')) return;
+    localStorage.removeItem(KEY); DB = clone(window.SEED); save(true); render(); return toast('Datos restablecidos');
+  }
+});
+
+function openSync() {
+  openDrawer('sync', drawerShell('Cómo se sincroniza', 'Del panel a la web, sin planillas', `
+    <div class="sect"><h4>Hoy (prototipo)</h4>
+      <p class="small">El panel guarda el catálogo y exporta <code>catalog.json</code>. La web lo toma al compilar. Sirve para ordenar el catálogo, pero el stock no se mueve solo.</p></div>
+    <div class="sect"><h4>Con base de datos (recomendado)</h4>
+      <p class="small">El panel escribe en una base (Supabase o Postgres en Vercel). La tienda lee los productos y el stock desde la misma base:</p>
+      <ul class="small" style="line-height:1.8">
+        <li>Al crear o editar un producto, la web lo muestra al instante.</li>
+        <li>Al confirmarse un pago, el webhook de MercadoPago descuenta el talle vendido.</li>
+        <li>Si el stock llega a 0, el producto pasa a «agotado» sin tocarlo a mano.</li>
+        <li>Los pedidos web caen en la pestaña Pedidos con su estado de pago.</li>
+      </ul></div>
+    <div class="sect"><h4>Qué falta definir</h4>
+      <p class="small">Dónde vive la base, quién tiene acceso al panel y si el depósito se sigue cargando desde el Excel o directo en el panel.</p></div>
+  `, `<button class="btn" data-act="close-drawer">Cerrar</button>`));
+}
+
+/* ---------- guardado ---------- */
+function saveProduct() {
+  const p = UI.draft;
+  if (!p.name.trim()) return toast('El producto necesita un nombre', true);
+  p.name = p.name.trim();
+  p.slug = p.slug || p.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  p.updatedAt = today();
+  if (p.status === 'published' && (p.price == null || !(p.photos || []).length)) {
+    const falta = p.price == null ? 'precio' : 'foto';
+    if (!confirm('Al producto le falta ' + falta + '. ¿Publicarlo igual?')) return;
+  }
+  const idx = DB.products.findIndex(x => x.id === p.id);
+  if (idx >= 0) DB.products[idx] = p; else DB.products.push(p);
+  save(); closeDrawer(); render(); toast('Producto guardado');
+}
+function saveMove() {
+  const f = new FormData($('#f-move'));
+  const p = DB.products.find(x => x.id === f.get('productId'));
+  const size = f.get('size'), type = f.get('type'), qty = +f.get('qty') || 0;
+  const it = p.sizes.find(s => s.size === size) || (p.sizes.push({ size, stock: 0 }), p.sizes[p.sizes.length - 1]);
+  if (type === 'entrada') it.stock = (+it.stock || 0) + qty;
+  if (type === 'salida') it.stock = Math.max(0, (+it.stock || 0) - qty);
+  if (type === 'ajuste') it.stock = qty;
+  DB.movements.push({ id: uid('MOV'), date: f.get('date'), productId: p.id, size, type, qty,
+    motive: f.get('motive'), note: f.get('note') });
+  save(); closeDrawer(); render(); toast('Stock actualizado');
+}
+function saveOrder() {
+  const o = UI.draft;
+  const client = DB.clients.find(c => c.id === o.clientId);
+  o.clientName = client ? client.name : (o.clientName || 'Cliente ocasional');
+  o.total = (o.lines || []).reduce((a, l) => a + l.qty * l.price, 0) - (o.discount || 0) + (o.shippingCost || 0);
+  if (!(o.lines || []).length) return toast('Agregá al menos un ítem', true);
+  if (o.total <= 0) return toast('El pedido no puede tener total 0: cargá el precio del ítem', true);
+  o.paid = 0;
+  o.payment = { method: '', status: 'pendiente' };
+  o.shipping = { method: 'Retiro', status: '' };
+  if (o.deduct) o.lines.forEach(l => {
+    const p = DB.products.find(x => x.id === l.productId); if (!p) return;
+    const it = p.sizes.find(s => s.size === l.size); if (it) it.stock = Math.max(0, it.stock - l.qty);
+    DB.movements.push({ id: uid('MOV'), date: o.date, productId: p.id, size: l.size, type: 'salida', qty: l.qty, motive: 'Venta', note: o.id });
+  });
+  delete o.deduct;
+  DB.orders.push(o);
+  save(); closeDrawer(); render(); toast('Pedido creado');
+}
+function saveClient() {
+  const c = UI.draft;
+  if (!c.name.trim()) return toast('Falta el nombre', true);
+  const idx = DB.clients.findIndex(x => x.id === c.id);
+  if (idx >= 0) DB.clients[idx] = c; else DB.clients.push(c);
+  save(); closeDrawer(); render(); toast('Cliente guardado');
+}
+function saveCoupon() {
+  const c = UI.draft;
+  if (!c.code.trim()) return toast('Falta el código', true);
+  c.code = c.code.trim().toUpperCase();
+  const idx = DB.coupons.findIndex(x => x.id === c.id);
+  if (idx >= 0) DB.coupons[idx] = c; else DB.coupons.push(c);
+  save(); closeDrawer(); render(); toast('Cupón guardado');
+}
+function savePay() {
+  const f = new FormData($('#f-pay'));
+  const o = DB.orders.find(x => x.id === UI.payOrder);
+  const amount = +f.get('amount') || 0;
+  DB.payments.push({ id: nextId('COB-', DB.payments), date: f.get('date'),
+    orderId: o ? o.id : '', clientId: o ? o.clientId : '', amount, method: f.get('method'), account: '', ref: f.get('ref') });
+  if (o) { o.paid = (+o.paid || 0) + amount; if (o.paid >= o.total - 1) { o.payment.status = 'pagado'; if (o.status === 'pendiente') o.status = 'pagado'; } else o.payment.status = 'parcial'; }
+  save(); closeDrawer(); render(); toast('Cobro registrado');
+}
+
+/* ---------- eventos de formulario ---------- */
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'q') {
+    UI.q = t.value; const pos = t.selectionStart;
+    render(); const n = $('#q'); if (n) { n.focus(); n.setSelectionRange(pos, pos); }
+    return;
+  }
+  if (t.dataset.stock) {
+    const [pid, size] = t.dataset.stock.split('|');
+    const p = DB.products.find(x => x.id === pid);
+    const it = p.sizes.find(s => s.size === size) || (p.sizes.push({ size, stock: 0 }), p.sizes[p.sizes.length - 1]);
+    it.stock = Math.max(0, +t.value || 0);
+    save(true);
+    const tr = t.closest('tr'); const tot = tr.querySelector('.rowtotal');
+    if (tot) tot.textContent = totalStock(p);
+    refreshStockTotals();
+    return;
+  }
+  if (t.dataset.b && UI.draft) {
+    let v = t.type === 'checkbox' ? t.checked : t.value;
+    if (t.type === 'number') v = v === '' ? null : +v;
+    if (t.dataset.b === 'cuidados') { setPath(UI.draft, 'description.cuidados', v.split('\n').map(x => x.trim()).filter(Boolean)); return; }
+    setPath(UI.draft, t.dataset.b, v);
+    if (t.dataset.b === 'clientId') {
+      const c = DB.clients.find(x => x.id === v); if (c) UI.draft.clientName = c.name;
+    }
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'fstatus') { UI.fStatus = t.value; return render(); }
+  if (t.id === 'fcat') { UI.fCat = t.value; return render(); }
+  if (t.id === 'fstock') { UI.fStock = t.value; return render(); }
+  if (t.dataset.b && UI.draft && !t.dataset.lf) {
+    let v = t.type === 'checkbox' ? t.checked : t.value;
+    if (t.type === 'number') v = v === '' ? null : +v;
+    setPath(UI.draft, t.dataset.b, v);
+    if (t.dataset.b === 'clientId') {
+      const c = DB.clients.find(x => x.id === v);
+      if (c) { UI.draft.clientName = c.name; const inp = document.querySelector('[data-b="clientName"]'); if (inp) inp.value = c.name; }
+    }
+  }
+  if (t.dataset.lf === 'productId') {
+    const p = DB.products.find(x => x.id === t.value);
+    const i = +t.dataset.line;
+    UI.draft.lines[i].productId = t.value;
+    if (p && p.price != null) UI.draft.lines[i].price = p.price;
+    const first = (p.sizes || []).find(s => s.stock > 0); if (first) UI.draft.lines[i].size = first.size;
+    return renderNewOrder();
+  }
+  if (t.id === 'upload' && t.files && t.files[0]) {
+    const f = t.files[0];
+    if (f.size > 700000) return toast('Imagen muy pesada (máx. 700 KB)', true);
+    const r = new FileReader();
+    r.onload = () => { UI.draft.photos.push({ url: r.result, alt: f.name, main: !UI.draft.photos.length }); renderProductDrawer(); };
+    r.readAsDataURL(f);
+  }
+});
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === 'f-content') {
+    const d = Object.fromEntries(new FormData(f));
+    d.announceOn = f.announceOn.checked;
+    DB.content = d; save(); render(); return toast('Contenido guardado');
+  }
+  if (f.id === 'f-settings') {
+    DB.settings = { ...(DB.settings || {}), ...Object.fromEntries(new FormData(f)) };
+    save(); render(); return toast('Datos guardados');
+  }
+  if (f.id === 'f-shipping') {
+    const d = Object.fromEntries(new FormData(f));
+    DB.settings = { ...(DB.settings || {}), ...d, mpOn: f.mpOn.checked, cashOn: f.cashOn.checked };
+    save(); render(); return toast('Envíos y pagos guardados');
+  }
+});
+
+/* ---------- init ---------- */
+DB.content = DB.content || {};
+DB.settings = DB.settings || {};
+DB.orders.forEach(o => { o.status = String(o.status || 'pendiente').toLowerCase(); });
+DB.products.forEach(p => { p.status = String(p.status || 'draft').toLowerCase(); });
+$('#scrim').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if ($('#lightbox').classList.contains('on')) return closeZoom();
+    closeDrawer();
+  }
+});
+if (!location.hash) location.hash = '#resumen';
+render();
+
+</script>
+</body>
+</html>

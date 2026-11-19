@@ -7,6 +7,7 @@ import {
   MapPin, Copy, CheckCheck, Clock
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { getSizeStatus } from '../utils/sizeStatus';
 
 const promoJacketsList = [
   {
@@ -621,6 +622,18 @@ export default function CartDrawer({
                             <span className="text-[11px] font-semibold text-neutral-600 bg-white px-2 py-0.5 rounded border border-neutral-200">
                               Talle: <strong>{item.selectedSize}</strong>
                             </span>
+                            {(() => {
+                              const sizeObj = item.sizes?.find(s => s.size === item.selectedSize);
+                              if (getSizeStatus(sizeObj) === 'a-pedido') {
+                                return (
+                                  <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex items-center gap-1">
+                                    <Clock size={10} className="text-amber-600" />
+                                    A pedido
+                                  </span>
+                                );
+                              }
+                              return null;
+                            })()}
                           </div>
                         </div>
 
@@ -1107,16 +1120,26 @@ export default function CartDrawer({
 
                 {/* Detalle por prenda */}
                 <div className="space-y-1.5 py-1">
-                  {cartItems.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-start text-neutral-700">
-                      <span className="pr-2 leading-snug">
-                        <strong>{item.quantity}x</strong> {item.name} <span className="text-teal-900 font-bold">({item.selectedSize})</span>
-                      </span>
-                      <span className="font-bold text-neutral-900 flex-shrink-0">
-                        ${(item.price * item.quantity).toLocaleString('es-AR')},00
-                      </span>
-                    </div>
-                  ))}
+                  {cartItems.map((item, idx) => {
+                    const sizeObj = item.sizes?.find(s => s.size === item.selectedSize);
+                    const isAPedido = getSizeStatus(sizeObj) === 'a-pedido';
+                    return (
+                      <div key={idx} className="flex justify-between items-start text-neutral-700">
+                        <span className="pr-2 leading-snug">
+                          <strong>{item.quantity}x</strong> {item.name}{" "}
+                          <span className="text-teal-900 font-bold">({item.selectedSize})</span>
+                          {isAPedido && (
+                            <span className="ml-1 text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded inline-block">
+                              A pedido
+                            </span>
+                          )}
+                        </span>
+                        <span className="font-bold text-neutral-900 flex-shrink-0">
+                          ${(item.price * item.quantity).toLocaleString('es-AR')},00
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="pt-2 border-t border-neutral-200 space-y-1.5 text-neutral-600">

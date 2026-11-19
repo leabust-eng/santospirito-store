@@ -1,5 +1,6 @@
 import React from 'react';
 import { Eye, ShoppingBag, Sparkles, Star } from 'lucide-react';
+import { getSizeStatus } from '../utils/sizeStatus';
 
 export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
   const installmentAmount = Math.round(product.price / 3);
@@ -123,18 +124,23 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
         <div className="pt-1 flex items-center justify-between">
           <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
             <span className="text-[10px] text-neutral-400 font-semibold mr-1">Talles:</span>
-            {product.sizes.map((s) => (
-              <span 
-                key={s.size} 
-                className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
-                  s.stock > 0 
-                    ? "border-neutral-200 text-neutral-700 bg-neutral-50" 
-                    : "border-neutral-100 text-neutral-300 line-through"
-                }`}
-              >
-                {s.size}
-              </span>
-            ))}
+            {(product.sizes || []).map((s) => {
+              const status = getSizeStatus(s);
+              return (
+                <span
+                  key={s.size}
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                    status === "agotado"
+                      ? "border-neutral-100 text-neutral-300 line-through"
+                      : status === "a-pedido"
+                      ? "border-dashed border-teal-600 text-teal-700 bg-white"
+                      : "border-neutral-200 text-neutral-700 bg-neutral-50"
+                  }`}
+                >
+                  {s.size}
+                </span>
+              );
+            })}
           </div>
         </div>
 

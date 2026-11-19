@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   X, Star, CreditCard, Truck, ShieldCheck, Ruler, 
-  Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw,
+  Check, ArrowRight, Share2, AlertCircle, Sparkles, RefreshCw, Clock,
   ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Maximize2, Move
 } from 'lucide-react';
 import ProductReviewsSection from './ProductReviewsSection';
 import { getProductReviews } from '../data/productReviews';
+import { getSizeStatus } from '../utils/sizeStatus';
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -22,7 +23,8 @@ export default function ProductDetailModal({
   if (!product) return null;
 
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0]?.size || "S");
+  const firstAvailableSize = product.sizes?.find(s => getSizeStatus(s) !== 'agotado')?.size || product.sizes?.[0]?.size || 'S';
+  const [selectedSize, setSelectedSize] = useState(firstAvailableSize);
   const [quantity, setQuantity] = useState(1);
   const [postalCode, setPostalCode] = useState('');
   const [shippingQuote, setShippingQuote] = useState(null);
@@ -474,7 +476,8 @@ export default function ProductDetailModal({
 
                   <div className="grid grid-cols-5 sm:grid-cols-6 gap-2">
                     {(product.sizes || []).map((s) => {
-                      const isAvailable = s.stock > 0;
+                      const status = getSizeStatus(s);
+                      const isAvailable = status !== "agotado";
                       const isSelected = selectedSize === s.size;
                       return (
                         <button
@@ -484,9 +487,11 @@ export default function ProductDetailModal({
                           className={`py-2 text-xs font-bold rounded-lg border transition ${
                             isSelected
                               ? "bg-teal-900 border-teal-900 text-white shadow-md ring-2 ring-teal-700/30"
-                              : isAvailable
-                              ? "bg-white border-neutral-300 text-neutral-800 hover:border-neutral-500 hover:bg-neutral-50"
-                              : "bg-neutral-100 border-neutral-200 text-neutral-300 cursor-not-allowed line-through"
+                              : status === "agotado"
+                              ? "bg-neutral-100 border-neutral-200 text-neutral-300 cursor-not-allowed line-through"
+                              : status === "a-pedido"
+                              ? "bg-white border-dashed border-teal-700 text-teal-800 hover:bg-teal-50"
+                              : "bg-white border-neutral-300 text-neutral-800 hover:border-neutral-500 hover:bg-neutral-50"
                           }`}
                         >
                           {s.size}
@@ -496,9 +501,23 @@ export default function ProductDetailModal({
                   </div>
 
                   {currentSizeObj && (
-                    <p className="text-[11px] text-neutral-500 mt-1.5 flex items-center gap-1">
-                      <Check size={12} className="text-emerald-600" />
-                      <span>Stock disponible para entrega inmediata ({currentSizeObj.stock} unidades en talle {selectedSize}).</span>
+                    <p className="text-[11px] mt-1.5 flex items-center gap-1">
+                      {getSizeStatus(currentSizeObj) === "a-pedido" ? (
+                        <>
+                          <Clock size={12} className="text-amber-600" />
+                          <span className="text-amber-800 font-semibold">A pedido — listo en 7 días hábiles</span>
+                        </>
+                      ) : getSizeStatus(currentSizeObj) === "en-stock" ? (
+                        <>
+                          <Check size={12} className="text-emerald-600" />
+                          <span className="text-neutral-600">En stock — se despacha en 24 h</span>
+                        </>
+                      ) : (
+                        <>
+                          <AlertCircle size={12} className="text-red-600" />
+                          <span className="text-red-700 font-semibold">Agotado</span>
+                        </>
+                      )}
                     </p>
                   )}
                 </div>

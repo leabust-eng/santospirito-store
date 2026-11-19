@@ -1,4 +1,5 @@
 // Catálogo oficial de SantoSpirito - Confección prémium en Spandex y gabardina elastizada
+import { SIZES_REAL } from './sizesReal';
 
 export const products = [
   // 1. AMBO TRICOLOR MENTA & BLANCO (Carousel Slide 2)
@@ -27,12 +28,12 @@ export const products = [
       { name: "Verde Menta Puro", hex: "#a8e6cf", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 7 },
-      { size: "M", stock: 10 },
-      { size: "L", stock: 8 },
-      { size: "XL", stock: 5 },
-      { size: "XXL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "Ambo exclusivo de alta costura que fusiona tres bloques de color estratégicos. La chaqueta estiliza la figura gracias al contraste superior en blanco y la base fresca en verde menta.",
@@ -73,12 +74,12 @@ export const products = [
       { name: "Azul Marino Sólido", hex: "#1e3a5f", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 4 },
-      { size: "S", stock: 8 },
-      { size: "M", stock: 12 },
-      { size: "L", stock: 7 },
-      { size: "XL", stock: 4 },
-      { size: "XXL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "El balance perfecto entre la serenidad del celeste clínico y la formalidad del azul náutico. Diseñado para médicas, enfermeras y odontólogas que buscan elegancia y funcionalidad.",
@@ -118,12 +119,12 @@ export const products = [
       { name: "Negro Azabache", hex: "#1f2022", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 6 },
-      { size: "M", stock: 9 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 3 },
-      { size: "XXL", stock: 1 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "Un estilo sofisticado inspirado en las pasarelas europeas. Combina un tono camel cálido con detalles en negro intenso.",
@@ -160,11 +161,11 @@ export const products = [
       { name: "Rosa Pastel", hex: "#f0c3cb", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 2 },
-      { size: "S", stock: 6 },
-      { size: "M", stock: 8 },
-      { size: "L", stock: 5 },
-      { size: "XL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "La vanguardia del diseño urbano aplicada a la indumentaria de salud. El verde oliva otorga presencia mientras los vivos rosa suavizan el diseño.",
@@ -178,12 +179,12 @@ export const products = [
   // 5. AMBO AZUL QUIRÚRGICO (Carousel Slide 5)
   {
     id: "ambo-azul-quirurgico",
-    slug: "ambo-azul-quirurgico",
-    name: "AMBO AZUL QUIRÚRGICO ALTA RESISTENCIA",
-    tagline: "Azul eléctrico vibrante en tela técnica de alta densidad que resiste lavados intensivos",
+    slug: "azzuro-francia-completa",
+    name: "AZZURO Francia completa",
+    tagline: "Azul Francia intenso en tela técnica de alta resistencia",
     gender: "Unisex",
     category: "Ambos Unisex",
-    subCategory: "Quirúrgicos",
+    subCategory: "Azul Francia",
     fabric: "Arciel / Spandex Técnico",
     price: 115000,
     originalPrice: 130000,
@@ -197,16 +198,15 @@ export const products = [
       "/products/ambo-azul-quirurgico-pose.jpg"
     ],
     colors: [
-      { name: "Azul Quirúrgico Clásico", hex: "#185adb", inStock: true },
-      { name: "Azul Marino", hex: "#0a1931", inStock: true }
+      { name: "Azul Francia", hex: "#0055a5", inStock: true }
     ],
     sizes: [
-      { size: "S", stock: 8 },
-      { size: "M", stock: 15 },
-      { size: "L", stock: 12 },
-      { size: "XL", stock: 8 },
-      { size: "XXL", stock: 5 },
-      { size: "3XL", stock: 3 }
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" },
+      { size: "3XL" }
     ],
     description: {
       intro: "Diseñado para resistir largas jornadas de guardia, quirófano o clínica veterinaria. Tela que no destiñe ni pierde elasticidad.",
@@ -243,11 +243,11 @@ export const products = [
       { name: "Negro Sólido", hex: "#1e1e1e", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 7 },
-      { size: "M", stock: 11 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 3 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "La tendencia jogger en su máxima expresión. Pantalón con botamangas elastizadas para un look moderno y comodidad inigualable al caminar.",
@@ -284,11 +284,11 @@ export const products = [
       { name: "Verde Oliva", hex: "#556b2f", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 5 },
-      { size: "M", stock: 8 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "Para profesionales que no temen destacar. La energía del color magenta fusionada con la sobriedad del oliva crea un look único en cualquier consultorio.",
@@ -324,11 +324,11 @@ export const products = [
       { name: "Tricolor Detalle Técnico", hex: "#4a707a", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 4 },
-      { size: "S", stock: 8 },
-      { size: "M", stock: 10 },
-      { size: "L", stock: 7 },
-      { size: "XL", stock: 4 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "El modelo preferido para quienes necesitan practicidad absoluta en guardias. Sus bolsillos anatómicos permiten guardar celulares grandes, termómetros y lapiceras sin deformar la prenda.",
@@ -365,11 +365,11 @@ export const products = [
       { name: "Bordeaux Puro", hex: "#6b172a", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 6 },
-      { size: "M", stock: 9 },
-      { size: "L", stock: 5 },
-      { size: "XL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "Destacado en nuestra comunidad oficial de Facebook. Un diseño dulce pero con personalidad gracias a los vivos profundos en bordeaux.",
@@ -406,11 +406,11 @@ export const products = [
       { name: "Celeste Sanitario", hex: "#7ba7bc", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 2 },
-      { size: "S", stock: 5 },
-      { size: "M", stock: 8 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 3 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "Confeccionado con telas importadas de primera calidad que garantizan caída impecable y cero arrugas durante el turno.",
@@ -446,11 +446,11 @@ export const products = [
       { name: "Azul Francia Vibrante", hex: "#0055a5", inStock: true }
     ],
     sizes: [
-      { size: "S", stock: 6 },
-      { size: "M", stock: 10 },
-      { size: "L", stock: 9 },
-      { size: "XL", stock: 5 },
-      { size: "XXL", stock: 3 }
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "Directamente de las publicaciones más aclamadas de nuestro Facebook. El Azul Francia es un clásico renovado con elasticidad multidireccional.",
@@ -487,11 +487,11 @@ export const products = [
       { name: "Verde Seco Flex", hex: "#7a8b7b", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 7 },
-      { size: "M", stock: 9 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 3 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "La máxima innovación de SantoSpirito anunciada en redes sociales. Tejido Flex ultraligero que repele salpicaduras y no requiere planchado.",
@@ -528,12 +528,12 @@ export const products = [
       { name: "Bordó", hex: "#6b172a", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 4 },
-      { size: "S", stock: 8 },
-      { size: "M", stock: 12 },
-      { size: "L", stock: 6 },
-      { size: "XL", stock: 3 },
-      { size: "XXL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "Ambo femenino confeccionado en gabardina elastizada de tacto suave con detalles en plumetí traslúcido reforzado.",
@@ -570,11 +570,11 @@ export const products = [
       { name: "Azul Marino", hex: "#1e293b", inStock: true }
     ],
     sizes: [
-      { size: "S", stock: 5 },
-      { size: "M", stock: 9 },
-      { size: "L", stock: 7 },
-      { size: "XL", stock: 4 },
-      { size: "XXL", stock: 3 }
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
       intro: "Ambo diseñado para el profesional masculino. Espalda ergonómica con fuelle que facilita el movimiento de brazos al auscultar o realizar maniobras clínicas.",
@@ -610,10 +610,10 @@ export const products = [
       { name: "Blanco Puro + Azul", hex: "#ffffff", inStock: true }
     ],
     sizes: [
-      { size: "S", stock: 6 },
-      { size: "M", stock: 12 },
-      { size: "L", stock: 10 },
-      { size: "XL", stock: 4 }
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "Indispensable para estudiantes e instituciones que requieren uniforme reglamentario blanco con vivos azul marino.",
@@ -649,11 +649,11 @@ export const products = [
       { name: "Verde Seco / Sage", hex: "#7a8b7b", inStock: true }
     ],
     sizes: [
-      { size: "XS", stock: 3 },
-      { size: "S", stock: 6 },
-      { size: "M", stock: 10 },
-      { size: "L", stock: 5 },
-      { size: "XL", stock: 2 }
+      { size: "XS" },
+      { size: "S" },
+      { size: "M" },
+      { size: "L" },
+      { size: "XL" }
     ],
     description: {
       intro: "El verde seco es el tono más solicitado de la temporada por su versatilidad y armonía visual.",
@@ -662,8 +662,72 @@ export const products = [
       composicion: "97% Algodón, 3% Elastano.",
       cuidados: ["Lavar con agua fría"]
     }
+  },
+  // PIEZA SUELTA: chaqueta del conjunto Azzurro Francia (fila 54 del depósito)
+  {
+    id: "chaqueta-azzurro-francia",
+    slug: "chaqueta-azzurro-francia",
+    name: "CHAQUETA AZZURRO FRANCIA CUELLO MAO",
+    tagline: "La chaqueta del conjunto Azzurro Francia, sola",
+    gender: "Unisex",
+    category: "Chaquetas",
+    subCategory: "Azul Francia",
+    fabric: "Arciel con elastano",
+    price: 49500,
+    originalPrice: null,
+    discount: null,
+    featured: false,
+    rating: 5,
+    reviewsCount: 0,
+    badge: "PIEZA SUELTA",
+    images: ["/products/chaqueta-azzurro-francia.jpg"],
+    colors: [{ name: "Azul Francia", hex: "#0055a5", inStock: true }],
+    sizes: SIZES_REAL["chaqueta-azzurro-francia"],
+    description: {
+      intro: "Chaqueta suelta del conjunto Azzurro Francia. Se vende por separado.",
+      casaca: "Cuello mao, corte recto, dos bolsillos inferiores.",
+      pantalon: "",
+      composicion: "Arciel con elastano.",
+      cuidados: ["Lavado suave con agua fría", "Plancha tibia"]
+    }
+  },
+
+  // PIEZA SUELTA: pantalón del conjunto Azzurro Francia (fila 81 del depósito)
+  {
+    id: "pantalon-azzurro-francia",
+    slug: "pantalon-azzurro-francia",
+    name: "PANTALÓN AZZURRO FRANCIA ARCIEL ELASTIZADO",
+    tagline: "El pantalón del conjunto Azzurro Francia, solo",
+    gender: "Unisex",
+    category: "Pantalones",
+    subCategory: "Azul Francia",
+    fabric: "Arciel elastizado",
+    price: 49500,
+    originalPrice: null,
+    discount: null,
+    featured: false,
+    rating: 5,
+    reviewsCount: 0,
+    badge: "PIEZA SUELTA",
+    // TODO: foto propia del pantalón
+    images: ["/products/ambo-azul-quirurgico-pose.jpg"],
+    colors: [{ name: "Azul Francia", hex: "#0055a5", inStock: true }],
+    sizes: SIZES_REAL["pantalon-azzurro-francia"],
+    description: {
+      intro: "Pantalón suelto del conjunto Azzurro Francia. Se vende por separado.",
+      casaca: "",
+      pantalon: "Corte recto, cintura elastizada, tela Arciel elastizada.",
+      composicion: "Arciel con elastano.",
+      cuidados: ["Lavado suave con agua fría", "Plancha tibia"]
+    }
   }
 ];
+
+// El stock real del depósito manda sobre los talles cargados a mano.
+products.forEach((p) => {
+  const real = SIZES_REAL[p.id];
+  if (real) p.sizes = real;
+});
 
 export const categories = [
   {
@@ -685,5 +749,15 @@ export const categories = [
     id: "edicion-tricolor",
     name: "EDICIÓN TRICOLOR",
     subCategories: ["Menta y Blanco", "Detalle Bolsillos"]
+  },
+  {
+    id: "chaquetas",
+    name: "CHAQUETAS",
+    subCategories: []
+  },
+  {
+    id: "pantalones",
+    name: "PANTALONES",
+    subCategories: []
   }
 ];
