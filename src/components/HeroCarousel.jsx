@@ -129,6 +129,22 @@ const slides = [
     accentColor: "text-emerald-300",
     badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-400/30",
     image: "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
+  },
+  {
+    id: 9,
+    tag: "CLÁSICO & ROMÁNTICO",
+    badge: "MÁS ELEGIDO",
+    title: "ROSA PLUMETI",
+    subtitle: "Chaqueta rosa empolvada en tejido plumetí texturado con vivos bordeaux y pantalón confort a tono. Suavidad y distinción para tu día a día.",
+    highlight: "Talles M, L y XL en stock para entrega inmediata en 24 h",
+    cta: "Ver Rosa Plumeti",
+    productSlug: "ambo-plumeti-rosa",
+    categoryTarget: "Ambos Mujer",
+    colorName: "Rosa Plumeti",
+    themeBg: "from-rose-950 via-neutral-900 to-stone-950",
+    accentColor: "text-rose-300",
+    badgeBg: "bg-rose-500/20 text-rose-300 border-rose-400/30",
+    image: "/products/ambo-rosa-plumeti.jpg"
   }
 ];
 

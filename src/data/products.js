@@ -520,6 +520,7 @@ export const products = [
     reviewsCount: 38,
     badge: "MÁS VENDIDO",
     images: [
+      "/products/ambo-rosa-plumeti.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/8e88e15d99e302000e6362428e137b9f64fd5b6d004a668ddf4d02fadb4bcb56466763.jpg",
       "/products/ambo-rosita-bordeaux.jpg"
     ],
