@@ -5,13 +5,13 @@
 // "agotado" se asigna a mano cuando el modelo no se fabrica mas.
 
 export const SIZES_REAL = {
-  // fila 7 - AMBO TRICOLOR GREEN
+  // fila 9 - AMBO TRICOLOR BLUE GREEN
   "ambo-tricolor-menta-blanco": [
     { size: "XS", stock: 0, status: "a-pedido" },
     { size: "S", stock: 0, status: "a-pedido" },
     { size: "M", stock: 0, status: "a-pedido" },
     { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XL", stock: 0, status: "a-pedido" },
     { size: "XXL", stock: 0, status: "a-pedido" },
   ],
   // fila 44 - AMBO CELESTE CUELLO V

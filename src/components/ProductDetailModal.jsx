@@ -23,7 +23,7 @@ export default function ProductDetailModal({
   if (!product) return null;
 
   const [selectedImage, setSelectedImage] = useState(0);
-  const firstAvailableSize = product.sizes?.find(s => getSizeStatus(s) !== 'agotado')?.size || product.sizes?.[0]?.size || 'S';
+  const firstAvailableSize = product.sizes?.find(s => getSizeStatus(s) !== 'agotado')?.size || null;
   const [selectedSize, setSelectedSize] = useState(firstAvailableSize);
   const [quantity, setQuantity] = useState(1);
   const [postalCode, setPostalCode] = useState('');
@@ -454,7 +454,12 @@ export default function ProductDetailModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-bold uppercase tracking-wider text-neutral-700">
-                      Seleccionar Talle: <span className="text-teal-800 font-black">{selectedSize}</span>
+                      Seleccionar Talle:{" "}
+                      {selectedSize ? (
+                        <span className="text-teal-800 font-black">{selectedSize}</span>
+                      ) : (
+                        <span className="text-red-700 font-bold">Sin Stock</span>
+                      )}
                     </label>
 
                     <div className="flex items-center gap-2">
@@ -487,10 +492,10 @@ export default function ProductDetailModal({
                           disabled={!isAvailable}
                           onClick={() => setSelectedSize(s.size)}
                           className={`py-2 text-xs font-bold rounded-lg border transition ${
-                            isSelected
-                              ? "bg-teal-900 border-teal-900 text-white shadow-md ring-2 ring-teal-700/30"
-                              : status === "agotado"
+                            status === "agotado"
                               ? "bg-neutral-100 border-neutral-200 text-neutral-300 cursor-not-allowed line-through"
+                              : isSelected
+                              ? "bg-teal-900 border-teal-900 text-white shadow-md ring-2 ring-teal-700/30"
                               : status === "a-pedido"
                               ? "bg-white border-dashed border-teal-700 text-teal-800 hover:bg-teal-50"
                               : "bg-white border-neutral-300 text-neutral-800 hover:border-neutral-500 hover:bg-neutral-50"
@@ -502,26 +507,24 @@ export default function ProductDetailModal({
                     })}
                   </div>
 
-                  {currentSizeObj && (
-                    <p className="text-[11px] mt-1.5 flex items-center gap-1">
-                      {getSizeStatus(currentSizeObj) === "a-pedido" ? (
-                        <>
-                          <Clock size={12} className="text-amber-600" />
-                          <span className="text-amber-800 font-semibold">A pedido — listo en 7 días hábiles</span>
-                        </>
-                      ) : getSizeStatus(currentSizeObj) === "en-stock" ? (
-                        <>
-                          <Check size={12} className="text-emerald-600" />
-                          <span className="text-neutral-600">En stock — se despacha en 24 h</span>
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle size={12} className="text-red-600" />
-                          <span className="text-red-700 font-semibold">Agotado</span>
-                        </>
-                      )}
-                    </p>
-                  )}
+                  <p className="text-[11px] mt-1.5 flex items-center gap-1">
+                    {!currentSizeObj || getSizeStatus(currentSizeObj) === "agotado" ? (
+                      <>
+                        <AlertCircle size={12} className="text-red-600" />
+                        <span className="text-red-700 font-semibold">Producto sin stock por el momento</span>
+                      </>
+                    ) : getSizeStatus(currentSizeObj) === "a-pedido" ? (
+                      <>
+                        <Clock size={12} className="text-amber-600" />
+                        <span className="text-amber-800 font-semibold">A pedido — listo en 7 días hábiles</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check size={12} className="text-emerald-600" />
+                        <span className="text-neutral-600">En stock — se despacha en 24 h</span>
+                      </>
+                    )}
+                  </p>
                 </div>
 
                 {/* Quantity and Add to Cart */}
