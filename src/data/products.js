@@ -179,8 +179,8 @@ export const products = [
   // 5. AMBO AZUL QUIRÚRGICO (Carousel Slide 5)
   {
     id: "ambo-azul-quirurgico",
-    slug: "azzuro-francia-completa",
-    name: "AZZURO Francia completa",
+    slug: "azzuro-francia",
+    name: "AZZURO FRANCIA",
     tagline: "Azul Francia intenso en tela técnica de alta resistencia",
     gender: "Unisex",
     category: "Ambos Unisex",
