@@ -72,7 +72,7 @@ const slides = [
     badge: "STOCK INMEDIATO",
     title: "TRICOLOR GREEN",
     subtitle: "Diseño moderno con chaqueta verde menta y pantalón jogger con puños elastizados. Libertad total para moverte en tu lugar de trabajo.",
-    highlight: "Última unidad en talle XL en stock para entrega inmediata en 24 h",
+    highlight: "Hasta 3 Cuotas Sin Interés • Envíos a todo el país",
     cta: "Ver TRICOLOR GREEN",
     productSlug: "ambo-menta-negro",
     categoryTarget: "Ambos Mujer",
@@ -87,15 +87,15 @@ const slides = [
     tag: "NUEVO INGRESO 2026",
     badge: "2 MODELOS DISPONIBLES",
     title: "AMBO MAGENTA Y VERDE MILITAR",
-    subtitle: "Disponible en sus 2 modelos: Chaqueta Magenta con vivos verde militar (3 u. talle XL) o Chaqueta Verde Militar con vivos magenta (1 u. talle XXL).",
-    highlight: "En stock inmediato: 3 un. Talle XL • 1 un. Talle XXL",
+    subtitle: "Disponible en sus 2 modelos: Chaqueta Magenta con vivos verde militar o Chaqueta Verde Militar con vivos magenta.",
+    highlight: "10% de ahorro directo por Transferencia Bancaria • 3 Cuotas Sin Interés",
     cta: "Ver 2 Modelos",
     productSlug: "ambo-magenta-y-verde-militar",
     categoryTarget: "Ambos Mujer",
     colorName: "Magenta y Verde Militar",
     modelPills: [
-      { name: "Chaqueta Magenta y Verde Militar", tag: "3 u. XL", hex: "#9a1f59", slug: "ambo-magenta-y-verde-militar" },
-      { name: "Chaqueta Verde Militar y Magenta", tag: "1 u. XXL", hex: "#4b5320", slug: "ambo-verde-militar-y-magenta" }
+      { name: "Chaqueta Magenta y Verde Militar", hex: "#9a1f59", slug: "ambo-magenta-y-verde-militar" },
+      { name: "Chaqueta Verde Militar y Magenta", hex: "#4b5320", slug: "ambo-verde-militar-y-magenta" }
     ],
     themeBg: "from-pink-950 via-neutral-900 to-stone-950",
     accentColor: "text-pink-300",
@@ -124,7 +124,7 @@ const slides = [
     badge: "MÁS ELEGIDO",
     title: "ROSA PLUMETI",
     subtitle: "Chaqueta rosa empolvada en tejido plumetí texturado con vivos bordeaux y pantalón confort a tono. Suavidad y distinción para tu día a día.",
-    highlight: "Talles M, L y XL en stock para entrega inmediata en 24 h",
+    highlight: "Hasta 3 Cuotas Sin Interés • Envíos a todo el país",
     cta: "Ver Rosa Plumeti",
     productSlug: "ambo-plumeti-rosa",
     categoryTarget: "Ambos Mujer",
@@ -258,9 +258,11 @@ export default function HeroCarousel({ onSelectCategory, onSelectProduct, onOpen
                   >
                     <span className="w-2.5 h-2.5 rounded-full border border-white/40 shrink-0" style={{ backgroundColor: mp.hex }} />
                     <span className="font-bold">{mp.name}</span>
-                    <span className="text-teal-300 font-semibold bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/30 text-[10px]">
-                      {mp.tag}
-                    </span>
+                    {mp.tag && (
+                      <span className="text-teal-300 font-semibold bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/30 text-[10px]">
+                        {mp.tag}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>

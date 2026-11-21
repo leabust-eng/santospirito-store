@@ -9,7 +9,7 @@ const MAGENTA_MILITAR_MODELS = [
     tagline: "Chaqueta magenta con bolsillos frontales verde militar y vivos a tono",
     hex: "#9a1f59",
     contrastHex: "#4b5320",
-    stockNote: "3 u. en talle XL en stock",
+    stockNote: "En stock para entrega inmediata",
     sizes: [
       { size: "XS", stock: 0, status: "agotado" },
       { size: "S", stock: 0, status: "agotado" },
@@ -30,7 +30,7 @@ const MAGENTA_MILITAR_MODELS = [
     tagline: "Chaqueta verde militar con vivos y pantalón en tono magenta",
     hex: "#4b5320",
     contrastHex: "#9a1f59",
-    stockNote: "1 u. en talle XXL en stock",
+    stockNote: "En stock para entrega inmediata",
     sizes: [
       { size: "XS", stock: 0, status: "agotado" },
       { size: "S", stock: 0, status: "agotado" },
