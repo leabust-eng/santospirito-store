@@ -32,14 +32,7 @@ export const SIZES_REAL = {
     { size: "XL", stock: 2, status: "en-stock" },
     { size: "XXL", stock: 0, status: "a-pedido" },
   ],
-  // fila 39 - AMBO VERDE OLIVA
-  "ambo-verde-oliva-rosa": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 1, status: "en-stock" },
-  ],
+
   // sin equivalente en el deposito
   "ambo-azul-quirurgico": [
     { size: "S", stock: 0, status: "agotado" },

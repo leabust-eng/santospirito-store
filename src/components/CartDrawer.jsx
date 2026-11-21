@@ -34,14 +34,7 @@ const promoJacketsList = [
     price: 55000,
     originalPrice: 75000
   },
-  {
-    id: "chaqueta-promo-verde-oliva",
-    name: "Chaqueta Verde Oliva & Rosa",
-    style: "Verde oliva suave con vivos rosa pastel",
-    image: "https://d22fxaf9t8d39k.cloudfront.net/a9b6ce1bd1c7323c23de5fab33c4a086f1ac731b411b63fa59537736a122db01466763.jpg",
-    price: 55000,
-    originalPrice: 75000
-  },
+
   {
     id: "chaqueta-promo-magenta-oliva",
     name: "Chaqueta Magenta & Oliva",

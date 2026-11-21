@@ -135,46 +135,7 @@ export const products = [
     }
   },
 
-  // 4. AMBO VERDE OLIVA & ROSA (Carousel Slide 4)
-  {
-    id: "ambo-verde-oliva-rosa",
-    slug: "ambo-verde-oliva-rosa",
-    name: "AMBO VERDE OLIVA & ROSA SPANDEX",
-    tagline: "Sofisticada combinación de verde oliva militar con delicados vivos en rosa pastel",
-    gender: "Mujer",
-    category: "Ambos Mujer",
-    subCategory: "Spandex",
-    fabric: "Gabardina Spandex Prémium",
-    price: 126000,
-    originalPrice: 144000,
-    discount: "13% OFF",
-    featured: true,
-    rating: 4.8,
-    reviewsCount: 31,
-    badge: "CALCE ANATÓMICO",
-    images: [
-      "https://d22fxaf9t8d39k.cloudfront.net/a9b6ce1bd1c7323c23de5fab33c4a086f1ac731b411b63fa59537736a122db01466763.jpg",
-      "/products/ambo-verde-oliva-rosa-sentada.jpg"
-    ],
-    colors: [
-      { name: "Verde Oliva + Rosa Pastel", hex: "#556b2f", inStock: true },
-      { name: "Rosa Pastel", hex: "#f0c3cb", inStock: true }
-    ],
-    sizes: [
-      { size: "XS" },
-      { size: "S" },
-      { size: "M" },
-      { size: "L" },
-      { size: "XL" }
-    ],
-    description: {
-      intro: "La vanguardia del diseño urbano aplicada a la indumentaria de salud. El verde oliva otorga presencia mientras los vivos rosa suavizan el diseño.",
-      casaca: "Casaca con corte anatómico, bolsillo superior y dos bolsillos inferiores profundos.",
-      pantalon: "Pantalón verde oliva recto con cintura elastizada confort.",
-      composicion: "Spandex de alta densidad 97% algodón, 3% elastano.",
-      cuidados: ["Lavado suave con agua fría", "Plancha tibia"]
-    }
-  },
+
 
   // 5. AMBO AZUL QUIRÚRGICO (Carousel Slide 5)
   {
@@ -644,7 +605,6 @@ export const products = [
     badge: "COLOR TENDENCIA",
     images: [
       "/products/ambo-verde-seco.jpg",
-      "/products/ambo-verde-oliva-rosa-sentada.jpg"
     ],
     colors: [
       { name: "Verde Seco / Sage", hex: "#7a8b7b", inStock: true }

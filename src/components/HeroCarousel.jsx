@@ -50,24 +50,8 @@ const slides = [
     badgeBg: "bg-amber-500/20 text-amber-300 border-amber-400/30",
     image: "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg"
   },
-  {
+    {
     id: 4,
-    tag: "LÍNEA URBANA & VANGUARDIA",
-    badge: "CALCE ANATÓMICO",
-    title: "AMBO VERDE OLIVA & ROSA",
-    subtitle: "Sofisticada combinación de verde oliva militar con delicados vivos en rosa pastel. Pantalón recto elastizado con cintura confort.",
-    highlight: "Cambio de talle fácil y garantizado",
-    cta: "Ver Modelo Oliva",
-    productSlug: "ambo-verde-oliva-rosa",
-    categoryTarget: "Ambos Mujer",
-    colorName: "Oliva & Rosa",
-    themeBg: "from-emerald-950 via-stone-900 to-neutral-950",
-    accentColor: "text-emerald-300",
-    badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-400/30",
-    image: "https://d22fxaf9t8d39k.cloudfront.net/a9b6ce1bd1c7323c23de5fab33c4a086f1ac731b411b63fa59537736a122db01466763.jpg"
-  },
-  {
-    id: 5,
     tag: "LÍNEA QUIRÚRGICA & GUARDIA",
     badge: "GABARDINA REFORZADA",
     title: "AZZURO FRANCIA",
@@ -83,7 +67,7 @@ const slides = [
     image: "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg"
   },
   {
-    id: 6,
+    id: 5,
     tag: "ESTILO JOGGER & CONFORT",
     badge: "STOCK INMEDIATO",
     title: "TRICOLOR GREEN",
@@ -99,7 +83,7 @@ const slides = [
     image: "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg"
   },
   {
-    id: 7,
+    id: 6,
     tag: "NUEVO INGRESO 2026",
     badge: "PALETA VIBRANTE",
     title: "AMBO MAGENTA & OLIVA",
@@ -115,7 +99,7 @@ const slides = [
     image: "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg"
   },
   {
-    id: 8,
+    id: 7,
     tag: "DETALLE DE ALTA COSTURA",
     badge: "DETALLES REFORZADOS",
     title: "BOLSILLOS ANATÓMICOS TRICOLOR",
@@ -131,7 +115,7 @@ const slides = [
     image: "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
   },
   {
-    id: 9,
+    id: 8,
     tag: "CLÁSICO & ROMÁNTICO",
     badge: "MÁS ELEGIDO",
     title: "ROSA PLUMETI",

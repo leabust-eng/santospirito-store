@@ -185,66 +185,6 @@ export const productReviewsData = {
     ]
   },
 
-  "ambo-verde-oliva-rosa": {
-    rating: 4.7,
-    totalReviews: 6,
-    reviews: [
-      {
-        id: "or-1",
-        name: "Noelia Beatriz Álvarez",
-        role: "Lic. en Enfermería",
-        location: "Tucumán",
-        stars: 5,
-        date: "23/01/2026",
-        text: "El verde oliva con rosa pastel es una combinación que no esperaba que me gustara tanto. La tela es de alta densidad, se siente firme pero no rígida. La cintura elastizada del pantalón no me marca nada después de doce horas de guardia."
-      },
-      {
-        id: "or-2",
-        name: "Yamila Soledad Ferreyra",
-        role: "Odontóloga",
-        location: "Jujuy",
-        stars: 5,
-        date: "06/03/2026",
-        text: "Los tres bolsillos de la casaca son un golazo: en el de arriba llevo la lapicera y en los de abajo el resto. El rosa de los vivos es suave, no chillón. La gabardina no se arruga, la saco de la mochila y está presentable."
-      },
-      {
-        id: "or-3",
-        name: "Melisa Anahí Cáceres",
-        role: "Veterinaria",
-        location: "Corrientes",
-        stars: 4,
-        date: "20/04/2026",
-        text: "Muy buena calidad de spandex, resistente al lavado con agua fría como recomiendan. Le bajo una estrella porque el pantalón me quedó un poco largo (mido 1,57), pero el resto impecable. El oliva es un verde militar apagado, hermoso."
-      },
-      {
-        id: "or-4",
-        name: "Gisela Mariana Toledo",
-        role: "Esteticista",
-        location: "Tucumán",
-        stars: 5,
-        date: "04/06/2026",
-        text: "Buscaba algo distinto para el spa y este ambo es lo más. El rosa pastel del vivo le saca lo serio al oliva. La tela es fresca, no transpira y el calce anatómico hace que no se vea holgado."
-      },
-      {
-        id: "or-5",
-        name: "Silvina Andrea Domínguez",
-        role: "Bioquímica",
-        location: "Entre Ríos",
-        stars: 5,
-        date: "18/07/2026",
-        text: "Lo uso en el laboratorio, entro y salgo del frío al calor, y la tela regula bien. El corte anatómico de la casaca es cómodo para trabajar con los brazos levantados. Ya lo lavé varias veces con agua fría y no perdió color."
-      },
-      {
-        id: "or-6",
-        name: "Julieta Belén Alderete",
-        role: "Enfermera",
-        location: "Tucumán",
-        stars: 5,
-        date: "01/09/2026",
-        text: "Soy fan del verde oliva y este ambo no me decepcionó. La tela tiene cuerpo, no es finita, y el rosa del vivo es discreto. La cintura elastizada me resulta cómoda en los turnos de noche, no me aprieta cuando me siento."
-      }
-    ]
-  },
 
   "ambo-azul-quirurgico": {
     rating: 4.8,
@@ -501,7 +441,7 @@ export function getProductReviews(productId, fallbackCategory = "Ambos") {
     productReviewsData["ambo-celeste-marino"].reviews[0],
     productReviewsData["ambo-beige-negro"].reviews[1],
     productReviewsData["ambo-tricolor-menta-blanco"].reviews[0],
-    productReviewsData["ambo-verde-oliva-rosa"].reviews[0],
+    productReviewsData["ambo-plumeti-rosa"].reviews[0],
     productReviewsData["ambo-menta-negro"].reviews[3],
     productReviewsData["ambo-azul-quirurgico"].reviews[0],
   ];
