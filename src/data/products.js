@@ -217,11 +217,11 @@ export const products = [
     }
   },
 
-  // 6. AMBO MENTA & NEGRO (Carousel Slide 6)
+  // 6. TRICOLOR GREEN (Carousel Slide 6)
   {
     id: "ambo-menta-negro",
-    slug: "ambo-menta-negro",
-    name: "AMBO MENTA & NEGRO ESTILO JOGGER",
+    slug: "tricolor-green",
+    name: "TRICOLOR GREEN",
     tagline: "Chaqueta verde menta con pantalón jogger negro y puños elastizados",
     gender: "Mujer",
     category: "Ambos Mujer",
@@ -239,7 +239,7 @@ export const products = [
       "/products/ambo-menta-negro-pose.jpg"
     ],
     colors: [
-      { name: "Menta Pastel + Negro", hex: "#98ddca", inStock: true },
+      { name: "Tricolor Green", hex: "#98ddca", inStock: true },
       { name: "Negro Sólido", hex: "#1e1e1e", inStock: true }
     ],
     sizes: [

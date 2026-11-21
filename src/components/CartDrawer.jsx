@@ -52,8 +52,8 @@ const promoJacketsList = [
   },
   {
     id: "chaqueta-promo-menta-negro",
-    name: "Chaqueta Menta & Negro",
-    style: "Menta sanitario con contraste negro",
+    name: "Chaqueta Tricolor Green",
+    style: "Tricolor menta con contraste negro",
     image: "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg",
     price: 55000,
     originalPrice: 75000

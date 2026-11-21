@@ -49,13 +49,20 @@ export const SIZES_REAL = {
     { size: "XXL", stock: 0, status: "agotado" },
     { size: "3XL", stock: 0, status: "agotado" },
   ],
-  // sin equivalente en el deposito
+  // fila 7 - AMBO TRICOLOR GREEN
   "ambo-menta-negro": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
+  ],
+  "tricolor-green": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
   ],
   // fila 37 - AMBO MAGENTA Y VERDE MILITAR
   "ambo-magenta-oliva": [
