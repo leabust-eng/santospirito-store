@@ -40,8 +40,9 @@ const MAGENTA_MILITAR_MODELS = [
       { size: "XXL", stock: 1, status: "en-stock" },
     ],
     images: [
-      "/products/ambo-verde-militar-magenta.jpg",
-      "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg"
+      "/products/ambo-verde-militar-magenta-sentada.png",
+      "/products/ambo-verde-militar-magenta-pie.jpg",
+      "/products/ambo-verde-militar-magenta.jpg"
     ]
   }
 ];
@@ -286,7 +287,7 @@ export const products = [
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
       "/products/ambo-magenta-oliva-pose.jpg",
-      "/products/ambo-verde-militar-magenta.jpg"
+      "/products/ambo-verde-militar-magenta-sentada.png"
     ],
     colors: [
       { name: "Chaqueta Magenta y Verde Militar", hex: "#9a1f59", inStock: true },
@@ -329,9 +330,9 @@ export const products = [
     defaultModelId: "verde-militar-magenta",
     models: MAGENTA_MILITAR_MODELS,
     images: [
-      "/products/ambo-verde-militar-magenta.jpg",
-      "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
-      "/products/ambo-magenta-oliva-pose.jpg"
+      "/products/ambo-verde-militar-magenta-sentada.png",
+      "/products/ambo-verde-militar-magenta-pie.jpg",
+      "/products/ambo-verde-militar-magenta.jpg"
     ],
     colors: [
       { name: "Chaqueta Verde Militar y Magenta", hex: "#4b5320", inStock: true },
