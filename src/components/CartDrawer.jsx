@@ -37,8 +37,8 @@ const promoJacketsList = [
 
   {
     id: "chaqueta-promo-magenta-oliva",
-    name: "Chaqueta Magenta & Oliva",
-    style: "Magenta vibrante con vivos oliva",
+    name: "Chaqueta Magenta y Verde Militar",
+    style: "Magenta vibrante con vivos verde militar",
     image: "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
     price: 55000,
     originalPrice: 75000

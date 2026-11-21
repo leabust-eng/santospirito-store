@@ -22,9 +22,26 @@ export default function ProductDetailModal({
 }) {
   if (!product) return null;
 
+  const defaultModelId = product?.defaultModelId || (product?.models && product.models.length > 0 ? product.models[0].id : null);
+  const [selectedModelId, setSelectedModelId] = useState(defaultModelId);
+
+  useEffect(() => {
+    const nextDefault = product?.defaultModelId || (product?.models && product.models.length > 0 ? product.models[0].id : null);
+    setSelectedModelId(nextDefault);
+    setSelectedImage(0);
+  }, [product?.id, product?.defaultModelId]);
+
+  const activeModel = product?.models?.find(m => m.id === selectedModelId) || null;
+  const currentSizes = activeModel?.sizes || product?.sizes || [];
+
   const [selectedImage, setSelectedImage] = useState(0);
-  const firstAvailableSize = product.sizes?.find(s => getSizeStatus(s) !== 'agotado')?.size || null;
+  const firstAvailableSize = currentSizes.find(s => getSizeStatus(s) !== 'agotado')?.size || null;
   const [selectedSize, setSelectedSize] = useState(firstAvailableSize);
+
+  useEffect(() => {
+    const firstAvail = currentSizes.find(s => getSizeStatus(s) !== 'agotado')?.size || null;
+    setSelectedSize(firstAvail);
+  }, [selectedModelId, product?.id]);
   const [quantity, setQuantity] = useState(1);
   const [postalCode, setPostalCode] = useState('');
   const [shippingQuote, setShippingQuote] = useState(null);
@@ -40,7 +57,10 @@ export default function ProductDetailModal({
   const startPosRef = useRef({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
   const hasMovedRef = useRef(false);
 
-  const images = (product.images && product.images.length > 0) ? product.images : ["/brand/og-banner.jpg"];
+  const activeImages = (activeModel?.images && activeModel.images.length > 0)
+    ? activeModel.images
+    : ((product.images && product.images.length > 0) ? product.images : ["/brand/og-banner.jpg"]);
+  const images = activeImages;
   const safeSelectedImage = selectedImage < images.length ? selectedImage : 0;
   const secondaryImage = images.length > 1 ? (safeSelectedImage === 0 ? 1 : 0) : 0;
 
@@ -203,14 +223,18 @@ export default function ProductDetailModal({
     if (!isCurrentAvailable) return;
     onAddToCart({
       ...product,
+      id: activeModel ? activeModel.id : product.id,
+      name: activeModel ? activeModel.fullName : product.name,
       selectedSize,
+      selectedColor: activeModel ? activeModel.name : (product.colors?.[0]?.name || "Único"),
+      image: images[safeSelectedImage] || images[0],
       quantity
     });
     setAddedSuccess(true);
     setTimeout(() => setAddedSuccess(false), 2000);
   };
 
-  const currentSizeObj = (product.sizes || []).find(s => s.size === selectedSize);
+  const currentSizeObj = currentSizes.find(s => s.size === selectedSize);
   const isCurrentAvailable = currentSizeObj && getSizeStatus(currentSizeObj) !== 'agotado';
 
   return createPortal(
@@ -376,7 +400,7 @@ export default function ProductDetailModal({
                   </div>
 
                   <h1 id="product-detail-title" className="text-xl sm:text-2xl font-black text-neutral-900 leading-tight">
-                    {product.name}
+                    {activeModel ? activeModel.fullName : product.name}
                   </h1>
 
                   <p className="text-xs text-neutral-500 mt-1">
@@ -427,27 +451,78 @@ export default function ProductDetailModal({
                   </button>
                 </div>
 
-                {/* Color preview */}
-                {product.colors && product.colors.length > 0 && (
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-neutral-700 block mb-2">
-                      Color / Combinación Oficial:
-                    </label>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {product.colors.map((c, i) => (
-                        <div 
-                          key={i} 
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-300 bg-white text-xs font-semibold text-neutral-800 shadow-2xs"
-                        >
-                          <span 
-                            className="w-3.5 h-3.5 rounded-full border border-black/20" 
-                            style={{ backgroundColor: c.hex }} 
-                          />
-                          <span>{c.name}</span>
-                        </div>
-                      ))}
+                {/* Selector de Modelo con Tilde si existen variantes de modelo */}
+                {product.models && product.models.length > 0 ? (
+                  <div className="bg-neutral-50 p-3 sm:p-3.5 rounded-2xl border border-neutral-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-neutral-900">
+                        Seleccionar Modelo:
+                      </label>
+                      <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                        2 Opciones Disponibles
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {product.models.map((m) => {
+                        const isSelected = selectedModelId === m.id;
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedModelId(m.id);
+                              setSelectedImage(0);
+                            }}
+                            className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl border-2 transition-all text-left ${
+                              isSelected 
+                                ? "border-teal-700 bg-white shadow-sm ring-2 ring-teal-600/20" 
+                                : "border-neutral-200 hover:border-neutral-300 bg-white/70 opacity-75 hover:opacity-100"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0 pr-1">
+                              <span 
+                                className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0 shadow-xs" 
+                                style={{ backgroundColor: m.hex }} 
+                              />
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-neutral-900 leading-snug">{m.name}</div>
+                                <div className="text-[11px] font-semibold text-emerald-700">{m.stockNote}</div>
+                              </div>
+                            </div>
+                            {isSelected ? (
+                              <div className="w-5 h-5 rounded-full bg-teal-700 text-white flex items-center justify-center shrink-0 shadow-xs">
+                                <Check size={12} strokeWidth={3} />
+                              </div>
+                            ) : (
+                              <div className="w-5 h-5 rounded-full border-2 border-neutral-300 shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
+                ) : (
+                  product.colors && product.colors.length > 0 && (
+                    <div>
+                      <label className="text-xs font-bold uppercase tracking-wider text-neutral-700 block mb-2">
+                        Color / Combinación Oficial:
+                      </label>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {product.colors.map((c, i) => (
+                          <div 
+                            key={i} 
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neutral-300 bg-white text-xs font-semibold text-neutral-800 shadow-2xs"
+                          >
+                            <span 
+                              className="w-3.5 h-3.5 rounded-full border border-black/20" 
+                              style={{ backgroundColor: c.hex }} 
+                            />
+                            <span>{c.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
                 )}
 
                 {/* Size Selector */}
@@ -482,7 +557,7 @@ export default function ProductDetailModal({
                   </div>
 
                   <div className="grid grid-cols-5 sm:grid-cols-6 gap-2">
-                    {(product.sizes || []).map((s) => {
+                    {currentSizes.map((s) => {
                       const status = getSizeStatus(s);
                       const isAvailable = status !== "agotado";
                       const isSelected = selectedSize === s.size;

@@ -433,6 +433,8 @@ export const productReviewsData = {
 
 // Función para obtener reseñas de un producto (calculando el promedio real matemáticamente con reduce)
 productReviewsData["tricolor-green"] = productReviewsData["ambo-menta-negro"];
+productReviewsData["ambo-magenta-y-verde-militar"] = productReviewsData["ambo-magenta-oliva"];
+productReviewsData["ambo-verde-militar-y-magenta"] = productReviewsData["ambo-magenta-oliva"];
 
 export function getProductReviews(productId, fallbackCategory = "Ambos") {
   const productEntry = productReviewsData[productId];

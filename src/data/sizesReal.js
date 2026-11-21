@@ -59,12 +59,31 @@ export const SIZES_REAL = {
   ],
   // fila 37 - AMBO MAGENTA Y VERDE MILITAR
   "ambo-magenta-oliva": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
     { size: "XL", stock: 3, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
+  "ambo-magenta-y-verde-militar": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 3, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 38 - AMBO VERDE MILITAR Y MAGENTA
+  "ambo-verde-militar-y-magenta": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 1, status: "en-stock" },
+  ],
+
   // sin equivalente en el deposito
   "ambo-bolsillos-anatomicos-tricolor": [
     { size: "XS", stock: 0, status: "a-pedido" },

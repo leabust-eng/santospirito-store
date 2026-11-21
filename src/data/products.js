@@ -1,6 +1,51 @@
 // Catálogo oficial de SantoSpirito - Confección prémium en Spandex y gabardina elastizada
 import { SIZES_REAL } from './sizesReal';
 
+const MAGENTA_MILITAR_MODELS = [
+  {
+    id: "magenta-verde-militar",
+    name: "Chaqueta Magenta y Verde Militar",
+    fullName: "AMBO MAGENTA Y VERDE MILITAR",
+    tagline: "Chaqueta magenta con bolsillos frontales verde militar y vivos a tono",
+    hex: "#9a1f59",
+    contrastHex: "#4b5320",
+    stockNote: "3 u. en talle XL en stock",
+    sizes: [
+      { size: "XS", stock: 0, status: "agotado" },
+      { size: "S", stock: 0, status: "agotado" },
+      { size: "M", stock: 0, status: "agotado" },
+      { size: "L", stock: 0, status: "agotado" },
+      { size: "XL", stock: 3, status: "en-stock" },
+      { size: "XXL", stock: 0, status: "agotado" },
+    ],
+    images: [
+      "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
+      "/products/ambo-magenta-oliva-pose.jpg"
+    ]
+  },
+  {
+    id: "verde-militar-magenta",
+    name: "Chaqueta Verde Militar y Magenta",
+    fullName: "AMBO VERDE MILITAR Y MAGENTA",
+    tagline: "Chaqueta verde militar con vivos y pantalón en tono magenta",
+    hex: "#4b5320",
+    contrastHex: "#9a1f59",
+    stockNote: "1 u. en talle XXL en stock",
+    sizes: [
+      { size: "XS", stock: 0, status: "agotado" },
+      { size: "S", stock: 0, status: "agotado" },
+      { size: "M", stock: 0, status: "agotado" },
+      { size: "L", stock: 0, status: "agotado" },
+      { size: "XL", stock: 0, status: "agotado" },
+      { size: "XXL", stock: 1, status: "en-stock" },
+    ],
+    images: [
+      "/products/ambo-verde-militar-magenta.jpg",
+      "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg"
+    ]
+  }
+];
+
 export const products = [
   // 1. AMBO TRICOLOR MENTA & BLANCO (Carousel Slide 2)
   {
@@ -219,12 +264,12 @@ export const products = [
     }
   },
 
-  // 7. AMBO MAGENTA & OLIVA (Carousel Slide 7)
+  // 6. AMBO MAGENTA Y VERDE MILITAR (Carousel Slide 6)
   {
     id: "ambo-magenta-oliva",
-    slug: "ambo-magenta-oliva",
-    name: "AMBO MAGENTA & OLIVA SPANDEX",
-    tagline: "Impactante chaqueta magenta con bolsillos frontales verde oliva y pantalón haciendo juego",
+    slug: "ambo-magenta-y-verde-militar",
+    name: "AMBO MAGENTA Y VERDE MILITAR",
+    tagline: "Impactante chaqueta magenta con bolsillos frontales verde oliva y pantalón anatómico haciendo juego",
     gender: "Mujer",
     category: "Ambos Mujer",
     subCategory: "Spandex",
@@ -236,27 +281,76 @@ export const products = [
     rating: 4.9,
     reviewsCount: 27,
     badge: "NUEVO INGRESO 2026",
+    defaultModelId: "magenta-verde-militar",
+    models: MAGENTA_MILITAR_MODELS,
     images: [
+      "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
+      "/products/ambo-magenta-oliva-pose.jpg",
+      "/products/ambo-verde-militar-magenta.jpg"
+    ],
+    colors: [
+      { name: "Chaqueta Magenta y Verde Militar", hex: "#9a1f59", inStock: true },
+      { name: "Chaqueta Verde Militar y Magenta", hex: "#4b5320", inStock: true }
+    ],
+    sizes: [
+      { size: "XS", stock: 0, status: "agotado" },
+      { size: "S", stock: 0, status: "agotado" },
+      { size: "M", stock: 0, status: "agotado" },
+      { size: "L", stock: 0, status: "agotado" },
+      { size: "XL", stock: 3, status: "en-stock" },
+      { size: "XXL", stock: 0, status: "agotado" }
+    ],
+    description: {
+      intro: "Para profesionales que buscan distinción y diseño. Disponible en dos variantes combinadas con chaqueta magenta o chaqueta verde militar según tu preferencia.",
+      casaca: "Casaca entallada con bolsillos frontales reforzados en contratono y cuello pikito anatómico.",
+      pantalon: "Pantalón elastizado confort con tiro medio/alto.",
+      composicion: "Spandex Premium 97% algodón, 3% elastano.",
+      cuidados: ["Lavar con agua fría", "Secar colgado"]
+    }
+  },
+
+  // 7. AMBO VERDE MILITAR Y MAGENTA
+  {
+    id: "ambo-verde-militar-y-magenta",
+    slug: "ambo-verde-militar-y-magenta",
+    name: "AMBO VERDE MILITAR Y MAGENTA",
+    tagline: "Chaqueta verde militar con vivos y detalles magenta en tela Gabardina Spandex",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 128000,
+    originalPrice: 145000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 18,
+    badge: "NUEVO INGRESO 2026",
+    defaultModelId: "verde-militar-magenta",
+    models: MAGENTA_MILITAR_MODELS,
+    images: [
+      "/products/ambo-verde-militar-magenta.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
       "/products/ambo-magenta-oliva-pose.jpg"
     ],
     colors: [
-      { name: "Magenta Intenso + Oliva", hex: "#9a1f59", inStock: true },
-      { name: "Verde Oliva", hex: "#556b2f", inStock: true }
+      { name: "Chaqueta Verde Militar y Magenta", hex: "#4b5320", inStock: true },
+      { name: "Chaqueta Magenta y Verde Militar", hex: "#9a1f59", inStock: true }
     ],
     sizes: [
-      { size: "XS" },
-      { size: "S" },
-      { size: "M" },
-      { size: "L" },
-      { size: "XL" }
+      { size: "XS", stock: 0, status: "agotado" },
+      { size: "S", stock: 0, status: "agotado" },
+      { size: "M", stock: 0, status: "agotado" },
+      { size: "L", stock: 0, status: "agotado" },
+      { size: "XL", stock: 0, status: "agotado" },
+      { size: "XXL", stock: 1, status: "en-stock" }
     ],
     description: {
-      intro: "Para profesionales que no temen destacar. La energía del color magenta fusionada con la sobriedad del oliva crea un look único en cualquier consultorio.",
-      casaca: "Casaca magenta con bolsillos de parche en verde oliva.",
-      pantalon: "Pantalón a juego con corte recto anatómico.",
-      composicion: "Gabardina Spandex de primera selección.",
-      cuidados: ["Lavar por separado las primeras 2 veces"]
+      intro: "La variante con chaqueta en verde militar otorga presencia profesional y serenidad, complementada con detalles y pantalón en tono magenta.",
+      casaca: "Casaca verde militar con bolsillos amplios reforzados y vivos magenta.",
+      pantalon: "Pantalón elastizado confort con tiro anatómico.",
+      composicion: "Spandex Premium 97% algodón, 3% elastano.",
+      cuidados: ["Lavar con agua fría", "Secar colgado"]
     }
   },
 

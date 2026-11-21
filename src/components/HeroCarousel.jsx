@@ -85,14 +85,18 @@ const slides = [
   {
     id: 6,
     tag: "NUEVO INGRESO 2026",
-    badge: "PALETA VIBRANTE",
-    title: "AMBO MAGENTA & OLIVA",
-    subtitle: "Impactante chaqueta magenta con bolsillos frontales verde oliva y pantalón anatómico haciendo juego. Calidad prémium garantizada.",
-    highlight: "10% de ahorro directo por Transferencia Bancaria",
-    cta: "Ver Magenta & Oliva",
-    productSlug: "ambo-magenta-oliva",
+    badge: "2 MODELOS DISPONIBLES",
+    title: "AMBO MAGENTA Y VERDE MILITAR",
+    subtitle: "Disponible en sus 2 modelos: Chaqueta Magenta con vivos verde militar (3 u. talle XL) o Chaqueta Verde Militar con vivos magenta (1 u. talle XXL).",
+    highlight: "En stock inmediato: 3 un. Talle XL • 1 un. Talle XXL",
+    cta: "Ver 2 Modelos",
+    productSlug: "ambo-magenta-y-verde-militar",
     categoryTarget: "Ambos Mujer",
-    colorName: "Magenta & Oliva",
+    colorName: "Magenta y Verde Militar",
+    modelPills: [
+      { name: "Chaqueta Magenta y Verde Militar", tag: "3 u. XL", hex: "#9a1f59", slug: "ambo-magenta-y-verde-militar" },
+      { name: "Chaqueta Verde Militar y Magenta", tag: "1 u. XXL", hex: "#4b5320", slug: "ambo-verde-militar-y-magenta" }
+    ],
     themeBg: "from-pink-950 via-neutral-900 to-stone-950",
     accentColor: "text-pink-300",
     badgeBg: "bg-pink-500/20 text-pink-300 border-pink-400/30",
@@ -238,6 +242,29 @@ export default function HeroCarousel({ onSelectCategory, onSelectProduct, onOpen
             <p className="text-xs sm:text-sm md:text-base text-neutral-200 font-light leading-relaxed max-w-xl drop-shadow">
               {slide.subtitle}
             </p>
+
+            {/* Model Pills if defined (e.g. 2 Modelos Magenta & Militar) */}
+            {slide.modelPills && (
+              <div className="flex flex-wrap gap-2 pt-1 pb-1">
+                {slide.modelPills.map((mp, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onSelectProduct) onSelectProduct(mp.slug || slide.productSlug);
+                    }}
+                    className="flex items-center gap-2 bg-black/60 hover:bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/25 hover:border-teal-400 text-[11px] sm:text-xs text-white transition active:scale-95 shadow-sm"
+                  >
+                    <span className="w-2.5 h-2.5 rounded-full border border-white/40 shrink-0" style={{ backgroundColor: mp.hex }} />
+                    <span className="font-bold">{mp.name}</span>
+                    <span className="text-teal-300 font-semibold bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/30 text-[10px]">
+                      {mp.tag}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Highlight with Icon */}
             <div className={`flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-wide ${slide.accentColor}`}>
