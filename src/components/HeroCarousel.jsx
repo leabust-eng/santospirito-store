@@ -104,22 +104,6 @@ const slides = [
   },
   {
     id: 7,
-    tag: "DETALLE DE ALTA COSTURA",
-    badge: "DETALLES REFORZADOS",
-    title: "BOLSILLOS ANATÓMICOS TRICOLOR",
-    subtitle: "Doble costura de seguridad, bolsillo porta-lapicera y capacidad optimizada para celular, instrumental y pertenencias de guardia.",
-    highlight: "Asesoramiento personalizado por WhatsApp",
-    cta: "Ver Detalle Tricolor",
-    productSlug: "ambo-bolsillos-anatomicos-tricolor",
-    categoryTarget: "Ambos Mujer",
-    colorName: "Detalle Tricolor",
-    themeBg: "from-slate-900 via-neutral-900 to-stone-950",
-    accentColor: "text-emerald-300",
-    badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-400/30",
-    image: "https://d22fxaf9t8d39k.cloudfront.net/23ded51650e4311d9538f582b5f873338667313e94fcd7d7603bf8d3595a3818466763.jpg"
-  },
-  {
-    id: 8,
     tag: "CLÁSICO & ROMÁNTICO",
     badge: "MÁS ELEGIDO",
     title: "ROSA PLUMETI",

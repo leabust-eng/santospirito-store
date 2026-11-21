@@ -355,7 +355,7 @@ export const products = [
     }
   },
 
-  // 8. BOLSILLOS ANATÓMICOS TRICOLOR (Carousel Slide 8)
+  // 8. BOLSILLOS ANATÓMICOS TRICOLOR
   {
     id: "ambo-bolsillos-anatomicos-tricolor",
     slug: "ambo-bolsillos-anatomicos-tricolor",
@@ -368,7 +368,7 @@ export const products = [
     price: 125000,
     originalPrice: 140000,
     discount: "11% OFF",
-    featured: true,
+    featured: false,
     rating: 5.0,
     reviewsCount: 39,
     badge: "ALTA COSTURA",
