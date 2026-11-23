@@ -139,11 +139,11 @@ export const products = [
     }
   },
 
-  // 3. AMBO BEIGE & NEGRO (Carousel Slide 3)
+  // 3. AMBO SAFIRO BEIGE C/ NEGRO (Carousel Slide 3)
   {
     id: "ambo-beige-negro",
-    slug: "ambo-beige-negro",
-    name: "AMBO BEIGE & NEGRO SPANDEX",
+    slug: "ambo-safiro-beige-negro",
+    name: "AMBO SAFIRO BEIGE C/ NEGRO",
     tagline: "La calidez del tono beige camel combinada con vivos y pantalón negro azabache",
     gender: "Mujer",
     category: "Ambos Mujer",

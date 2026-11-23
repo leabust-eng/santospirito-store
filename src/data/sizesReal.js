@@ -41,12 +41,20 @@ export const SIZES_REAL = {
   ],
   // fila 30 - AMBO SAFIRO BEIGE C/ NEGRO
   "ambo-beige-negro": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
     { size: "XL", stock: 2, status: "en-stock" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  "ambo-safiro-beige-negro": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
 
   // sin equivalente en el deposito

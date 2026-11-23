@@ -28,7 +28,7 @@ const promoJacketsList = [
   },
   {
     id: "chaqueta-promo-beige-negro",
-    name: "Chaqueta Beige & Negro",
+    name: "Chaqueta Safiro Beige c/ Negro",
     style: "Tono camel distinguido con vivos negros",
     image: "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
     price: 55000,
