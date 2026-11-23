@@ -94,11 +94,11 @@ export const products = [
     }
   },
 
-  // 2. AMBO CELESTE & AZUL MARINO (Carousel Slide 1)
+  // 2. AMBO CHIELO (Carousel Slide 1)
   {
     id: "ambo-celeste-marino",
-    slug: "ambo-celeste-marino",
-    name: "AMBO CELESTE & AZUL MARINO SPANDEX",
+    slug: "ambo-chielo",
+    name: "AMBO CHIELO",
     tagline: "Chaqueta celeste pastel con vivos azul marino y pantalón náutico anatómico",
     gender: "Mujer",
     category: "Ambos Mujer",
@@ -781,7 +781,7 @@ export const products = [
 
 // El stock real del depósito manda sobre los talles cargados a mano.
 products.forEach((p) => {
-  const real = SIZES_REAL[p.id];
+  const real = SIZES_REAL[p.id] || SIZES_REAL[p.slug];
   if (real) p.sizes = real;
 });
 

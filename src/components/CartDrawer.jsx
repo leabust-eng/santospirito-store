@@ -12,7 +12,7 @@ import { getSizeStatus } from '../utils/sizeStatus';
 const promoJacketsList = [
   {
     id: "chaqueta-promo-celeste-marino",
-    name: "Chaqueta Celeste & Marino",
+    name: "Chaqueta Chielo",
     style: "Celeste pastel con vivos azul marino",
     image: "https://d22fxaf9t8d39k.cloudfront.net/179b70366be62483d6cb18922249ffa8d6bc8ac69ea53ce461ad61101bab8f2d466763.jpg",
     price: 55000,

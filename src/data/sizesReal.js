@@ -14,14 +14,22 @@ export const SIZES_REAL = {
     { size: "XL", stock: 0, status: "a-pedido" },
     { size: "XXL", stock: 0, status: "a-pedido" },
   ],
-  // fila 44 - AMBO CELESTE CUELLO V
+  // fila 44 - AMBO CHIELO (ex AMBO CELESTE CUELLO V)
   "ambo-celeste-marino": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 1, status: "en-stock" },
-    { size: "XL", stock: 0, status: "a-pedido" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 1, status: "en-stock" },
+    { size: "M", stock: 1, status: "en-stock" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  "ambo-chielo": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 1, status: "en-stock" },
+    { size: "M", stock: 1, status: "en-stock" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
   // fila 30 - AMBO SAFIRO BEIGE C/ NEGRO
   "ambo-beige-negro": [

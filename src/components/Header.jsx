@@ -19,7 +19,8 @@ export default function Header({
     ? products.filter(p => 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.fabric.toLowerCase().includes(searchQuery.toLowerCase())
+        p.fabric.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (p.tagline || '').toLowerCase().includes(searchQuery.toLowerCase())
       ).slice(0, 5)
     : [];
 
