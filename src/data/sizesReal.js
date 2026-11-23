@@ -150,12 +150,20 @@ export const SIZES_REAL = {
   ],
   // fila 26 - AMBO PLUMETI ROSA C/ROSA
   "ambo-plumeti-rosa": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
     { size: "M", stock: 1, status: "en-stock" },
-    { size: "L", stock: 3, status: "en-stock" },
-    { size: "XL", stock: 2, status: "en-stock" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "L", stock: 1, status: "en-stock" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  "rosa-plumeti": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 1, status: "en-stock" },
+    { size: "L", stock: 1, status: "en-stock" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
   // sin equivalente en el deposito
   "ambo-hombre-gris-y-negro": [
