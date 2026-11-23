@@ -48,11 +48,11 @@ const MAGENTA_MILITAR_MODELS = [
 ];
 
 export const products = [
-  // 1. AMBO TRICOLOR MENTA & BLANCO (Carousel Slide 2)
+  // 1. AMBO TRICOLOR BLUE GREEN (Carousel Slide 2)
   {
     id: "ambo-tricolor-menta-blanco",
-    slug: "ambo-tricolor-menta-blanco",
-    name: "AMBO TRICOLOR MENTA & BLANCO SPANDEX",
+    slug: "ambo-tricolor-blue-green",
+    name: "AMBO TRICOLOR BLUE GREEN",
     tagline: "Diseño fresco y moderno que combina blanco óptico, vivos azul marino y base verde menta",
     gender: "Mujer",
     category: "Ambos Mujer",

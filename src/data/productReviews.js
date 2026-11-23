@@ -434,6 +434,7 @@ export const productReviewsData = {
 // Función para obtener reseñas de un producto (calculando el promedio real matemáticamente con reduce)
 productReviewsData["tricolor-green"] = productReviewsData["ambo-menta-negro"];
 productReviewsData["ambo-chielo"] = productReviewsData["ambo-celeste-marino"];
+productReviewsData["ambo-tricolor-blue-green"] = productReviewsData["ambo-tricolor-menta-blanco"];
 productReviewsData["ambo-magenta-y-verde-militar"] = productReviewsData["ambo-magenta-oliva"];
 productReviewsData["ambo-verde-militar-y-magenta"] = productReviewsData["ambo-magenta-oliva"];
 

@@ -7,12 +7,20 @@
 export const SIZES_REAL = {
   // fila 9 - AMBO TRICOLOR BLUE GREEN
   "ambo-tricolor-menta-blanco": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
-    { size: "XL", stock: 0, status: "a-pedido" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  "ambo-tricolor-blue-green": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
   // fila 44 - AMBO CHIELO (ex AMBO CELESTE CUELLO V)
   "ambo-celeste-marino": [

@@ -20,7 +20,7 @@ const promoJacketsList = [
   },
   {
     id: "chaqueta-promo-tricolor-menta",
-    name: "Chaqueta Tricolor Menta & Blanco",
+    name: "Chaqueta Tricolor Blue Green",
     style: "Base menta con blanco óptico y vivos",
     image: "https://d22fxaf9t8d39k.cloudfront.net/ca8312fc57ec21a391345f33020a52e030349e70a5fee4dc9806fa6e01792342466763.jpg",
     price: 55000,
