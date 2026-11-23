@@ -428,7 +428,67 @@ export const productReviewsData = {
         text: "Lo uso en rehabilitación y el bolsillo compartimentado me sirve para tener las bandas y el celular a mano. La gabardina elastizada no se pega cuando transpiro y después de lavarla queda igual."
       }
     ]
-  }
+  },
+  "ambo-plumeti-rosa": {
+    rating: 4.9,
+    totalReviews: 6,
+    reviews: [
+      {
+        id: "pr-1",
+        name: "María Florencia Morales",
+        role: "Pediatra",
+        location: "Tucumán",
+        stars: 5,
+        date: "08/04/2026",
+        text: "El detalle de plumetí en la casaca es precioso y súper delicado. A los chicos en el consultorio les encanta el color rosa pastel. Muy fresco y cómodo para estar horas de guardia."
+      },
+      {
+        id: "pr-2",
+        name: "Agustina Solís",
+        role: "Dermatóloga",
+        location: "Buenos Aires",
+        stars: 5,
+        date: "19/05/2026",
+        text: "Hermosa caída y confección impecable. La tela spandex se adapta al cuerpo sin apretar y el vivo bordeaux le da un toque distintivo y elegante. Ya pedí un segundo ambo."
+      },
+      {
+        id: "pr-3",
+        name: "Camila Denise Herrera",
+        role: "Lic. en Fonoaudiología",
+        location: "Córdoba",
+        stars: 5,
+        date: "02/06/2026",
+        text: "Es súper suave al tacto y el talle M me calzó a la perfección. No encoge al lavarlo y el color rosa empolvado se mantiene intacto. Excelente atención y envío rápido."
+      },
+      {
+        id: "pr-4",
+        name: "Julieta Valdez",
+        role: "Odontopediatra",
+        location: "Salta",
+        stars: 5,
+        date: "14/07/2026",
+        text: "El diseño plumetí rompe con el ambo tradicional sin perder la formalidad clínica. Los bolsillos frontales son bien amplios y el pantalón no marca. Un diez total."
+      },
+      {
+        id: "pr-5",
+        name: "Luciana Marisel Castro",
+        role: "Enfermera Neonatal",
+        location: "Mendoza",
+        stars: 5,
+        date: "29/08/2026",
+        text: "Trabajo en neonatología y buscaba algo suave y amigable. El tejido es muy noble, el corte estiliza y permite moverse con total agilidad. Lo recomiendo con los ojos cerrados."
+      },
+      {
+        id: "pr-6",
+        name: "Valeria Noemí Giménez",
+        role: "Médica Ginecóloga",
+        location: "Santa Fe",
+        stars: 4,
+        date: "11/09/2026",
+        text: "Calidad prémium en gabardina y terminaciones. La combinación de rosa con bordeaux queda muy distinguida. El calce es exacto a la tabla de medidas."
+      }
+    ]
+  },
 };
 
 // Función para obtener reseñas de un producto (calculando el promedio real matemáticamente con reduce)
@@ -436,25 +496,38 @@ productReviewsData["tricolor-green"] = productReviewsData["ambo-menta-negro"];
 productReviewsData["ambo-chielo"] = productReviewsData["ambo-celeste-marino"];
 productReviewsData["ambo-tricolor-blue-green"] = productReviewsData["ambo-tricolor-menta-blanco"];
 productReviewsData["ambo-safiro-beige-negro"] = productReviewsData["ambo-beige-negro"];
+productReviewsData["rosa-plumeti"] = productReviewsData["ambo-plumeti-rosa"];
 productReviewsData["ambo-magenta-y-verde-militar"] = productReviewsData["ambo-magenta-oliva"];
 productReviewsData["ambo-verde-militar-y-magenta"] = productReviewsData["ambo-magenta-oliva"];
 
 export function getProductReviews(productId, fallbackCategory = "Ambos") {
   const productEntry = productReviewsData[productId];
   
-  const reviews = productEntry?.reviews || [
-    productReviewsData["ambo-celeste-marino"].reviews[0],
-    productReviewsData["ambo-beige-negro"].reviews[1],
-    productReviewsData["ambo-tricolor-menta-blanco"].reviews[0],
-    productReviewsData["ambo-plumeti-rosa"].reviews[0],
-    productReviewsData["ambo-menta-negro"].reviews[3],
-    productReviewsData["ambo-azul-quirurgico"].reviews[0],
-  ];
+  // Reseñas del producto específico, o fallback defensivo que nunca falla
+  const fallbackReviews = [
+    productReviewsData["ambo-celeste-marino"]?.reviews?.[0],
+    productReviewsData["ambo-beige-negro"]?.reviews?.[1],
+    productReviewsData["ambo-tricolor-menta-blanco"]?.reviews?.[0],
+    productReviewsData["ambo-plumeti-rosa"]?.reviews?.[0],
+    productReviewsData["ambo-menta-negro"]?.reviews?.[3],
+    productReviewsData["ambo-azul-quirurgico"]?.reviews?.[0],
+  ].filter(Boolean);
+
+  const reviews = productEntry?.reviews || (fallbackReviews.length > 0 ? fallbackReviews : [
+    {
+      id: "fb-1",
+      name: "Colega de la Salud",
+      role: "Profesional Sanitario",
+      location: "Tucumán",
+      stars: 5,
+      date: "01/10/2026",
+      text: "Excelente confección y tela de primera calidad. Muy cómodo para guardias intensivas."
+    }
+  ]);
 
   const totalReviews = reviews.length;
   const totalStars = reviews.reduce((sum, r) => sum + r.stars, 0);
   const rawAverage = totalReviews > 0 ? totalStars / totalReviews : 5.0;
-  // Promedio matemático real exacto a 1 decimal
   const rating = parseFloat(rawAverage.toFixed(1));
 
   return {

@@ -562,7 +562,7 @@ export const products = [
   {
     id: "ambo-plumeti-rosa",
     slug: "ambo-plumeti-rosa",
-    name: "AMBO SPANDEX PLUMETÍ ROSA",
+    name: "AMBO ROSA PLUMETI",
     tagline: "El clásico más elegido: elegancia, frescura y libertad de movimiento",
     gender: "Mujer",
     category: "Ambos Mujer",
