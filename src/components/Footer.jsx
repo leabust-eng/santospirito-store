@@ -1,7 +1,7 @@
 import React from 'react';
 import { Instagram, Facebook, MessageCircle, Mail, Phone, MapPin, ShieldCheck, Heart } from 'lucide-react';
 
-export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) {
+export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome, onOpenCookieSettings }) {
   return (
     <footer className="bg-[#18181b] text-neutral-300 text-xs border-t border-neutral-800 w-full max-w-full overflow-hidden">
       
@@ -118,6 +118,15 @@ export default function Footer({ onOpenSizeGuide, onSelectCategory, onGoHome }) 
                 <a href="#arrepentimiento" className="hover:text-amber-400 transition">
                   ⚖️ Botón de Arrepentimiento (Ley 24.240)
                 </a>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={onOpenCookieSettings}
+                  className="hover:text-white transition underline decoration-dotted text-left"
+                >
+                  🍪 Configurar Cookies y Privacidad
+                </button>
               </li>
             </ul>
           </div>

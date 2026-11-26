@@ -8,6 +8,7 @@ import {
 import ProductReviewsSection from './ProductReviewsSection';
 import { getProductReviews } from '../data/productReviews';
 import { getSizeStatus } from '../utils/sizeStatus';
+import { trackViewContent } from '../utils/tracking';
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -29,6 +30,7 @@ export default function ProductDetailModal({
     const nextDefault = product?.defaultModelId || (product?.models && product.models.length > 0 ? product.models[0].id : null);
     setSelectedModelId(nextDefault);
     setSelectedImage(0);
+    trackViewContent(product);
   }, [product?.id, product?.defaultModelId]);
 
   const activeModel = product?.models?.find(m => m.id === selectedModelId) || null;

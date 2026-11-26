@@ -11,8 +11,10 @@ import CartDrawer from './components/CartDrawer';
 import PaymentMethodsModal from './components/PaymentMethodsModal';
 import Footer from './components/Footer';
 import WhatsAppFloating from './components/WhatsAppFloating';
+import CookieBanner from './components/CookieBanner';
 import { products } from './data/products';
 import { getSizeStatus } from './utils/sizeStatus';
+import { initMetaPixel, trackAddToCart, trackPurchase } from './utils/tracking';
 import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown, CheckCircle2, PackageCheck, X, Clock, XCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -34,6 +36,11 @@ export default function App() {
       console.error(e);
     }
   }, [cartItems]);
+
+  // Inicializar Meta Pixel (si VITE_META_PIXEL_ID está configurado y no se desactivaron cookies)
+  useEffect(() => {
+    initMetaPixel();
+  }, []);
 
   // Capturar retorno de pago desde Mercado Pago (Aprobado, Pendiente Efectivo/Rapipago, Rechazado)
   const [orderFeedback, setOrderFeedback] = useState(null);
@@ -62,6 +69,8 @@ export default function App() {
       const isRejected = collectionStatus === 'rejected' || statusParam === 'rejected' || mpBack === 'failure';
 
       if (isApproved) {
+        const orderTotal = cartItems.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 1), 0);
+        trackPurchase(cleanOrderId, orderTotal, cartItems);
         setCartItems([]);
         try { localStorage.removeItem('santospirito_cart'); } catch (e) {}
         setOrderFeedback({
@@ -108,6 +117,7 @@ export default function App() {
   const [isVirtualFittingOpen, setIsVirtualFittingOpen] = useState(false);
   const [virtualFittingGender, setVirtualFittingGender] = useState('mujer');
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isCookieSettingsOpen, setIsCookieSettingsOpen] = useState(false);
 
   const handleOpenVirtualFitting = (g = 'mujer') => {
     setVirtualFittingGender(g);
@@ -124,6 +134,7 @@ export default function App() {
 
   // Cart operations
   const handleAddToCart = (itemToAdd) => {
+    trackAddToCart(itemToAdd);
     setCartItems(prev => {
       const existingIdx = prev.findIndex(
         it => it.id === itemToAdd.id && it.selectedSize === itemToAdd.selectedSize
@@ -500,10 +511,18 @@ export default function App() {
         onSelectCategory={setActiveCategory}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
         onOpenPaymentMethods={() => setIsPaymentModalOpen(true)}
+        onGoHome={handleGoHome}
+        onOpenCookieSettings={() => setIsCookieSettingsOpen(true)}
       />
 
       {/* 8. WhatsApp Floating Button with live pulse */}
       <WhatsAppFloating />
+
+      {/* 8b. Discrete Cookie & Meta Pixel Consent Banner (Option A) */}
+      <CookieBanner
+        forceOpen={isCookieSettingsOpen}
+        onCloseForce={() => setIsCookieSettingsOpen(false)}
+      />
 
       {/* 9. Product Detail Modal (Horizontal Dual Image Layout) */}
       {selectedProduct && (

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { getSizeStatus } from '../utils/sizeStatus';
+import { trackInitiateCheckout, trackPurchase } from '../utils/tracking';
 
 const promoJacketsList = [
   {
@@ -381,6 +382,7 @@ export default function CartDrawer({
   // Handle flow transition
   const handleProceedFromCheckout = async (e) => {
     e.preventDefault();
+    trackInitiateCheckout(cartItems, finalTotal);
     if (customerData.paymentMethod === 'mercadopago') {
       setCheckoutStep('processing');
 
@@ -451,9 +453,11 @@ export default function CartDrawer({
         `• *CVU:* 0000003100071610252523%0A%0A` +
         `_Adjunto a continuación la captura del comprobante de transferencia._`;
 
+      const transferOrderId = `TR-${Math.floor(100000 + Math.random() * 900000)}`;
       window.open(`https://wa.me/5493815307474?text=${message}`, '_blank');
+      trackPurchase(transferOrderId, finalTotal, cartItems);
       setOrderReceipt({
-        id: `TR-${Math.floor(100000 + Math.random() * 900000)}`,
+        id: transferOrderId,
         method: 'Transferencia Bancaria (10% OFF)',
         shippingTitle: selectedShipping.title,
         shippingMethod: selectedShipping.id,
@@ -472,8 +476,10 @@ export default function CartDrawer({
 
     // Simulate authentic Mercado Pago API handshake and approval
     setTimeout(() => {
+      const mpOrderId = `MP-${Math.floor(100000000 + Math.random() * 900000000)}`;
+      trackPurchase(mpOrderId, finalTotal, cartItems);
       setOrderReceipt({
-        id: `MP-${Math.floor(100000000 + Math.random() * 900000000)}`,
+        id: mpOrderId,
         cardBrand: cardBrand.toUpperCase(),
         lastFour: cardData.number.replace(/\s/g, '').slice(-4) || '4242',
         installments: cardData.installments,
