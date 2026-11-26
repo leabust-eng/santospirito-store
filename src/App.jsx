@@ -288,11 +288,8 @@ export default function App() {
         />
       )}
 
-      {/* 5. Trust Bar */}
-      <TrustBar onOpenPaymentMethods={() => setIsPaymentModalOpen(true)} />
-
-      {/* 6. Main Product Catalog Section */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
+      {/* 5. Main Product Catalog Section */}
+      <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-10 w-full">
 
         {/* Oh! Wear-style Quick Category Strip */}
         <div className="mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
@@ -409,6 +406,11 @@ export default function App() {
             </button>
           </div>
         )}
+
+        {/* Trust Bar below Product Grid (never pushes selected products below fold on mobile) */}
+        <div className="mt-10 -mx-3 sm:mx-0">
+          <TrustBar onOpenPaymentMethods={() => setIsPaymentModalOpen(true)} />
+        </div>
 
         {/* Size Helper Banner in-catalog */}
         <div className="mt-12 bg-gradient-to-r from-teal-900 via-neutral-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">

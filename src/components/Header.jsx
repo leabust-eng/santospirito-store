@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Search,
   ShoppingBag,
@@ -61,7 +62,7 @@ export default function Header({
   onSelectCategory
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileShopExpanded, setMobileShopExpanded] = useState(true);
+  const [expandedMobileGroup, setExpandedMobileGroup] = useState('mujer');
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -108,6 +109,18 @@ export default function Header({
     }
   }, [isSearchOpen]);
 
+  // Prevent body scroll when mobile left drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const handleOpenShopHover = () => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setIsSearchOpen(false);
@@ -142,9 +155,8 @@ export default function Header({
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 lg:grid-cols-[1fr_auto_1fr] items-center h-16 sm:h-[70px] gap-2">
 
-          {/* LEFT ZONE: Desktop Single-Row Menu (Oh! Wear style) / Mobile Hamburger */}
+          {/* LEFT ZONE: Desktop Single-Row Menu / Mobile Hamburger */}
           <div className="flex items-center">
-            {/* Mobile hamburger */}
             <button
               type="button"
               onClick={() => {
@@ -259,7 +271,6 @@ export default function Header({
 
           {/* RIGHT ZONE: Minimal Actions (Vestuario Virtual + Search + Cart) */}
           <div className="flex items-center justify-end gap-2 sm:gap-3">
-            {/* Vestuario Virtual pill */}
             <button
               type="button"
               onClick={() => {
@@ -273,7 +284,6 @@ export default function Header({
               <span className="xl:hidden">Probador 3D</span>
             </button>
 
-            {/* Search Icon Trigger */}
             <button
               type="button"
               onClick={() => {
@@ -292,7 +302,6 @@ export default function Header({
               <Search size={19} />
             </button>
 
-            {/* Cart Button */}
             <button
               type="button"
               onClick={onOpenCart}
@@ -390,7 +399,6 @@ export default function Header({
               </button>
             </div>
 
-            {/* Instant Search Results Dropdown */}
             {isSearchFocused && searchResults.length > 0 && (
               <div className="mt-2 bg-white rounded-xl shadow-xl border border-neutral-200 overflow-hidden">
                 <div className="px-3 py-2 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider bg-neutral-50 border-b border-neutral-100">
@@ -427,141 +435,192 @@ export default function Header({
         </div>
       )}
 
-      {/* MOBILE SLIDE-DOWN MENU WITH SHOP ACCORDION */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-neutral-200 bg-white max-h-[82vh] overflow-y-auto px-4 py-4 space-y-3 shadow-xl animate-fade-in">
-          <button
-            type="button"
-            onClick={() => handleNavigateCategory('TODOS', null)}
-            className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-neutral-900 bg-neutral-50"
-          >
-            Inicio
-          </button>
+      {/* MOBILE LEFT SLIDE-OVER DRAWER (Oh! Wear style via Portal) */}
+      {mobileMenuOpen && createPortal(
+        <div
+          className="fixed inset-0 z-50 lg:hidden flex"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menú móvil SantoSpirito"
+        >
+          {/* Dimmed backdrop on the right */}
+          <div
+            onClick={() => setMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/45 backdrop-blur-[1px] transition-opacity"
+          />
 
-          {/* SHOP Accordion */}
-          <div className="border border-neutral-200 rounded-xl overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setMobileShopExpanded((prev) => !prev)}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 bg-neutral-50 text-xs font-extrabold uppercase tracking-wider text-neutral-900"
-            >
-              <span>Shop</span>
-              <ChevronDown
-                size={15}
-                className={`transition-transform ${mobileShopExpanded ? 'rotate-180 text-teal-800' : ''}`}
+          {/* Left Slide-Over Panel */}
+          <div className="relative w-[82%] max-w-[330px] bg-white h-full shadow-2xl flex flex-col z-10 animate-fade-in">
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
+              <img
+                src="/brand/santospirito-logo-horizontal.svg"
+                alt="SantoSpirito"
+                className="h-6 w-auto object-contain"
               />
-            </button>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Cerrar menú"
+                className="p-1.5 text-neutral-500 hover:text-black rounded-full hover:bg-neutral-100 transition"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-            {mobileShopExpanded && (
-              <div className="p-3.5 space-y-4 bg-white">
-                {SHOP_COLUMNS.map((col) => (
-                  <div key={col.id}>
-                    <div className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-900 mb-1.5">
-                      {col.title}
-                    </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {col.links.map((item) => (
-                        <button
-                          key={item.label}
-                          type="button"
-                          onClick={() => handleNavigateCategory(item.category, item.subCategory)}
-                          className={`text-left text-xs py-1 px-2 rounded hover:bg-neutral-50 ${
-                            item.accent ? 'font-bold text-teal-800 col-span-2' : 'text-neutral-600'
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
+            {/* Drawer Scrollable Links */}
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1">
+              <button
+                type="button"
+                onClick={() => handleNavigateCategory('TODOS', null)}
+                className="w-full text-left py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-neutral-900 hover:text-teal-800 transition"
+              >
+                INICIO
+              </button>
+
+              {/* Category Groups directly expandable like Oh! Wear (MUJER ⌄, HOMBRE ⌄, UNISEX ⌄) */}
+              {SHOP_COLUMNS.map((col) => {
+                const isExpanded = expandedMobileGroup === col.id;
+                return (
+                  <div key={col.id} className="border-t border-neutral-100 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedMobileGroup(isExpanded ? null : col.id)}
+                      className="w-full flex items-center justify-between py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-neutral-900"
+                    >
+                      <span>{col.title}</span>
+                      <ChevronDown
+                        size={15}
+                        className={`text-neutral-500 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-teal-800' : ''}`}
+                      />
+                    </button>
+
+                    {isExpanded && (
+                      <div className="pl-3 pb-2.5 space-y-1.5">
+                        {col.links.map((item) => (
+                          <button
+                            key={item.label}
+                            type="button"
+                            onClick={() => handleNavigateCategory(item.category, item.subCategory)}
+                            className={`w-full text-left py-1.5 text-[13px] transition ${
+                              item.accent ? 'font-bold text-teal-800' : 'text-neutral-600 hover:text-black'
+                            }`}
+                          >
+                            {item.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
+                );
+              })}
 
-                {/* Mobile Accesorios: En preparación */}
-                <div className="pt-2 border-t border-neutral-100 flex items-center justify-between">
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-neutral-900">
-                    ACCESORIOS
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">
-                    <Clock size={10} />
-                    En preparación
-                  </span>
-                </div>
+              {/* ACCESORIOS (En preparación) */}
+              <div className="border-t border-neutral-100 py-3 flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.1em] text-neutral-500">
+                  ACCESORIOS
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">
+                  <Clock size={10} />
+                  En preparación
+                </span>
               </div>
-            )}
+
+              <div className="border-t border-neutral-100 pt-2 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => handleNavigateCategory('LO NUEVO', 'Colección Spandex 2026')}
+                  className="w-full text-left py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-teal-900 hover:text-teal-700 transition"
+                >
+                  LO NUEVO
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleNavigateCategory('OFERTAS', 'Piezas sueltas y promos')}
+                  className="w-full text-left py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-rose-700 hover:text-rose-800 transition"
+                >
+                  OFERTAS
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenSizeGuide();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-neutral-700 hover:text-black flex items-center gap-2"
+                >
+                  <Ruler size={14} className="text-teal-700" />
+                  <span>GUÍA DE TALLES</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenVirtualFitting();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left mt-2 px-3 py-2.5 rounded-xl text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/70 flex items-center gap-2"
+                >
+                  <Sparkles size={14} className="text-amber-500" />
+                  <span>Vestuario Virtual (3D)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Drawer Footer */}
+            <div className="border-t border-neutral-100 px-5 py-3.5 bg-neutral-50/70 space-y-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenCart();
+                }}
+                className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-neutral-900 py-1"
+              >
+                <span className="flex items-center gap-2">
+                  <ShoppingBag size={15} />
+                  Mi Carrito
+                </span>
+                <span className="bg-neutral-900 text-white text-[10px] px-2 py-0.5 rounded-full">
+                  {cartCount}
+                </span>
+              </button>
+
+              <div className="flex items-center justify-between text-[11px] text-neutral-600 pt-1 border-t border-neutral-200/60">
+                <a
+                  href="https://wa.me/5493815307474"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-emerald-700 font-semibold"
+                >
+                  <Phone size={12} />
+                  <span>WhatsApp</span>
+                </a>
+                <a
+                  href="https://instagram.com/santospirito.ok"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 hover:text-pink-600"
+                >
+                  <Instagram size={12} className="text-pink-500" />
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href="https://www.facebook.com/santospirito.ok"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 hover:text-blue-600"
+                >
+                  <Facebook size={12} className="text-blue-600" />
+                  <span>Facebook</span>
+                </a>
+              </div>
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => handleNavigateCategory('LO NUEVO', 'Colección Spandex 2026')}
-            className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-teal-900 hover:bg-teal-50 transition"
-          >
-            Lo Nuevo · Colección Spandex 2026
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleNavigateCategory('OFERTAS', 'Piezas sueltas y promos')}
-            className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-rose-700 hover:bg-rose-50 transition"
-          >
-            Ofertas · Piezas sueltas / Promos
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              onOpenSizeGuide();
-              setMobileMenuOpen(false);
-            }}
-            className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
-          >
-            <Ruler size={14} className="text-teal-700" />
-            <span>Guía de Talles</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              onOpenVirtualFitting();
-              setMobileMenuOpen(false);
-            }}
-            className="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/70 flex items-center gap-2"
-          >
-            <Sparkles size={14} className="text-amber-500" />
-            <span>Vestuario Virtual (Simulador 3D)</span>
-          </button>
-
-          <div className="pt-2 border-t border-neutral-100 flex items-center justify-around text-xs">
-            <a
-              href="https://wa.me/5493815307474"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-emerald-700 font-semibold py-1"
-            >
-              <Phone size={13} />
-              <span>WhatsApp</span>
-            </a>
-            <span className="text-neutral-300">|</span>
-            <a
-              href="https://instagram.com/santospirito.ok"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-neutral-600 hover:text-pink-600 py-1"
-            >
-              <Instagram size={13} className="text-pink-500" />
-              <span>Instagram</span>
-            </a>
-            <span className="text-neutral-300">|</span>
-            <a
-              href="https://www.facebook.com/santospirito.ok"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-neutral-600 hover:text-blue-600 py-1"
-            >
-              <Facebook size={13} className="text-blue-600" />
-              <span>Facebook</span>
-            </a>
-          </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
