@@ -59,6 +59,14 @@ html, body {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Center navigation menu symmetrically on desktop/wide screens without clipping mobile scroll */
 @media (min-width: 1350px) {
   .nav-center-wide {

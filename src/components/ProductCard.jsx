@@ -10,14 +10,14 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
     <div className="group relative bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
       
       {/* Badge Top Left */}
-      <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1 items-start">
+      <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1 items-start max-w-[68%] sm:max-w-[62%]">
         {product.badge && (
-          <span className="bg-neutral-900/90 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded tracking-wider uppercase shadow-sm">
+          <span className="bg-neutral-900/90 backdrop-blur-sm text-white text-[8.5px] sm:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded tracking-wider uppercase shadow-sm truncate max-w-full">
             {product.badge}
           </span>
         )}
         {product.discount && (
-          <span className="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded tracking-wider uppercase">
+          <span className="bg-rose-600 text-white text-[8.5px] sm:text-[10px] font-extrabold px-1.5 sm:px-2 py-0.5 rounded tracking-wider uppercase">
             {product.discount}
           </span>
         )}
@@ -29,9 +29,9 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
         className="relative aspect-[3/4] bg-neutral-100 overflow-hidden cursor-pointer"
       >
         {/* Logo Oficial SantoSpirito en cada prenda */}
-        <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-sm pointer-events-none">
+        <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 flex items-center gap-1 bg-black/60 backdrop-blur-md px-1.5 sm:px-2 py-0.5 sm:py-0.5 rounded-full border border-white/20 shadow-sm pointer-events-none">
           <img src="/brand/santospirito-iso-white.svg" alt="SantoSpirito" className="w-3 h-3" />
-          <span className="text-[9px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
+          <span className="hidden sm:inline text-[9px] font-bold text-white tracking-widest uppercase font-serif">SantoSpirito</span>
         </div>
 
         <img
@@ -107,10 +107,12 @@ export default function ProductCard({ product, onSelectProduct, onQuickAdd }) {
           </div>
 
           {/* 3 Cuotas sin interés callout */}
-          <div className="mt-1 flex items-center gap-1 text-[11px] text-teal-800 font-semibold bg-teal-50 px-2 py-0.5 rounded inline-flex">
-            <span className="font-bold text-teal-900">3</span>
-            <span>cuotas sin interés de</span>
-            <span className="font-bold text-teal-900">${installmentAmount.toLocaleString('es-AR')},00</span>
+          <div className="mt-1 inline-flex flex-wrap items-center gap-x-1 text-[10px] sm:text-[11px] text-teal-800 font-semibold bg-teal-50 px-2 py-0.5 rounded leading-tight">
+            <span className="font-bold text-teal-900">
+              3 cuotas <span className="sm:hidden">s/i</span><span className="hidden sm:inline">sin interés</span>
+            </span>
+            <span>de</span>
+            <span className="font-bold text-teal-900">${installmentAmount.toLocaleString('es-AR')}</span>
           </div>
 
           {/* Free shipping threshold callout */}

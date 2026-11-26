@@ -516,21 +516,21 @@ export default function Header({
               })}
 
               {/* ACCESORIOS (En preparación) */}
-              <div className="border-t border-neutral-100 py-3 flex items-center justify-between">
+              <div className="border-t border-neutral-100 py-2.5 flex items-center justify-between gap-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.1em] text-neutral-500">
                   ACCESORIOS
                 </span>
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
                   <Clock size={10} />
                   En preparación
                 </span>
               </div>
 
-              <div className="border-t border-neutral-100 pt-2 space-y-1">
+              <div className="border-t border-neutral-100 pt-1.5 space-y-0.5">
                 <button
                   type="button"
                   onClick={() => handleNavigateCategory('LO NUEVO', 'Colección Spandex 2026')}
-                  className="w-full text-left py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-teal-900 hover:text-teal-700 transition"
+                  className="w-full text-left py-2 text-xs font-bold uppercase tracking-[0.1em] text-teal-900 hover:text-teal-700 transition"
                 >
                   LO NUEVO
                 </button>
@@ -538,7 +538,7 @@ export default function Header({
                 <button
                   type="button"
                   onClick={() => handleNavigateCategory('OFERTAS', 'Piezas sueltas y promos')}
-                  className="w-full text-left py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-rose-700 hover:text-rose-800 transition"
+                  className="w-full text-left py-2 text-xs font-bold uppercase tracking-[0.1em] text-rose-700 hover:text-rose-800 transition"
                 >
                   OFERTAS
                 </button>
@@ -549,7 +549,7 @@ export default function Header({
                     onOpenSizeGuide();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-neutral-700 hover:text-black flex items-center gap-2"
+                  className="w-full text-left py-2 text-xs font-semibold uppercase tracking-[0.1em] text-neutral-700 hover:text-black flex items-center gap-2"
                 >
                   <Ruler size={14} className="text-teal-700" />
                   <span>GUÍA DE TALLES</span>
@@ -561,7 +561,7 @@ export default function Header({
                     onOpenVirtualFitting();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left mt-2 px-3 py-2.5 rounded-xl text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/70 flex items-center gap-2"
+                  className="w-full text-left mt-1.5 px-3 py-2 rounded-xl text-xs font-bold text-teal-950 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200/70 flex items-center gap-2"
                 >
                   <Sparkles size={14} className="text-amber-500" />
                   <span>Vestuario Virtual (3D)</span>
