@@ -497,6 +497,8 @@ productReviewsData["ambo-chielo"] = productReviewsData["ambo-celeste-marino"];
 productReviewsData["ambo-tricolor-blue-green"] = productReviewsData["ambo-tricolor-menta-blanco"];
 productReviewsData["ambo-safiro-beige-negro"] = productReviewsData["ambo-beige-negro"];
 productReviewsData["rosa-plumeti"] = productReviewsData["ambo-plumeti-rosa"];
+productReviewsData["ambo-topacio-cuello-corazon"] = productReviewsData["ambo-celeste-marino"];
+productReviewsData["ambo-topacio"] = productReviewsData["ambo-celeste-marino"];
 productReviewsData["ambo-magenta-y-verde-militar"] = productReviewsData["ambo-magenta-oliva"];
 productReviewsData["ambo-verde-militar-y-magenta"] = productReviewsData["ambo-magenta-oliva"];
 

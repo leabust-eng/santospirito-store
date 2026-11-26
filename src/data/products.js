@@ -20,6 +20,7 @@ const MAGENTA_MILITAR_MODELS = [
     ],
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
+      "/products/ambo-magenta-verde-militar-nuevo.jpg",
       "/products/ambo-magenta-oliva-pose.jpg"
     ]
   },
@@ -112,6 +113,7 @@ export const products = [
     reviewsCount: 36,
     badge: "COLECCIÓN OFICIAL 2026",
     images: [
+      "/products/ambo-chielo-mao.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/179b70366be62483d6cb18922249ffa8d6bc8ac69ea53ce461ad61101bab8f2d466763.jpg",
       "/products/ambo-celeste-marino-pose.jpg"
     ],
@@ -157,6 +159,7 @@ export const products = [
     reviewsCount: 29,
     badge: "MÁXIMA DISTINCIÓN",
     images: [
+      "/products/ambo-safiro-beige-negro-nuevo.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/6db6e534003861e5572bae4eb67cde08963f4a8f4a8d530378623f4a0c091d79466763.jpg",
       "/products/ambo-beige-negro-sentada.jpg"
     ],
@@ -224,15 +227,15 @@ export const products = [
     }
   },
 
-  // 6. TRICOLOR GREEN (Carousel Slide 6)
+  // 6. TRICOLOR GREEN (Carousel Slide 5)
   {
     id: "ambo-menta-negro",
     slug: "tricolor-green",
     name: "TRICOLOR GREEN",
-    tagline: "Chaqueta verde menta con pantalón jogger negro y puños elastizados",
+    tagline: "Chaqueta verde menta y negro tricolor con pantalón recto elastizado",
     gender: "Mujer",
     category: "Ambos Mujer",
-    subCategory: "Spandex",
+    subCategory: "Tricolor",
     fabric: "Gabardina Spandex Prémium",
     price: 126000,
     originalPrice: 142000,
@@ -240,8 +243,9 @@ export const products = [
     featured: true,
     rating: 4.9,
     reviewsCount: 33,
-    badge: "ESTILO JOGGER & CONFORT",
+    badge: "EDICIÓN TRICOLOR",
     images: [
+      "/products/ambo-tricolor-green-recto.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/6472c905867ad8d562bf38c2395b5b10f7fa921fadba6aa0d0fb88a4f3b2ed14466763.jpg",
       "/products/ambo-menta-negro-pose.jpg"
     ],
@@ -257,9 +261,9 @@ export const products = [
       { size: "XL" }
     ],
     description: {
-      intro: "La tendencia jogger en su máxima expresión. Pantalón con botamangas elastizadas para un look moderno y comodidad inigualable al caminar.",
-      casaca: "Chaqueta menta con bolsillos laterales reforzados.",
-      pantalon: "Pantalón jogger negro elastizado con puños ajustados al tobillo.",
+      intro: "Combinación tricolor en verde menta y negro con corte moderno y pantalón recto de caída estilizada para tu jornada clínica.",
+      casaca: "Chaqueta tricolor menta y negro con bolsillos laterales reforzados.",
+      pantalon: "Pantalón recto negro elastizado con cintura anatómica confort.",
       composicion: "Spandex Premium 97% algodón, 3% elastano.",
       cuidados: ["Lavar con agua fría", "Secar colgado"]
     }
@@ -286,6 +290,7 @@ export const products = [
     models: MAGENTA_MILITAR_MODELS,
     images: [
       "https://d22fxaf9t8d39k.cloudfront.net/831af11b56044326fccc106b89de21eb72692e303fddec387a062defcf550b2d466763.jpg",
+      "/products/ambo-magenta-verde-militar-nuevo.jpg",
       "/products/ambo-magenta-oliva-pose.jpg",
       "/products/ambo-verde-militar-magenta-sentada.png"
     ],
@@ -436,44 +441,43 @@ export const products = [
     }
   },
 
-  // 10. NUEVO DE FACEBOOK: AMBO TOPACIO
+  // 10. AMBO TOPACIO CUELLO CORAZÓN (Actualizado con foto real y stock Excel)
   {
     id: "ambo-topacio",
-    slug: "ambo-topacio",
-    name: "AMBO TOPACIO SPANDEX PRIMERA CALIDAD",
-    tagline: "Tono joya azul topacio con corte estilizado y tejido de altísima suavidad",
+    slug: "ambo-topacio-cuello-corazon",
+    name: "AMBO TOPACIO CUELLO CORAZÓN",
+    tagline: "Chaqueta blanca cuello corazón con vivos azul topacio y pantalón haciendo juego",
     gender: "Mujer",
     category: "Ambos Mujer",
     subCategory: "Spandex",
-    fabric: "Spandex Premium Joya",
-    price: 128000,
-    originalPrice: 145000,
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
     discount: "12% OFF",
     featured: true,
     rating: 5.0,
     reviewsCount: 19,
-    badge: "GÉNEROS PREMIUM",
+    badge: "CUELLO CORAZÓN • STOCK",
     images: [
-      "/products/ambo-azul-quirurgico-pose.jpg",
-      "https://d22fxaf9t8d39k.cloudfront.net/8acf9964eea1a0c405bcdd3fcc10c18263c0a1970d63afe65fe008ed40e14f82466763.jpg"
+      "/products/ambo-topacio-cuello-corazon.jpg"
     ],
     colors: [
-      { name: "Azul Topacio Intenso", hex: "#007791", inStock: true },
-      { name: "Celeste Sanitario", hex: "#7ba7bc", inStock: true }
+      { name: "Blanco + Azul Topacio", hex: "#007791", inStock: true }
     ],
     sizes: [
       { size: "XS" },
       { size: "S" },
       { size: "M" },
       { size: "L" },
-      { size: "XL" }
+      { size: "XL" },
+      { size: "XXL" }
     ],
     description: {
-      intro: "Confeccionado con telas importadas de primera calidad que garantizan caída impecable y cero arrugas durante el turno.",
-      casaca: "Chaqueta cuello en V con pespuntes finos y bolsillos anatómicos.",
-      pantalon: "Pantalón recto confort con cintura elastizada ancha.",
-      composicion: "97% Algodón Peinado, 3% Elastano.",
-      cuidados: ["Apto lavarropas", "Planchado fácil"]
+      intro: "Chaqueta blanca luminosa con delicados vivos en azul topacio en cuello corazón y bolsillos, combinada con pantalón azul topacio.",
+      casaca: "Chaqueta cuello corazón con vivos contrastantes y bolsillos frontales amplios.",
+      pantalon: "Pantalón azul topacio de corte recto confort con cintura elastizada.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Apto lavarropas programa delicado", "Planchado fácil"]
     }
   },
 
@@ -577,6 +581,7 @@ export const products = [
     badge: "MÁS VENDIDO",
     images: [
       "/products/ambo-rosa-plumeti.jpg",
+      "/products/ambo-plumeti-rosa-nuevo.jpg",
       "https://d22fxaf9t8d39k.cloudfront.net/8e88e15d99e302000e6362428e137b9f64fd5b6d004a668ddf4d02fadb4bcb56466763.jpg",
       "/products/ambo-rosita-bordeaux.jpg"
     ],
@@ -719,19 +724,369 @@ export const products = [
       cuidados: ["Lavar con agua fría"]
     }
   },
+  // === NUEVOS INGRESOS DEL EXCEL CON STOCK REAL ===
+  {
+    id: "ambo-chocobeige",
+    slug: "ambo-chocobeige",
+    name: "AMBO CHOCOBEIGE",
+    tagline: "Chaqueta beige camel con vivos chocolate y pantalón chocolate anatómico",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 125000,
+    originalPrice: 142000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 16,
+    badge: "NUEVO INGRESO 2026",
+    images: ["/products/ambo-chocobeige.jpg"],
+    colors: [
+      { name: "Beige + Chocolate", hex: "#6f4e37", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Combinación cálida y sofisticada de beige con vivos y pantalón en tono chocolate intenso.",
+      casaca: "Cuello corazón con vivos chocolate, corte semi entallado y doble bolsillo frontal.",
+      pantalon: "Pantalón recto chocolate elastizado de calce anatómico.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "Secado a la sombra"]
+    }
+  },
+  {
+    id: "ambo-beige-verde-malta",
+    slug: "ambo-beige-verde-malta",
+    name: "AMBO BEIGE C/ VERDE MALTA",
+    tagline: "Casaca beige cuello corazón con vivos verde malta y pantalón verde malta",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 125000,
+    originalPrice: 142000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 14,
+    badge: "NUEVO INGRESO 2026",
+    images: ["/products/ambo-beige-verde-malta.jpg"],
+    colors: [
+      { name: "Beige + Verde Malta", hex: "#5c7056", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Diseño natural y distinguido que fusiona casaca beige claro con detalles y pantalón en verde malta.",
+      casaca: "Casaca cuello corazón con vivos verde malta y bolsillos delanteros amplios.",
+      pantalon: "Pantalón recto verde malta elastizado con cintura confort.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "No usar cloro"]
+    }
+  },
+  {
+    id: "ambo-topacio-cuello-mao",
+    slug: "ambo-topacio-cuello-mao",
+    name: "AMBO TOPACIO CUELLO MAO",
+    tagline: "Chaqueta blanca cuello mao con vivos azul topacio y pantalón azul oscuro",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 5.0,
+    reviewsCount: 12,
+    badge: "CUELLO MAO • STOCK",
+    images: ["/products/ambo-topacio-cuello-mao.jpg"],
+    colors: [
+      { name: "Blanco + Azul Topacio", hex: "#005f73", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Impecable modelo Cuello Mao en blanco clínico con vivos azul topacio y pantalón a tono.",
+      casaca: "Casaca blanca cuello mao con terminaciones contrastantes y bolsillos funcionales.",
+      pantalon: "Pantalón azul oscuro de calce anatómico elastizado.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Apto lavarropas programa delicado", "Plancha tibia"]
+    }
+  },
+  {
+    id: "ambo-chocolate",
+    slug: "ambo-chocolate",
+    name: "AMBO CHOCOLATE",
+    tagline: "Monocromo chocolate profundo con delicados vivos claros en cuello corazón",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 124000,
+    originalPrice: 140000,
+    discount: "11% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 11,
+    badge: "STOCK INMEDIATO",
+    images: ["/products/ambo-chocolate.jpg"],
+    colors: [
+      { name: "Chocolate + Vivos Claros", hex: "#4a3228", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Ambo monocromático color chocolate que estiliza la silueta con delicados vivos claros en escote y bolsillo.",
+      casaca: "Casaca cuello corazón en tono chocolate con costuras reforzadas.",
+      pantalon: "Pantalón recto chocolate elastizado de cintura confortable.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar del revés con agua fría"]
+    }
+  },
+  {
+    id: "ambo-tricolor-topo",
+    slug: "ambo-tricolor-topo",
+    name: "AMBO TRICOLOR TOPO",
+    tagline: "Tricolor en rosa pastel, banda gris perla y base con pantalón gris topo",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Tricolor",
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 15,
+    badge: "EDICIÓN TRICOLOR",
+    images: ["/products/ambo-tricolor-topo.jpg"],
+    colors: [
+      { name: "Rosa + Gris + Topo", hex: "#4f5459", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Diseño tricolor de vanguardia que combina parte superior rosa pastel, banda gris claro y pantalón gris topo.",
+      casaca: "Casaca tricolor con bolsillos frontales amplios en tono topo.",
+      pantalon: "Pantalón recto gris topo elastizado de calce anatómico.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "No usar cloro"]
+    }
+  },
+  {
+    id: "ambo-tricolor-rose",
+    slug: "ambo-tricolor-rose",
+    name: "AMBO TRICOLOR ROSÉ",
+    tagline: "Armoniosa combinación tricolor en rosa pastel y gris perla claro",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Tricolor",
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 10,
+    badge: "EDICIÓN TRICOLOR",
+    images: ["/products/ambo-tricolor-rose.jpg"],
+    colors: [
+      { name: "Rosa + Gris Perla", hex: "#e8b4bc", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Estética luminosa y femenina con bloque superior rosa suave y base en gris claro.",
+      casaca: "Casaca tricolor con escote en V y bolsillos delanteros funcionales.",
+      pantalon: "Pantalón gris claro elastizado con tiro ergonómico.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "Secado a la sombra"]
+    }
+  },
+  {
+    id: "ambo-tricolor-rojo-gris-negro",
+    slug: "ambo-tricolor-rojo-gris-negro",
+    name: "AMBO TRICOLOR ROJO, GRIS Y NEGRO",
+    tagline: "Edición tricolor de alto impacto en rojo carmesí, gris grafito y negro",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Tricolor",
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 13,
+    badge: "EDICIÓN TRICOLOR",
+    images: ["/products/ambo-tricolor-rojo-gris-negro.jpg"],
+    colors: [
+      { name: "Rojo + Gris + Negro", hex: "#b91c1c", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Presencia enérgica con bloques estratégicos en rojo, gris medio y negro azabache.",
+      casaca: "Casaca tricolor con refuerzo en hombros y bolsillos de gran capacidad.",
+      pantalon: "Pantalón negro elastizado de calce anatómico.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar por separado con agua fría"]
+    }
+  },
+  {
+    id: "ambo-rococo-3-verde-militar",
+    slug: "ambo-rococo-3-verde-militar",
+    name: "AMBO ROCOCÓ 3 VERDE MILITAR C/ BLANCO",
+    tagline: "Cuello mao bipartito en blanco óptico y verde militar con pantalón a tono",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 126000,
+    originalPrice: 143000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 5.0,
+    reviewsCount: 9,
+    badge: "EDICIÓN ESPECIAL",
+    images: ["/products/ambo-rococo-3-verde-militar-blanco.jpg"],
+    colors: [
+      { name: "Blanco + Verde Militar", hex: "#4b5320", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Modelo Rococó-3 con canesú superior blanco y base en verde militar que aporta frescura y estructura.",
+      casaca: "Cuello mao con corte bicolor blanco/verde militar y bolsillos inferiores profundos.",
+      pantalon: "Pantalón verde militar recto con cintura elastizada confortable.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "Secado colgado"]
+    }
+  },
+  {
+    id: "ambo-plumeti-celeste",
+    slug: "ambo-plumeti-celeste",
+    name: "AMBO PLUMETI CELESTE",
+    tagline: "Delicado conjunto celeste cielo en tejido plumetí texturado con calce anatómico",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Spandex + Tejido Plumetí",
+    price: 124000,
+    originalPrice: 140000,
+    discount: "11% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 11,
+    badge: "TEJIDO PLUMETÍ",
+    images: ["/products/ambo-plumeti-celeste.jpg"],
+    colors: [
+      { name: "Celeste Plumetí", hex: "#93c5fd", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Textura plumetí en tono celeste clínico, suave al tacto y sumamente fresca.",
+      casaca: "Casaca cuello corazón en tela plumetí con pinzas que estilizan.",
+      pantalon: "Pantalón celeste haciendo juego de corte recto.",
+      composicion: "Spandex Premium + Plumetí.",
+      cuidados: ["Lavar en ciclo delicado", "Secar a la sombra"]
+    }
+  },
+  {
+    id: "ambo-azul-marino-rosa-bebe",
+    slug: "ambo-azul-marino-rosa-bebe",
+    name: "AMBO AZUL MARINO Y ROSA BEBÉ",
+    tagline: "Casaca bicolor rosa bebé con azul marino y pantalón náutico haciendo juego",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 125000,
+    originalPrice: 142000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 10,
+    badge: "EDICIÓN ESPECIAL",
+    images: ["/products/ambo-azul-marino-rosa-bebe.jpg"],
+    colors: [
+      { name: "Rosa Bebé + Azul Marino", hex: "#1e3a5f", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Contraste equilibrado entre la dulzura del rosa bebé superior y la sobriedad del azul marino.",
+      casaca: "Casaca cuello corazón bicolor con vivos marinos y doble bolsillo.",
+      pantalon: "Pantalón azul marino recto con cintura confortable.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría"]
+    }
+  },
+  {
+    id: "ambo-verde-oliva",
+    slug: "ambo-verde-oliva",
+    name: "AMBO VERDE OLIVA",
+    tagline: "Casaca verde salvia con vivos oliva y pantalón verde oliva cuello pikito",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 124000,
+    originalPrice: 140000,
+    discount: "11% OFF",
+    featured: true,
+    rating: 4.8,
+    reviewsCount: 9,
+    badge: "CUELLO PIKITO",
+    images: ["/products/ambo-verde-oliva.jpg"],
+    colors: [
+      { name: "Verde Salvia + Oliva", hex: "#556b2f", inStock: true }
+    ],
+    sizes: [{ size: "XS" }, { size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }],
+    description: {
+      intro: "Gama orgánica en dos intensidades de verde oliva con cuello pikito estilizado.",
+      casaca: "Casaca verde salvia claro cuello pikito con vivos y detalles verde oliva.",
+      pantalon: "Pantalón recto verde oliva oscuro con cintura elastizada.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría", "Secado a la sombra"]
+    }
+  },
+  {
+    id: "ambo-amatista",
+    slug: "ambo-amatista",
+    name: "AMBO AMATISTA",
+    tagline: "Casaca blanca cuello pikito con vivos amatista y pantalón amatista intenso",
+    gender: "Mujer",
+    category: "Ambos Mujer",
+    subCategory: "Spandex",
+    fabric: "Gabardina Spandex Prémium",
+    price: 125000,
+    originalPrice: 142000,
+    discount: "12% OFF",
+    featured: true,
+    rating: 4.9,
+    reviewsCount: 8,
+    badge: "TALLE ESPECIAL 3XL",
+    images: ["/products/ambo-amatista.jpg"],
+    colors: [
+      { name: "Blanco + Amatista", hex: "#8e2463", inStock: true }
+    ],
+    sizes: [{ size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }, { size: "XXL" }, { size: "3XL" }],
+    description: {
+      intro: "Chaqueta blanca impecable con detalles en tono amatista profundo y pantalón confort haciendo juego.",
+      casaca: "Cuello pikito con vivo amatista y bolsillos amplios.",
+      pantalon: "Pantalón amatista de calce anatómico en talle especial 3XL.",
+      composicion: "Gabardina Spandex 97% Algodón, 3% Elastano.",
+      cuidados: ["Lavar con agua fría"]
+    }
+  },
+
   // PIEZA SUELTA: chaqueta del conjunto Azzurro Francia (fila 54 del depósito)
   {
     id: "chaqueta-azzurro-francia",
     slug: "chaqueta-azzurro-francia",
     name: "CHAQUETA AZZURRO FRANCIA CUELLO MAO",
-    tagline: "La chaqueta del conjunto Azzurro Francia, sola",
+    tagline: "La chaqueta del conjunto Azzurro Francia, sola (entrega inmediata)",
     gender: "Unisex",
     category: "Chaquetas",
     subCategory: "Azul Francia",
     fabric: "Arciel con elastano",
     price: 49500,
-    originalPrice: null,
-    discount: null,
+    originalPrice: 57500,
+    discount: "OFERTA • -14%",
     featured: false,
     rating: 5,
     reviewsCount: 0,
@@ -753,14 +1108,14 @@ export const products = [
     id: "pantalon-azzurro-francia",
     slug: "pantalon-azzurro-francia",
     name: "PANTALÓN AZZURRO FRANCIA ARCIEL ELASTIZADO",
-    tagline: "El pantalón del conjunto Azzurro Francia, solo",
+    tagline: "El pantalón del conjunto Azzurro Francia, solo (entrega inmediata)",
     gender: "Unisex",
     category: "Pantalones",
     subCategory: "Azul Francia",
     fabric: "Arciel elastizado",
     price: 49500,
-    originalPrice: null,
-    discount: null,
+    originalPrice: 57500,
+    discount: "OFERTA • -14%",
     featured: false,
     rating: 5,
     reviewsCount: 0,

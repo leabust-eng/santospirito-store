@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AnnouncementBar from './components/AnnouncementBar';
 import Header from './components/Header';
-import Navbar from './components/Navbar';
 import HeroCarousel from './components/HeroCarousel';
 import TrustBar from './components/TrustBar';
 import ProductCard from './components/ProductCard';
@@ -13,6 +12,7 @@ import PaymentMethodsModal from './components/PaymentMethodsModal';
 import Footer from './components/Footer';
 import WhatsAppFloating from './components/WhatsAppFloating';
 import { products } from './data/products';
+import { getSizeStatus } from './utils/sizeStatus';
 import { SlidersHorizontal, Sparkles, Star, ShieldCheck, Heart, ArrowUpDown, CheckCircle2, PackageCheck, X, Clock, XCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -162,22 +162,36 @@ export default function App() {
     // Category match
     if (activeCategory?.category && activeCategory.category !== "TODOS") {
       const activeCat = activeCategory.category.toLowerCase();
-      const pCat = (p.category || '').toLowerCase();
-      const pGender = (p.gender || '').toLowerCase();
-      const matchCat = pCat.includes(activeCat) || 
-                       pGender.includes(activeCat) || 
-                       activeCat.includes(pCat) || 
-                       activeCat.includes(pGender) ||
-                       (activeCat.includes('tricolor') && (p.name.toLowerCase().includes('tricolor') || (p.badge || '').toLowerCase().includes('tricolor')));
-      if (!matchCat) return false;
+      if (activeCat === "lo nuevo") {
+        const isNewOrSpandex =
+          (p.subCategory || '').toLowerCase() === 'spandex' ||
+          (p.fabric || '').toLowerCase().includes('spandex') ||
+          (p.fabric || '').toLowerCase().includes('flex') ||
+          (p.badge || '').toLowerCase().includes('nuevo') ||
+          (p.badge || '').toLowerCase().includes('2026');
+        if (!isNewOrSpandex) return false;
+      } else if (activeCat === "ofertas") {
+        const isPiezaSuelta = (p.badge || '').toLowerCase().includes('pieza suelta');
+        const hasDiscount = Boolean(p.discount) || (p.originalPrice && p.originalPrice > p.price);
+        if (!isPiezaSuelta && !hasDiscount) return false;
+      } else {
+        const pCat = (p.category || '').toLowerCase();
+        const pGender = (p.gender || '').toLowerCase();
+        const matchCat = pCat.includes(activeCat) || 
+                         pGender.includes(activeCat) || 
+                         activeCat.includes(pCat) || 
+                         activeCat.includes(pGender) ||
+                         (activeCat.includes('tricolor') && (p.name.toLowerCase().includes('tricolor') || (p.badge || '').toLowerCase().includes('tricolor')));
+        if (!matchCat) return false;
 
-      if (activeCategory.subCategory) {
-        const activeSub = activeCategory.subCategory.toLowerCase();
-        const pSub = (p.subCategory || '').toLowerCase();
-        const pFabric = (p.fabric || '').toLowerCase();
-        const pName = (p.name || '').toLowerCase();
-        const matchSub = pSub.includes(activeSub) || pFabric.includes(activeSub) || pName.includes(activeSub);
-        if (!matchSub) return false;
+        if (activeCategory.subCategory) {
+          const activeSub = activeCategory.subCategory.toLowerCase();
+          const pSub = (p.subCategory || '').toLowerCase();
+          const pFabric = (p.fabric || '').toLowerCase();
+          const pName = (p.name || '').toLowerCase();
+          const matchSub = pSub.includes(activeSub) || pFabric.includes(activeSub) || pName.includes(activeSub);
+          if (!matchSub) return false;
+        }
       }
     }
 
@@ -195,12 +209,35 @@ export default function App() {
   });
 
   // Sorting
+  const getStockPriority = (p) => {
+    const statuses = (p.sizes || []).map((s) => getSizeStatus(s));
+    if (statuses.includes('en-stock')) return 0;
+    if (statuses.includes('a-pedido')) return 1;
+    return 2; // agotado
+  };
+
   if (sortBy === 'precio-menor') {
     filteredProducts.sort((a, b) => a.price - b.price);
   } else if (sortBy === 'precio-mayor') {
     filteredProducts.sort((a, b) => b.price - a.price);
   } else if (sortBy === 'rating') {
     filteredProducts.sort((a, b) => b.rating - a.rating);
+  } else if ((activeCategory?.category || '').toUpperCase() === 'OFERTAS') {
+    filteredProducts.sort((a, b) => {
+      const aSuelta = (a.badge || '').toLowerCase().includes('pieza suelta') ? 0 : 1;
+      const bSuelta = (b.badge || '').toLowerCase().includes('pieza suelta') ? 0 : 1;
+      if (aSuelta !== bSuelta) return aSuelta - bSuelta;
+      return getStockPriority(a) - getStockPriority(b);
+    });
+  } else {
+    // Destacados: primero productos con stock inmediato (ambos completos primero, luego piezas), luego a pedido, luego agotados
+    filteredProducts.sort((a, b) => {
+      const prioDiff = getStockPriority(a) - getStockPriority(b);
+      if (prioDiff !== 0) return prioDiff;
+      const aSuelta = (a.badge || '').toLowerCase().includes('pieza suelta') ? 1 : 0;
+      const bSuelta = (b.badge || '').toLowerCase().includes('pieza suelta') ? 1 : 0;
+      return aSuelta - bSuelta;
+    });
   }
 
   const totalCartUnits = cartItems.reduce((acc, it) => acc + it.quantity, 0);
@@ -212,15 +249,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col bg-[#faf9f8] text-[#222]">
+    <div className="min-h-screen w-full max-w-full overflow-x-clip flex flex-col bg-[#faf9f8] text-[#222]">
       
       {/* 1. Announcement Bar */}
-      <AnnouncementBar 
-        onOpenSizeGuide={() => setIsSizeGuideOpen(true)} 
-        onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
-      />
+      <AnnouncementBar />
 
-      {/* 2. Header */}
+      {/* 2. Unified Single-Row Header + SHOP Mega-Menu (Oh! Wear style) */}
       <Header
         cartCount={totalCartUnits}
         onOpenCart={() => setIsCartOpen(true)}
@@ -231,15 +265,8 @@ export default function App() {
         onSelectProduct={(p) => setSelectedProduct(p)}
         products={products}
         onGoHome={handleGoHome}
-      />
-
-      {/* 3. Multi-level Navigation (Matching Plavusa) */}
-      <Navbar
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
-        onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
-        onOpenVirtualFitting={() => handleOpenVirtualFitting('mujer')}
-        onGoHome={handleGoHome}
       />
 
       {/* 4. Hero Carousel (Shows on home view) */}
@@ -266,6 +293,46 @@ export default function App() {
 
       {/* 6. Main Product Catalog Section */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
+
+        {/* Oh! Wear-style Quick Category Strip */}
+        <div className="mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          {[
+            { label: 'Todos los Modelos', category: 'TODOS', subCategory: null },
+            { label: 'Lo Nuevo · Spandex 2026', category: 'LO NUEVO', subCategory: 'Colección Spandex 2026' },
+            { label: 'Ambos Mujer', category: 'AMBOS MUJER', subCategory: null },
+            { label: 'Edición Tricolor', category: 'EDICIÓN TRICOLOR', subCategory: null },
+            { label: 'Ambos Hombre', category: 'AMBOS HOMBRE', subCategory: null },
+            { label: 'Ambos Unisex', category: 'AMBOS UNISEX', subCategory: null },
+            { label: 'Chaquetas', category: 'Chaquetas', subCategory: null },
+            { label: 'Pantalones', category: 'Pantalones', subCategory: null },
+            { label: 'Súper Ofertas', category: 'OFERTAS', subCategory: 'Piezas sueltas y promos', isOffer: true },
+          ].map((chip) => {
+            const isSelected =
+              (activeCategory.category || 'TODOS').toUpperCase() === chip.category.toUpperCase() &&
+              !searchQuery;
+            return (
+              <button
+                key={chip.label}
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveCategory({ category: chip.category, subCategory: chip.subCategory });
+                }}
+                className={`px-3.5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap border transition ${
+                  isSelected
+                    ? chip.isOffer
+                      ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
+                      : 'bg-neutral-900 text-white border-neutral-900 shadow-sm'
+                    : chip.isOffer
+                    ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                    : 'bg-white text-neutral-700 border-neutral-200 hover:border-neutral-400 hover:text-black'
+                }`}
+              >
+                {chip.label}
+              </button>
+            );
+          })}
+        </div>
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-neutral-200">

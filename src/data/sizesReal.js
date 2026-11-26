@@ -124,13 +124,22 @@ export const SIZES_REAL = {
     { size: "L", stock: 0, status: "a-pedido" },
     { size: "XL", stock: 0, status: "a-pedido" },
   ],
-  // fila 28 - AMBO TOPACIO CUELLO CORAZON
+  // fila 16 - AMBO TOPACIO CUELLO CORAZON (ex fila 28)
   "ambo-topacio": [
-    { size: "XS", stock: 0, status: "a-pedido" },
-    { size: "S", stock: 0, status: "a-pedido" },
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
     { size: "M", stock: 2, status: "en-stock" },
     { size: "L", stock: 3, status: "en-stock" },
     { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  "ambo-topacio-cuello-corazon": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 2, status: "en-stock" },
+    { size: "L", stock: 3, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
   // fila 20 - AMBO AZZURRO FRAN
   "ambo-azul-francia": [
@@ -148,21 +157,21 @@ export const SIZES_REAL = {
     { size: "L", stock: 0, status: "a-pedido" },
     { size: "XL", stock: 0, status: "a-pedido" },
   ],
-  // fila 26 - AMBO PLUMETI ROSA C/ROSA
+  // fila 14 - AMBO PLUMETI ROSA C/ROSA
   "ambo-plumeti-rosa": [
     { size: "XS", stock: 0, status: "agotado" },
     { size: "S", stock: 0, status: "agotado" },
     { size: "M", stock: 1, status: "en-stock" },
-    { size: "L", stock: 1, status: "en-stock" },
-    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "L", stock: 3, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
     { size: "XXL", stock: 0, status: "agotado" },
   ],
   "rosa-plumeti": [
     { size: "XS", stock: 0, status: "agotado" },
     { size: "S", stock: 0, status: "agotado" },
     { size: "M", stock: 1, status: "en-stock" },
-    { size: "L", stock: 1, status: "en-stock" },
-    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "L", stock: 3, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
     { size: "XXL", stock: 0, status: "agotado" },
   ],
   // sin equivalente en el deposito
@@ -203,5 +212,115 @@ export const SIZES_REAL = {
     { size: "L", stock: 0, status: "a-pedido" },
     { size: "XL", stock: 1, status: "en-stock" },
     { size: "XXL", stock: 0, status: "a-pedido" },
+  ],
+
+  // === NUEVOS MODELOS DEL EXCEL (Noviembre 2026) ===
+  // fila 18 - AMBO NUEVOS CHOCOBEIGE
+  "ambo-chocobeige": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 2, status: "en-stock" },
+    { size: "M", stock: 4, status: "en-stock" },
+    { size: "L", stock: 2, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 20 - AMBO BEIGE C/VERDE MALTA
+  "ambo-beige-verde-malta": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 2, status: "en-stock" },
+    { size: "L", stock: 2, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 2, status: "en-stock" },
+  ],
+  // fila 11 - AMBO TOPACIO CUELLO MAO
+  "ambo-topacio-cuello-mao": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 1, status: "en-stock" },
+    { size: "L", stock: 2, status: "en-stock" },
+    { size: "XL", stock: 2, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 19 - AMBO CHOCOLATE
+  "ambo-chocolate": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 2, status: "en-stock" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 5 - AMBO TRICOLOR TOPO
+  "ambo-tricolor-topo": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 6 - AMBO TRICOLOR ROSÉ
+  "ambo-tricolor-rose": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 1, status: "en-stock" },
+  ],
+  // fila 8 - AMBO TRICOLOR RED/GRIS/NEGRO
+  "ambo-tricolor-rojo-gris-negro": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 1, status: "en-stock" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 12 - AMBO ROCOCO-3 VERDE MILI C/ BLANCO
+  "ambo-rococo-3-verde-militar": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 15 - AMBO PLUMETI CELESTE
+  "ambo-plumeti-celeste": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 1, status: "en-stock" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 21 - AMBO AZUL MARINO Y ROSA BEBE
+  "ambo-azul-marino-rosa-bebe": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 25 - AMBO VERDE OLIVA
+  "ambo-verde-oliva": [
+    { size: "XS", stock: 0, status: "agotado" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 1, status: "en-stock" },
+    { size: "XXL", stock: 0, status: "agotado" },
+  ],
+  // fila 26 - AMBO AMATISTA
+  "ambo-amatista": [
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
+    { size: "3XL", stock: 1, status: "en-stock" },
   ],
 };

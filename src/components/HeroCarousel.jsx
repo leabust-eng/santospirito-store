@@ -68,10 +68,10 @@ const slides = [
   },
   {
     id: 5,
-    tag: "ESTILO JOGGER & CONFORT",
+    tag: "DISEÑO TRICOLOR & CONFORT",
     badge: "STOCK INMEDIATO",
     title: "TRICOLOR GREEN",
-    subtitle: "Diseño moderno con chaqueta verde menta y pantalón jogger con puños elastizados. Libertad total para moverte en tu lugar de trabajo.",
+    subtitle: "Diseño moderno con chaqueta tricolor verde menta y negro, y pantalón recto elastizado. Libertad total para moverte en tu lugar de trabajo.",
     highlight: "Hasta 3 Cuotas Sin Interés • Envíos a todo el país",
     cta: "Ver TRICOLOR GREEN",
     productSlug: "ambo-menta-negro",
