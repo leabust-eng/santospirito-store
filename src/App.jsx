@@ -303,7 +303,7 @@ export default function App() {
       <main className="flex-1 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-10 w-full">
 
         {/* Oh! Wear-style Quick Category Strip */}
-        <div className="mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div className="mb-8 flex items-center gap-2 overflow-x-auto lg:overflow-visible lg:flex-wrap lg:justify-center no-scrollbar pb-1">
           {[
             { label: 'Todos los Modelos', category: 'TODOS', subCategory: null },
             { label: 'Lo Nuevo · Spandex 2026', category: 'LO NUEVO', subCategory: 'Colección Spandex 2026' },
@@ -313,7 +313,6 @@ export default function App() {
             { label: 'Ambos Unisex', category: 'AMBOS UNISEX', subCategory: null },
             { label: 'Chaquetas', category: 'Chaquetas', subCategory: null },
             { label: 'Pantalones', category: 'Pantalones', subCategory: null },
-            { label: 'Súper Ofertas', category: 'OFERTAS', subCategory: 'Piezas sueltas y promos', isOffer: true },
           ].map((chip) => {
             const isSelected =
               (activeCategory.category || 'TODOS').toUpperCase() === chip.category.toUpperCase() &&
@@ -328,11 +327,7 @@ export default function App() {
                 }}
                 className={`px-3.5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap border transition ${
                   isSelected
-                    ? chip.isOffer
-                      ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
-                      : 'bg-neutral-900 text-white border-neutral-900 shadow-sm'
-                    : chip.isOffer
-                    ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                    ? 'bg-neutral-900 text-white border-neutral-900 shadow-sm'
                     : 'bg-white text-neutral-700 border-neutral-200 hover:border-neutral-400 hover:text-black'
                 }`}
               >
