@@ -197,21 +197,21 @@ export const SIZES_REAL = {
     { size: "L", stock: 0, status: "a-pedido" },
     { size: "XL", stock: 0, status: "a-pedido" },
   ],
-  // fila 54 - CAHQUETA AZZURRRO CUELLO MAO
+  // fila 37 - CAHQUETA AZZURRRO CUELLO MAO (solo talle L en stock)
   "chaqueta-azzurro-francia": [
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
     { size: "L", stock: 1, status: "en-stock" },
-    { size: "XL", stock: 0, status: "a-pedido" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "XL", stock: 0, status: "agotado" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
-  // fila 81 - PANT. AZZURRRO FRANCIA ARCEIL ELASTIZAD
+  // fila 61 - PANT. AZZURRRO FRANCIA ARCIEL ELASTIZADO (solo talle XL en stock)
   "pantalon-azzurro-francia": [
-    { size: "S", stock: 0, status: "a-pedido" },
-    { size: "M", stock: 0, status: "a-pedido" },
-    { size: "L", stock: 0, status: "a-pedido" },
+    { size: "S", stock: 0, status: "agotado" },
+    { size: "M", stock: 0, status: "agotado" },
+    { size: "L", stock: 0, status: "agotado" },
     { size: "XL", stock: 1, status: "en-stock" },
-    { size: "XXL", stock: 0, status: "a-pedido" },
+    { size: "XXL", stock: 0, status: "agotado" },
   ],
 
   // === NUEVOS MODELOS DEL EXCEL (Noviembre 2026) ===

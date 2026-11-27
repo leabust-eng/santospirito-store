@@ -183,8 +183,10 @@ export default function App() {
         if (!isNewOrSpandex) return false;
       } else if (activeCat === "ofertas") {
         const isPiezaSuelta = (p.badge || '').toLowerCase().includes('pieza suelta');
-        const hasDiscount = Boolean(p.discount) || (p.originalPrice && p.originalPrice > p.price);
-        if (!isPiezaSuelta && !hasDiscount) return false;
+        const isOfertaReal =
+          (p.badge || '').toLowerCase().includes('oferta') ||
+          (p.discount || '').toLowerCase().includes('oferta');
+        if (!isPiezaSuelta && !isOfertaReal) return false;
       } else {
         const pCat = (p.category || '').toLowerCase();
         const pGender = (p.gender || '').toLowerCase();
